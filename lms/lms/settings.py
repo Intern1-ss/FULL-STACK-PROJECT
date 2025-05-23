@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # DATABASE APP
     'DB',
-    # CUSTOM APPS    
+    # CUSTOM APPS
+    'dashbaord', 
 ]
 
 MIDDLEWARE = [
