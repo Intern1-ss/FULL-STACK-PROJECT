@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     # DATABASE APP
     'DB',
     # CUSTOM APPS
-    'dashbaord', 
+    'dashboard', 
 ]
 
 MIDDLEWARE = [
