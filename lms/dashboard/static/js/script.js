@@ -51,6 +51,10 @@ function showCampusPage() {
     window.location.href = "/campus";
 }
 
+function showAddCampusPage() {
+    window.location.href = "/campus/add";
+}
+
 function showCampusCard(element) {
         const campusItem = element.closest('.campus-item');
         const content = campusItem.querySelector('.campus-card-content');

@@ -7,7 +7,6 @@ class Department(models.Model):
     dept_id = models.CharField(max_length=10, primary_key=True)
     dept_name = models.CharField(max_length=100, unique=True)
     hod = models.OneToOneField('Faculty', on_delete=models.SET_NULL, null=True, blank=True, related_name='headed_department')
-    description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -16,10 +15,9 @@ class Department(models.Model):
 
 #Campus Table
 class Campus(models.Model):
-    campus_id = models.CharField(max_length=10, primary_key=True)
+    id = models.CharField(max_length=10, primary_key=True)
     campus_name = models.CharField(max_length=100, unique=True)
     location = models.CharField(max_length=255, blank=True)
-    description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

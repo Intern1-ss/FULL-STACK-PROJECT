@@ -57,7 +57,7 @@
 
             <div class="right-panel camp-add">
                 <div class="dashboard-head">
-                    <span class="over-heading">Add Campus</span>
+                    <span class="over-heading">Edit Campus</span>
                     <div class="date pointer" onclick="showCampusPage()">
                         <span>Cancel</span>
                         <i class="fas fa-times"></i>
@@ -70,20 +70,20 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="name">Campus Name</label>
-                                <input type="text" id="name" name="name" placeholder="Enter Campus name" required>
+                                <input type="text" id="name" name="name" value="{{ campus.campus_name }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="campID">Campus ID</label>
-                                <input type="text" id="campID" name="id" placeholder="Enter Campus ID" required>
+                                <input type="text" id="campID" name="id" value="{{ campus.id }}" disabled>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="campLoc">Campus Location</label>
-                                <input type="text" id="campLoc" name="loc" placeholder="Enter Campus Location" required>
+                                <input type="text" id="campLoc" name="loc" value="{{ campus.location }}" required>
                             </div>
                         </div>
-                        <button class="create-button" type="submit">Create</button>
+                        <button class="create-button" type="submit">Update</button>
                     </form>
                 </div>
             </div>

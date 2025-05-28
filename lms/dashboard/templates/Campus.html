@@ -63,118 +63,55 @@
                     </div>
                 </div>
                 <div class="stud-header">
-                    <div class="create-icon">
+                    <div class="create-icon" onclick="showAddCampusPage()">
                         <span>create</span>
                         <i class="fa-solid fa-plus"></i>
                     </div>
                 </div>
                 
                 <div class="campus-content">
+                    {% if campuses %}
+                    {% for campus in campuses %}
                     <div class="campus-item">
                         <div class="campus-card-head">
                             <div class="card-head-det">
                                 <div class="icon-holder">
                                     <i class="fa-solid fa-school"></i>
                                 </div>
-                                <span class="campus-name">Anantapur Campus</span>
+                                <span class="campus-name">{{ campus.campus_name }} Campus</span>
                             </div>
                             <div class="edit-icons">
                                 <div onclick="showCampusCard(this)" class="icon-holder">
                                     <i class="fa-solid fa-circle-info"></i>
                                 </div>
-                                <div class="icon-holder">
+                                <div class="icon-holder" onclick="window.location.href='{% url 'edit_campus' campus.id %}'">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </div>
-                                <div class="icon-holder">
+                                <div class="icon-holder" onclick="if(confirm('Are you sure you want to delete this campus?')){window.location.href='{% url 'del_campus' campus.id %}'}">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </div>
                             </div>
                             
                         </div>
                         <div class="campus-card-content display-none">
-                            <span class="card-tag">ATP-2025</span>
-                            <span class="card-tag">Anantapur District</span>
+                            <span class="card-tag">{{ campus.id}}</span>
+                            <span class="card-tag">{{ campus.location }}</span>
                         </div>
                         
                     </div>
+                    {% endfor %}
+                    {% else %}
                     <div class="campus-item">
                         <div class="campus-card-head">
                             <div class="card-head-det">
                                 <div class="icon-holder">
                                     <i class="fa-solid fa-school"></i>
                                 </div>
-                                <span class="campus-name">Brindhavan Campus</span>
+                                <span class="campus-name">No Campus Available</span>
                             </div>
-                            <div class="edit-icons">
-                                <div onclick="showCampusCard(this)" class="icon-holder">
-                                    <i class="fa-solid fa-circle-info"></i>
-                                </div>
-                                <div class="icon-holder">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </div>
-                                <div class="icon-holder">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <div class="campus-card-content display-none">
-                            <span class="card-tag">BDN-2025</span>
-                            <span class="card-tag">Bangalore District</span>
                         </div>
                     </div>
-                    <div class="campus-item">
-                        <div class="campus-card-head">
-                            <div class="card-head-det">
-                                <div class="icon-holder">
-                                    <i class="fa-solid fa-school"></i>
-                                </div>
-                                <span class="campus-name">Prashanthi Nilayam Campus</span>
-                            </div>
-                            <div class="edit-icons">
-                                <div onclick="showCampusCard(this)" class="icon-holder">
-                                    <i class="fa-solid fa-circle-info"></i>
-                                </div>
-                                <div class="icon-holder">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </div>
-                                <div class="icon-holder">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <div class="campus-card-content display-none">
-                            <span class="card-tag">PSN-2025</span>
-                            <span class="card-tag">Sathya Sai Grama District</span>
-                        </div>
-                    </div>
-                    <div class="campus-item">
-                        <div class="campus-card-head">
-                            <div class="card-head-det">
-                                <div class="icon-holder">
-                                    <i class="fa-solid fa-school"></i>
-                                </div>
-                                <span class="campus-name">Nandigiri Campus</span>
-                            </div>
-                            <div class="edit-icons">
-                                <div onclick="showCampusCard(this)" class="icon-holder">
-                                    <i class="fa-solid fa-circle-info"></i>
-                                </div>
-                                <div class="icon-holder">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </div>
-                                <div class="icon-holder">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <div class="campus-card-content display-none">
-                            <span class="card-tag">NDG-2025</span>
-                            <span class="card-tag">Nandigram District</span>
-                        </div>
-                    </div>
+                    {% endif %}
                 </div>
             </div>
 

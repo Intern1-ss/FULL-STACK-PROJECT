@@ -18,7 +18,8 @@ def departments(request):
     return render(request, 'Departments.html', {'departments': departments})
 
 def campus(request):
-    return render(request, 'Campus.html')
+    campuses = Campus.objects.all()
+    return render(request, 'Campus.html', {'campuses': campuses})
 
 def addstudent(request):
     return render(request, 'Add-Student.html')
@@ -50,6 +51,16 @@ def adddepartment(request):
         return redirect('departments')
     return render(request, 'Add-Departments.html', {'faculties': Faculty.objects.all(), 'campuses': Campus.objects.all()})
 
+def addcampus(request):
+    if request.method == 'POST':
+        campus = Campus()
+        campus.campus_id = request.POST.get('id')
+        campus.campus_name = request.POST.get('name')
+        campus.location = request.POST.get('loc')
+        campus.save()
+        return redirect('campus')
+    return render(request, 'Add-Campus.html')
+
 def edit_faculty(request, faculty_id):
     faculty = Faculty.objects.get(faculty_id=faculty_id)
     if request.method == 'POST':
@@ -79,6 +90,15 @@ def edit_department(request, dept_id):
     faculties = Faculty.objects.all()
     return render(request, 'Edit-Departments.html', {'department': department, 'faculties': faculties})
 
+def edit_campus(request, campus_id):
+    campus = Campus.objects.get(id=campus_id)
+    if request.method == 'POST':
+        campus.campus_name = request.POST.get('name')
+        campus.location = request.POST.get('loc')
+        campus.save()
+        return redirect('campus')
+    return render(request, 'Edit-Campus.html', {'campus': campus})
+
 def delete_faculty(request, faculty_id):
     faculty = Faculty.objects.get(faculty_id=faculty_id)
     if not faculty:
@@ -92,3 +112,10 @@ def delete_department(request, dept_id):
         return redirect('departments')
     department.delete()
     return redirect('departments')
+
+def delete_campus(request, campus_id):
+    campus = Campus.objects.get(id=campus_id)
+    if not campus:
+        return redirect('campus')
+    campus.delete()
+    return redirect('campus')
