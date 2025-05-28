@@ -46,7 +46,11 @@ def adddepartment(request):
         department = Department()
         department.dept_id = request.POST.get('dept_id')
         department.dept_name = request.POST.get('dept_name')
-        department.hod = Faculty.objects.get(faculty_id=request.POST.get('hod'))
+        if not request.POST.get('hod'):
+            department.hod = None
+        else:
+            # Ensure that the HOD is a valid faculty member
+            department.hod = Faculty.objects.get(faculty_id=request.POST.get('hod'))
         department.save()
         return redirect('departments')
     return render(request, 'Add-Departments.html', {'faculties': Faculty.objects.all(), 'campuses': Campus.objects.all()})
