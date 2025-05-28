@@ -64,9 +64,10 @@ function showCampusCard(element) {
 function menuCollapse(){
     console.log("Menu collapsed");
     let panel = document.querySelectorAll('.right-panel');
+    let logoTitle = document.querySelector('.logo-title');
     if (menuOpen) {
         document.querySelectorAll('.icon-name').forEach(el => el.classList.add('display-none'));
-        document.querySelector('.logo-title').classList.add('display-none');
+        logoTitle.classList.add('display-none');
         document.querySelector('.logo-img').classList.remove('display-none');
         document.querySelector('.menu-panel').classList.add('menu-panel-collapsed');
         document.querySelectorAll('.menu-item').forEach(el => el.classList.add('menu-item-collapsed'));
@@ -75,7 +76,7 @@ function menuCollapse(){
 
     } else {
         document.querySelectorAll('.icon-name').forEach(el => el.classList.remove('display-none'));
-        document.querySelector('.logo-title').classList.remove('display-none');  
+        logoTitle.classList.remove('display-none');  
         document.querySelector('.logo-img').classList.add('display-none');
         document.querySelector('.menu-panel').classList.remove('menu-panel-collapsed');
         document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('menu-item-collapsed'));
@@ -84,4 +85,25 @@ function menuCollapse(){
 
     }
     menuOpen = !menuOpen;
+
+    const isCollapsed = logoTitle.classList.contains('display-none');
+    console.log("Menu collapsed state:", isCollapsed);
+    localStorage.setItem('menuCollapsed', isCollapsed ? 'true' : 'false');
 }
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     const collapsed = localStorage.getItem('menuCollapsed');
+//     if(collapsed){
+//         menuCollapse();
+//     }
+// });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const collapsed = localStorage.getItem('menuCollapsed') === 'true';
+    if (collapsed) {
+        menuOpen = true; 
+        menuCollapse();  
+    } else {
+        menuOpen = false; 
+    }
+});
