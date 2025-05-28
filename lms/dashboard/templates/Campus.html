@@ -1,0 +1,186 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>    </head>
+    <body>
+        <div class="whole-container">
+            <div class="menu-panel">
+                <div onclick="menuCollapse()" id="backIcon" class="back-icon">
+                    <i class="fa-solid fa-caret-right"></i>
+                </div>
+                <div class="logo-holder">
+                    <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
+                    <img class="logo-img display-none" src="{% static 'img/1.png' %}">
+                </div>
+                <div class="menu-icons">
+                    <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        <span class="icon-name">Overview</span>
+                    </div>
+                    <div onclick="showStudentPage()" id="students-item" class="students menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <span class="icon-name">Students</span> 
+                    </div>
+                    <div onclick="showFacultyPage()" id="faculty-item" class="faculty menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <span class="icon-name">Faculty</span>
+                    </div>
+                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <span class="icon-name">Departments</span>
+                    </div>
+                    <div id="courses-item" class="courses menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+                        <span class="icon-name">Courses</span>
+                    </div>
+                    <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item active">
+                        <div class="icon">
+                            <i class="fa-solid fa-school"></i>
+                        </div>
+                        <span class="icon-name">Campus</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel camp">
+                <div class="dashboard-head">
+                    <span class="over-heading">Campus</span>
+                    <div class="date">
+                        <span>26/05/2025</span>
+                    </div>
+                </div>
+                <div class="stud-header">
+                    <div class="create-icon">
+                        <span>create</span>
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                </div>
+                
+                <div class="campus-content">
+                    <div class="campus-item">
+                        <div class="campus-card-head">
+                            <div class="card-head-det">
+                                <div class="icon-holder">
+                                    <i class="fa-solid fa-school"></i>
+                                </div>
+                                <span class="campus-name">Anantapur Campus</span>
+                            </div>
+                            <div class="edit-icons">
+                                <div onclick="showCampusCard(this)" class="icon-holder">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </div>
+                                <div class="icon-holder">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </div>
+                                <div class="icon-holder">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="campus-card-content display-none">
+                            <span class="card-tag">ATP-2025</span>
+                            <span class="card-tag">Anantapur District</span>
+                        </div>
+                        
+                    </div>
+                    <div class="campus-item">
+                        <div class="campus-card-head">
+                            <div class="card-head-det">
+                                <div class="icon-holder">
+                                    <i class="fa-solid fa-school"></i>
+                                </div>
+                                <span class="campus-name">Brindhavan Campus</span>
+                            </div>
+                            <div class="edit-icons">
+                                <div onclick="showCampusCard(this)" class="icon-holder">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </div>
+                                <div class="icon-holder">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </div>
+                                <div class="icon-holder">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="campus-card-content display-none">
+                            <span class="card-tag">BDN-2025</span>
+                            <span class="card-tag">Bangalore District</span>
+                        </div>
+                    </div>
+                    <div class="campus-item">
+                        <div class="campus-card-head">
+                            <div class="card-head-det">
+                                <div class="icon-holder">
+                                    <i class="fa-solid fa-school"></i>
+                                </div>
+                                <span class="campus-name">Prashanthi Nilayam Campus</span>
+                            </div>
+                            <div class="edit-icons">
+                                <div onclick="showCampusCard(this)" class="icon-holder">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </div>
+                                <div class="icon-holder">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </div>
+                                <div class="icon-holder">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="campus-card-content display-none">
+                            <span class="card-tag">PSN-2025</span>
+                            <span class="card-tag">Sathya Sai Grama District</span>
+                        </div>
+                    </div>
+                    <div class="campus-item">
+                        <div class="campus-card-head">
+                            <div class="card-head-det">
+                                <div class="icon-holder">
+                                    <i class="fa-solid fa-school"></i>
+                                </div>
+                                <span class="campus-name">Nandigiri Campus</span>
+                            </div>
+                            <div class="edit-icons">
+                                <div onclick="showCampusCard(this)" class="icon-holder">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </div>
+                                <div class="icon-holder">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </div>
+                                <div class="icon-holder">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="campus-card-content display-none">
+                            <span class="card-tag">NDG-2025</span>
+                            <span class="card-tag">Nandigram District</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    
+    <script src="{% static 'js/script.js' %}"></script>
+    </body>
+</html>

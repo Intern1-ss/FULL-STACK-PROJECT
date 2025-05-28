@@ -34,7 +34,7 @@
                         </div>
                         <span class="icon-name">Faculty</span>
                     </div>
-                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item active">
+                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
                         <div class="icon">
                             <i class="fa-solid fa-users"></i>
                         </div>
@@ -46,7 +46,7 @@
                         </div>
                         <span class="icon-name">Courses</span>
                     </div>
-                    <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item">
+                    <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item active">
                         <div class="icon">
                             <i class="fa-solid fa-school"></i>
                         </div>
@@ -55,38 +55,31 @@
                 </div>
             </div>
 
-            <div id="addDepartmentsPage" class="right-panel dept-add">
+            <div class="right-panel camp-add">
                 <div class="dashboard-head">
-                    <span class="over-heading">Add Department</span>
-                    <div onclick="showDepartmentsPage()" class="date pointer">
+                    <span class="over-heading">Add Campus</span>
+                    <div class="date pointer">
                         <span>Cancel</span>
                         <i class="fas fa-times"></i>
                     </div>
                 </div>
                 
                 <div class="container">
-                    <form class="form" method="post">
-                        {% csrf_token %}
+                    <form class="form">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="name">Department Name</label>
-                                <input type="text" id="name" name="dept_name" placeholder="Enter Department name" required>
+                                <label for="name">Campus Name</label>
+                                <input type="text" id="name" placeholder="Enter Campus name" required>
                             </div>
                             <div class="form-group">
-                                <label for="deptID">Department ID</label>
-                                <input type="text" id="deptID" name="dept_id" placeholder="Enter Department ID" required>
+                                <label for="campID">Campus ID</label>
+                                <input type="text" id="campID" placeholder="Enter Campus ID" required>
                             </div>
                         </div>
                         <div class="form-row">
-                            
                             <div class="form-group">
-                            <label for="fruit-search">HOD:</label>
-                                <input list="faculties" id="fruit-search" name="hod" placeholder="Search fruit...">
-                                    <datalist id="faculties">
-                                        {% for faculty in faculties %}
-                                            <option value="{{ faculty.faculty_id }}">{{ faculty.name }}</option>
-                                        {% endfor %}
-                                    </datalist>
+                                <label for="campLoc">Campus Location</label>
+                                <input type="text" id="campLoc" placeholder="Enter Campus Location" required>
                             </div>
                         </div>
                         <button class="create-button" type="submit">Create</button>

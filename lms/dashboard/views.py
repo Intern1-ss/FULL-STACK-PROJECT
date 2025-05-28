@@ -17,6 +17,9 @@ def departments(request):
     departments = Department.objects.all()
     return render(request, 'Departments.html', {'departments': departments})
 
+def campus(request):
+    return render(request, 'Campus.html')
+
 def addstudent(request):
     return render(request, 'Add-Student.html')
 

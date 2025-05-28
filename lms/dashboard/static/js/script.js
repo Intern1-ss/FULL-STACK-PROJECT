@@ -47,6 +47,16 @@ function showAddDepartmentsPage() {
     window.location.href = "/departments/add";
 }
 
+function showCampusPage() {
+    window.location.href = "/campus";
+}
+
+function showCampusCard(element) {
+        const campusItem = element.closest('.campus-item');
+        const content = campusItem.querySelector('.campus-card-content');
+        content.classList.toggle('display-none');
+}
+
 function menuCollapse(){
     console.log("Menu collapsed");
     let panel = document.querySelectorAll('.right-panel');

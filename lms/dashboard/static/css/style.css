@@ -13,10 +13,6 @@
 	cursor: pointer;
 }
 
-.display-none {
-	display: none;
-}
-
 body {
 	height: 100vh;
 	min-height: 100vh;
@@ -198,10 +194,7 @@ body {
 	border-radius: 50%;
 	background-color: #695BF4;
 	color: white;
-}
-
-.icon-name{
-	/* display: none; */
+	cursor: pointer;
 }
 
 .card-content {
@@ -399,3 +392,63 @@ option:hover {
 	color: #695BF4;
 }
 
+.campus-content{
+	margin-top: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+	justify-content: center;
+}
+
+.campus-item{
+	width: 100%;
+	height: fit-content;
+	padding: 20px;
+	box-sizing: border-box;
+	background: white;
+	border-radius: 10px;
+}
+
+.campus-card-head{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.card-head-det{
+	display: flex;
+	gap: 20px;
+	align-items: center; 
+}
+
+.card-head-det span{
+	font-size: 25px;
+	font-weight: 600;
+	color: #505050;
+}
+
+.edit-icons{
+	display: flex;
+	gap: 10px;
+}
+
+.campus-card-content{
+	margin-top: 20px;
+	display: flex;
+	gap: 10px;
+	padding: 0px 20px;
+}
+
+.card-tag{
+	background: #695BF4;
+	width: fit-content;
+	height: fit-content;
+	color: white;
+	padding: 5px 20px;
+	border-radius: 5px;
+}
+
+
+.display-none {
+	display: none;
+}
