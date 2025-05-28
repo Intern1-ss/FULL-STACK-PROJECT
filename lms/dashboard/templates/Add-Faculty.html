@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>    </head>
+    <body>
+        <div class="whole-container">
+            <div class="menu-panel">
+                <div class="back-icon">
+                    <i class="fa-solid fa-caret-right"></i>
+                </div>
+                <div class="logo-holder">Sri Sathya Sai Institute of Higher Learning</div>
+                <div class="menu-icons">
+                    <div class="overview menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        <span class="icon-name">Overview</span>
+                    </div>
+                    <div class="students menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <span class="icon-name">Students</span> 
+                    </div>
+                    <div class="faculty menu-item active">
+                        <div class="icon">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <span class="icon-name">Faculty</span>
+                    </div>
+                    <div class="departments menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <span class="icon-name">Departments</span>
+                    </div>
+                    <div class="courses menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+                        <span class="icon-name">Courses</span>
+                    </div>
+                    <div class="Campus menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-school"></i>
+                        </div>
+                        <span class="icon-name">Campus</span>
+                    </div>
+                </div>
+            </div>
+            <div class="right-panel fac-add">
+                <div class="dashboard-head">
+                    <span class="over-heading">Add Faculty</span>
+                    <div class="date pointer">
+                        <span>Cancel</span>
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                
+                <div class="container">
+                    <form class="form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" placeholder="Enter name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dob">Date of Birth</label>
+                                <input type="date" id="dob" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" placeholder="Enter email" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="mobile">Mobile Number</label>
+                                <input type="tel" id="mobile" placeholder="Enter mobile number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <select class="field" name="cars" id="gender" >
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="campus">Campus</label>
+                                <select class="field" name="campus" id="campus" >
+                                    <option value="Anantapur+">Anantapur</option>
+                                    <option value="Brindhavan">Brindhavan</option>
+                                    <option value="Nandigiri">Nandigiri</option>
+                                    <option value="Prashanthi Nilayam">Prashanthi Nilayam</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="facID">Faculty ID</label>
+                                <input type="text" id="facID" placeholder="Enter Faculty ID" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="deptID">Department ID</label>
+                                <input type="text" id="deptID" placeholder="Enter Department ID" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select class="field" name="status" id="status" >
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="on leave">On Leave</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="qualifiication">Qualification</label>
+                                <input type="text" id="qualifiication" placeholder="Enter Highest Qualification" required>
+                            </div>
+                        </div>
+                        <button class="create-button" type="submit">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

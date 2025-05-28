@@ -121,7 +121,7 @@ body {
 }
 
 .stud, .stud-add, .fac, .fac-add, .dept, .dept-add{
-	display: none;
+	/* display: none; */
 }
 
 .dashboard-head{
