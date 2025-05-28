@@ -99,7 +99,7 @@
                                     
                                     <td class="info"><i class="fa-solid fa-circle-info"></i></td>
                                     <td class="edit" onclick="location.href='{% url 'edit_faculty' faculty.faculty_id %}'"><i class="fas fa-edit"></i></td>
-                                    <td class="delete" onclick="location.href='{% url 'del_faculty' faculty.faculty_id %}'"><i class="fa-solid fa-trash"></i></td>
+                                    <td class="delete" onclick="if(confirm('Are you sure you want to delete this faculty?')){window.location.href='{% url 'del_faculty' faculty.faculty_id %}'}"><i class="fa-solid fa-trash"></i></td>
                                 </tr>
                                 {% endfor %}
                             {% else %}
