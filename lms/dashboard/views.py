@@ -54,7 +54,7 @@ def adddepartment(request):
 def addcampus(request):
     if request.method == 'POST':
         campus = Campus()
-        campus.campus_id = request.POST.get('id')
+        campus.id = request.POST.get('id')
         campus.campus_name = request.POST.get('name')
         campus.location = request.POST.get('loc')
         campus.save()
