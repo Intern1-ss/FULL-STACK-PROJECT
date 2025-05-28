@@ -57,7 +57,7 @@
 
             <div id="addFacultyPage" class="right-panel fac-add">
                 <div class="dashboard-head">
-                    <span class="over-heading">Add Faculty</span>
+                    <span class="over-heading">Edit Faculty: {{ faculty.faculty_id }}</span>
                     <div onclick="showFacultyPage()" class="date pointer">
                         <span>Cancel</span>
                         <i class="fas fa-times"></i>
@@ -70,35 +70,35 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="name">Full Name</label>
-                                <input type="text" name="name" placeholder="Enter name" required>
+                                <input type="text" name="name" value="{{ faculty.name }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="dob">Date of Birth</label>
-                                <input type="date" name="dob" required>
+                                <input type="date" name="dob" value="{{ faculty.dob|date:'Y-m-d' }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" name="email" placeholder="Enter email" required>
+                                <input type="email" name="email" value="{{ faculty.email }}" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="mobile">Mobile Number</label>
-                                <input type="tel" name="mobile" placeholder="Enter mobile number" required>
+                                <input type="tel" name="mobile" value="{{ faculty.mobile }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="gender">Gender</label>
-                                <select class="field" name="gender" id="gender" >
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Others">Others</option>
+                                <select class="field" name="gender" id="gender">
+                                    <option value="Male" {% if faculty.gender == 'Male' %}selected{% endif %}>Male</option>
+                                    <option value="Female" {% if faculty.gender == 'Female' %}selected{% endif %}>Female</option>
+                                    <option value="Others" {% if faculty.gender == 'Others' %}selected{% endif %}>Others</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="campus">Campus</label>
                                 <select class="field" name="campus" id="campus">
                                     {% for camp in campuses %}
-                                        <option value="{{ camp.campus_name }}">
+                                        <option value="{{ camp.campus_name }}" {% if faculty.campus.campus_name == camp.campus_name %}selected{% endif %}>
                                             {{ camp.campus_name }}
                                         </option>
                                     {% endfor %}
@@ -108,8 +108,14 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="facID">Faculty ID</label>
-                                <input type="text" id="facID" name="faculty_id" placeholder="Enter Faculty ID" required>
+                                <input type="text" name="facID" value="{{ faculty.faculty_id }}" required>
                             </div>
+                            <!--
+                            <div class="form-group">
+                                <label for="deptID">Department ID</label>
+                                <input type="text" name="department" value="{{ faculty.department.dept_id }}" required>
+                            </div>
+                            -->
                             <div class="form-group">
                                 <label for="deptID">Department ID</label>
                                 <select class="field" name="department" id="department_select" required>
@@ -123,19 +129,19 @@
                             <div class="form-group">
                                 <label for="status">Status</label>
                                 <select class="field" name="status" id="status" >
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
-                                    <option value="on leave">On Leave</option>
+                                    <option value="active" {% if faculty.status == 'active' %}selected{% endif %}>Active</option>
+                                    <option value="inactive" {% if faculty.status == 'inactive' %}selected{% endif %}>Inactive</option>
+                                    <option value="on leave" {% if faculty.status == 'on leave' %}selected{% endif %}>On Leave</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="qualifiication">Qualification</label>
-                                <input type="text" id="qualification" name="qualification" placeholder="Enter Highest Qualification" required>
+                                <input type="text" name="qualification" value="{{ faculty.qualification }}" required>
                             </div>
                         </div>
-                        <button class="create-button" type="submit">Create</button>
+                        <button class="create-button" type="submit">Update</button>
                     </form>
                 </div>
             </div>

@@ -13,7 +13,7 @@
                 </div>
                 <div class="logo-holder">
                     <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
-                    <img class="logo-img display-none" src="1.png">
+                    <img class="logo-img display-none" src="{% static 'img/1.png' %}">
                 </div>
                 <div class="menu-icons">
                     <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item">
@@ -88,62 +88,25 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% if faculties %}
+                                {% for faculty in faculties %}
+                                <tr>
+                                    <td>{{ faculty.faculty_id }} </td>
+                                    <td>{{ faculty.name }}</td>
+                                    <td>{{ faculty.department}}</td>
+                                    <td>{{ faculty.campus }}</td>
+                                    <td>{{ faculty.email }}</td>
+                                    
+                                    <td class="info"><i class="fa-solid fa-circle-info"></i></td>
+                                    <td class="edit" onclick="location.href='{% url 'edit_faculty' faculty.faculty_id %}'"><i class="fas fa-edit"></i></td>
+                                    <td class="delete" onclick="location.href='{% url 'del_faculty' faculty.faculty_id %}'"><i class="fa-solid fa-trash"></i></td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
                             <tr>
-                                <td>1001</td>
-                                <td>John Doe</td>
-                                <td>Computer Science</td>
-                                <td>Nandigiri</td>
-                                <td>johndoe@gmail.com</td>
-                                
-                                <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                                <td class="edit"><i class="fas fa-edit"></i></td>
-                                <td class="delete"><i class="fa-solid fa-trash"></i></td>
+                                <td colspan="8" class="no-data">No Faculty Data Available</td>
                             </tr>
-                            <tr>
-                                <td>1002</td>
-                                <td>Jane Smith</td>
-                                <td>Electronics</td>
-                                <td>Nandigiri</td>
-                                <td>janesmith@gmail.com</td>
-                                
-                                <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                                <td class="edit"><i class="fas fa-edit"></i></td>
-                                <td class="delete"><i class="fa-solid fa-trash"></i></td>
-
-                            </tr>
-                            <tr>
-                                <td>1003</td>
-                                <td>Emily Johnson</td>
-                                <td>Physics</td>
-                                <td>Anantapur</td>
-                                <td>emilyjohnson@gmail.com</td>
-                                
-                                <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                                <td class="edit"><i class="fas fa-edit"></i></td>
-                                <td class="delete"><i class="fa-solid fa-trash"></i></td>
-                            </tr>
-                            <tr>
-                                <td>1004</td>
-                                <td>Michael Brown</td>
-                                <td>Mathematics</td>
-                                <td>Prashanthi Nilayam</td>
-                                <td>michaelbrown@gmail.com</td>
-                                
-                                <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                                <td class="edit"><i class="fas fa-edit"></i></td>
-                                <td class="delete"><i class="fa-solid fa-trash"></i></td>
-                            </tr>
-                            <tr>
-                                <td>1005</td>
-                                <td>Sarah Wilson</td>
-                                <td>Chemistry</td>
-                                <td>Anantapur</td>
-                                <td>sarahwilson@gmail.com</td>
-                                
-                                <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                                <td class="edit"><i class="fas fa-edit"></i></td>
-                                <td class="delete"><i class="fa-solid fa-trash"></i></td>
-                            </tr>
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>

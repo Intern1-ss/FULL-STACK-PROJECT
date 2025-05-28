@@ -55,58 +55,42 @@
                 </div>
             </div>
 
-            <div id="departmentsPage" class="right-panel dept">
+            <div id="addDepartmentsPage" class="right-panel dept-add">
                 <div class="dashboard-head">
-                    <span class="over-heading">Departments</span>
-                    <div class="date">
-                        <span>26/05/2025</span>
-                    </div>
-                </div>
-                <div class="stud-header">
-                    <div class="search-bar">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" class="search" placeholder="Search Departments...">
-                    </div>
-                    <div onclick="showAddDepartmentsPage()" class="create-icon">
-                        <span>create</span>
-                        <i class="fa-solid fa-plus"></i>
+                    <span class="over-heading">Add Department</span>
+                    <div onclick="showDepartmentsPage()" class="date pointer">
+                        <span>Cancel</span>
+                        <i class="fas fa-times"></i>
                     </div>
                 </div>
                 
-                <div class="table-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Department ID</th>
-                                <th>Department Name</th>
-                                <th>HOD name</th>
-                                <th>HOD id</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if departments %}
-                            {% for department in departments %}
-                            <tr>
-                                <td>{{ department.dept_id }}</td>
-                                <td>{{ department.dept_name }}</td>
-                                <td>{{ department.hod.name }}</td>
-                                <td>{{ department.hod.faculty_id }}</td>
-                                
-                                <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                                <td class="edit" onclick="location.href='{% url 'edit_department' department.dept_id %}'"><i class="fas fa-edit"></i></td>
-                                <td class="delete" onclick="location.href='{% url 'del_department' department.dept_id %}'"><i class="fa-solid fa-trash"></i></td>
-                            </tr>
-                            {% endfor %}
-                            {% else %}
-                            <tr>
-                                <td colspan="7" class="no-data">No Departments Data Available</td>
-                            </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
+                <div class="container">
+                    <form class="form" method="post">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Department Name</label>
+                                <input type="text" id="name" name="dept_name" value="{{ department.dept_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="deptID">Department ID</label>
+                                <input type="text" id="deptID" name="dept_id" value="{{ department.dept_id }}" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            
+                            <div class="form-group">
+                            <label for="fruit-search">HOD:</label>
+                                <input list="faculties" id="fruit-search" name="hod" value="{{ department.hod.faculty_id }}" placeholder="Search fruit...">
+                                    <datalist id="faculties">
+                                        {% for faculty in faculties %}
+                                            <option value="{{ faculty.faculty_id }}"></option>
+                                        {% endfor %}
+                                    </datalist>
+                            </div>
+                        </div>
+                        <button class="create-button" type="submit">Create</button>
+                    </form>
                 </div>
             </div>
 

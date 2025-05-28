@@ -20,99 +20,31 @@ let menuOpen = true;
 
 
 function showOverviewPage() {
-    overviewPage.style.display = "flex";
-    studentPage.style.display = "none";
-    addStudentPage.style.display = "none";
-    facultyPage.style.display = "none";
-    addFacultyPage.style.display = "none";
-    departmentsPage.style.display = "none";
-    addDepartmentsPage.style.display = "none";
-    // coursePage.style.display = "none";
-    // campusPage.style.display = "none";
-
-    document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
-    overview.classList.add('active');
+    window.location.href = "/";
 }
 
 function showStudentPage() {
-    studentPage.style.display = "block";
-    addStudentPage.style.display = "none";
-    overviewPage.style.display = "none";
-    facultyPage.style.display = "none";
-    addFacultyPage.style.display = "none";
-    departmentsPage.style.display = "none";
-    addDepartmentsPage.style.display = "none";
-    // coursePage.style.display = "none";
-    // campusPage.style.display = "none";
-
-    document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
-    students.classList.add('active');
+    window.location.href = "/students";
 }
 
 function showAddStudentPage() {
-    addStudentPage.style.display = "block";
-    overviewPage.style.display = "none";
-    studentPage.style.display = "none";
-    facultyPage.style.display = "none";
-    addFacultyPage.style.display = "none";
-    departmentsPage.style.display = "none";
-    addDepartmentsPage.style.display = "none";
-    // coursePage.style.display = "none";
-    // campusPage.style.display = "none";
+    window.location.href = "/students/add";
 }
 
 function showFacultyPage() {
-    facultyPage.style.display = "block";
-    addFacultyPage.style.display = "none";
-    overviewPage.style.display = "none";
-    studentPage.style.display = "none";
-    addStudentPage.style.display = "none";
-    departmentsPage.style.display = "none";
-    addDepartmentsPage.style.display = "none";
-    // coursePage.style.display = "none";
-    // campusPage.style.display = "none";
-
-    document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
-    faculty.classList.add('active');
+    window.location.href = "/faculty";
 }
 
 function showAddFacultyPage() {
-    addFacultyPage.style.display = "block";
-    overviewPage.style.display = "none";
-    studentPage.style.display = "none";
-    addStudentPage.style.display = "none";
-    facultyPage.style.display = "none";
-    departmentsPage.style.display = "none";
-    addDepartmentsPage.style.display = "none";
-    // coursePage.style.display = "none";
-    // campusPage.style.display = "none";
+    window.location.href = "/faculty/add";
 }
 
 function showDepartmentsPage() {
-    departmentsPage.style.display = "block";
-    addDepartmentsPage.style.display = "none";
-    overviewPage.style.display = "none";
-    studentPage.style.display = "none";
-    addStudentPage.style.display = "none";
-    facultyPage.style.display = "none";
-    addFacultyPage.style.display = "none";
-    // coursePage.style.display = "none";
-    // campusPage.style.display = "none";
-
-    document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
-    departments.classList.add('active');
+    window.location.href = "/departments";
 }
 
 function showAddDepartmentsPage() {
-    addDepartmentsPage.style.display = "block";
-    overviewPage.style.display = "none";
-    studentPage.style.display = "none";
-    addStudentPage.style.display = "none";
-    facultyPage.style.display = "none";
-    addFacultyPage.style.display = "none";
-    departmentsPage.style.display = "none";
-    // coursePage.style.display = "none";
-    // campusPage.style.display = "none";
+    window.location.href = "/departments/add";
 }
 
 function menuCollapse(){

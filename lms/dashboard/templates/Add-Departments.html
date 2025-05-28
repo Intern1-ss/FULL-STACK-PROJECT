@@ -13,7 +13,7 @@
                 </div>
                 <div class="logo-holder">
                     <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
-                    <img class="logo-img display-none" src="1.png">
+                    <img class="logo-img display-none" src="{% static 'img/1.png' %}">
                 </div>
                 <div class="menu-icons">
                     <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item">
@@ -65,25 +65,28 @@
                 </div>
                 
                 <div class="container">
-                    <form class="form">
+                    <form class="form" method="post">
+                        {% csrf_token %}
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="name">Department Name</label>
-                                <input type="text" id="name" placeholder="Enter Department name" required>
+                                <input type="text" id="name" name="dept_name" placeholder="Enter Department name" required>
                             </div>
                             <div class="form-group">
                                 <label for="deptID">Department ID</label>
-                                <input type="text" id="deptID" placeholder="Enter Department ID" required>
+                                <input type="text" id="deptID" name="dept_id" placeholder="Enter Department ID" required>
                             </div>
                         </div>
                         <div class="form-row">
+                            
                             <div class="form-group">
-                                <label for="name">HOD Name</label>
-                                <input type="text" id="name" placeholder="Enter HOD name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="HODID">HOD ID</label>
-                                <input type="text" id="HODID" placeholder="Enter HOD ID" required>
+                            <label for="fruit-search">HOD:</label>
+                                <input list="faculties" id="fruit-search" name="hod" placeholder="Search fruit...">
+                                    <datalist id="faculties">
+                                        {% for faculty in faculties %}
+                                            <option value="{{ faculty.faculty_id }}">{{ faculty.name }}</option>
+                                        {% endfor %}
+                                    </datalist>
                             </div>
                         </div>
                         <button class="create-button" type="submit">Create</button>

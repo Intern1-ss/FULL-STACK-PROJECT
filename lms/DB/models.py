@@ -35,11 +35,14 @@ def validate_fixed_length(value):
 # Faculty Table
 class Faculty(models.Model):
     faculty_id = models.CharField(max_length=4, primary_key=True, validators=[validate_fixed_length])
+    dob = models.DateField(null=True, blank=True)
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    campus = models.ForeignKey(Campus, on_delete=models.CASCADE, related_name='campus_faculty')
+    gender = models.CharField(max_length=10)
+    mobile = models.CharField(max_length=15, unique=True)
+    campus = models.ForeignKey(Campus, on_delete=models.SET_NULL,null=True, related_name='campus_faculty')
     qualification = models.CharField(max_length=100, blank=True)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='faculty')
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL,null=True, related_name='faculty')
     status = models.CharField(max_length=20, default='active')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
