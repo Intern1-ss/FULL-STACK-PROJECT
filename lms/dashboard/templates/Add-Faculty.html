@@ -97,6 +97,7 @@
                             <div class="form-group">
                                 <label for="campus">Campus</label>
                                 <select class="field" name="campus" id="campus">
+                                    <option value="" selected>-----</option>
                                     {% for camp in campuses %}
                                         <option value="{{ camp.campus_name }}">
                                             {{ camp.campus_name }}
@@ -112,7 +113,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="deptID">Department ID</label>
-                                <select class="field" name="department" id="department_select" required>
+                                <select class="field" name="department" id="department_select" placeholder="Select a Department">
+                                    <option value="" selected>-----</option>
                                     {% for dept in departments %}
                                         <option value="{{ dept.dept_id }}" {% if faculty.department.dept_id == dept.dept_id %}selected{% endif %}>
                                             {{ dept.dept_name }}

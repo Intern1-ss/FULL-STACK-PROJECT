@@ -33,9 +33,18 @@ def addfaculty(request):
         faculty.email = request.POST.get('email')
         faculty.mobile = request.POST.get('mobile')
         faculty.gender  = request.POST.get('gender')
-        faculty.campus = Campus.objects.get(campus_name=request.POST.get('campus'))
+        # Ensure that the campus and department exist before assigning
+        if not request.POST.get('campus'):
+            faculty.campus = None
+        else:
+            faculty.campus = Campus.objects.get(campus_name=request.POST.get('campus'))
         faculty.qualification = request.POST.get('qualification')
-        faculty.department = Department.objects.get(dept_id=request.POST.get('department'))
+        # Ensure that the department exists before assigning
+        if not request.POST.get('department'):
+            faculty.department = None
+        else:
+            # Ensure that the department exists before assigning
+            faculty.department = Department.objects.get(dept_id=request.POST.get('department'))
         faculty.status = request.POST.get('status')
         faculty.save()
         return redirect('faculty')
@@ -73,9 +82,18 @@ def edit_faculty(request, faculty_id):
         faculty.email = request.POST.get('email')
         faculty.mobile = request.POST.get('mobile')
         faculty.gender  = request.POST.get('gender')
-        faculty.campus = Campus.objects.get(campus_name=request.POST.get('campus'))
+        # Ensure that the campus and department exist before assigning
+        if not request.POST.get('campus'):
+            faculty.campus = None
+        else:
+            faculty.campus = Campus.objects.get(campus_name=request.POST.get('campus'))
         faculty.qualification = request.POST.get('qualification')
-        faculty.department = Department.objects.get(dept_id=request.POST.get('department'))
+        # Ensure that the department exists before assigning
+        if not request.POST.get('department'):
+            faculty.department = None
+        else:
+            # Ensure that the department exists before assigning
+            faculty.department = Department.objects.get(dept_id=request.POST.get('department'))
         faculty.status = request.POST.get('status')
         faculty.save()
         return redirect('faculty')
@@ -87,7 +105,11 @@ def edit_department(request, dept_id):
     department = Department.objects.get(dept_id=dept_id)
     if request.method == 'POST':
         department.dept_name = request.POST.get('dept_name')
-        department.hod = Faculty.objects.get(faculty_id=request.POST.get('hod'))
+        if not request.POST.get('hod'):
+            department.hod = None
+        else:
+            # Ensure that the HOD is a valid faculty member
+            department.hod = Faculty.objects.get(faculty_id=request.POST.get('hod'))
         department.save()
         return redirect('departments')
     
