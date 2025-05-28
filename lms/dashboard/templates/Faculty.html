@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7,42 +8,45 @@
     <body>
         <div class="whole-container">
             <div class="menu-panel">
-                <div class="back-icon" onclick-="menuCollapse">
+                <div onclick="menuCollapse()" id="backIcon" class="back-icon">
                     <i class="fa-solid fa-caret-right"></i>
                 </div>
-                <div class="logo-holder">Sri Sathya Sai Institute of Higher Learning</div>
+                <div class="logo-holder">
+                    <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
+                    <img class="logo-img display-none" src="1.png">
+                </div>
                 <div class="menu-icons">
-                    <div class="overview menu-item">
+                    <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item">
                         <div class="icon">
                             <i class="fa-solid fa-chart-simple"></i>
                         </div>
                         <span class="icon-name">Overview</span>
                     </div>
-                    <div class="students menu-item">
+                    <div onclick="showStudentPage()" id="students-item" class="students menu-item">
                         <div class="icon">
                             <i class="fa-solid fa-user"></i>
                         </div>
                         <span class="icon-name">Students</span> 
                     </div>
-                    <div class="faculty menu-item active">
+                    <div onclick="showFacultyPage()" id="faculty-item" class="faculty menu-item active">
                         <div class="icon">
                             <i class="fa-solid fa-chalkboard-user"></i>
                         </div>
                         <span class="icon-name">Faculty</span>
                     </div>
-                    <div class="departments menu-item">
+                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
                         <div class="icon">
                             <i class="fa-solid fa-users"></i>
                         </div>
                         <span class="icon-name">Departments</span>
                     </div>
-                    <div class="courses menu-item">
+                    <div id="courses-item" class="courses menu-item">
                         <div class="icon">
                             <i class="fa-solid fa-book"></i>
                         </div>
                         <span class="icon-name">Courses</span>
                     </div>
-                    <div class="Campus menu-item">
+                    <div id="campus-item" class="Campus menu-item">
                         <div class="icon">
                             <i class="fa-solid fa-school"></i>
                         </div>
@@ -50,7 +54,8 @@
                     </div>
                 </div>
             </div>
-            <div class="right-panel fac">
+
+            <div id="facultyPage" class="right-panel fac">
                 <div class="dashboard-head">
                     <span class="over-heading">Faculty</span>
                     <div class="date">
@@ -62,7 +67,7 @@
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input type="text" class="search" placeholder="Search Faculty...">
                     </div>
-                    <div class="create-icon">
+                    <div onclick="showAddFacultyPage()" class="create-icon">
                         <span>create</span>
                         <i class="fa-solid fa-plus"></i>
                     </div>
@@ -143,6 +148,10 @@
                     </table>
                 </div>
             </div>
+
         </div>
+
+    
+    <script src="{% static 'js/script.js' %}"></script>
     </body>
 </html>
