@@ -83,6 +83,7 @@
                             <label for="faculty-search">HOD:</label>
                                 <input list="faculties" id="faculty-search" name="hod" placeholder="Search Faculty...">
                                     <datalist id="faculties">
+                                            <option value="" selected>Select a Faculty</option>
                                         {% for faculty in faculties %}
                                             <option value="{{ faculty.faculty_id }}">{{ faculty.name }}</option>
                                         {% endfor %}
