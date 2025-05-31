@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Student</title>
+    <style>
+        body {
+            background: #f4f7f8;
+            font-family: "Segoe UI", sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            float: right;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .alert {
+            background-color: #f8d7da;
+            padding: 10px 15px;
+            color: #721c24;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .alert ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+
+    <!-- jQuery for AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        function fetchDistricts() {
+            const stateId = document.getElementById("state").value;
+            const districtSelect = document.getElementById("district");
+
+            // Clear previous districts
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+
+            if (stateId) {
+                $.get(`/get_districts/${stateId}/`, function(data) {
+                    data.forEach(function(district) {
+                        const option = document.createElement("option");
+                        option.value = district.id;
+                        option.textContent = district.name;
+                        districtSelect.appendChild(option);
+                    });
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Create Student</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% if messages %}
+        <div class="alert">
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="regd_no">Registration Number</label>
+            <input id="regd_no" name="regd_no" required>
+        </div>
+
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="state">State</label>
+            <select name="state" id="state" onchange="fetchDistricts()" required>
+                <option value="">Select State</option>
+                {% for state in states %}
+                    <option value="{{ state.id }}">{{ state.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="district">District</label>
+            <select name="district" id="district" required>
+                <option value="">Select District</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="city">City/Place</label>
+            <input type="text" name="city" id="city" placeholder="Enter City or Place" required>
+        </div>
+
+         <div class="form-group">
+            <label for="prev_degree1_name">Previous Degree1 Name</label>
+            <input id="prev_degree1_name" name="prev_degree1_name" type="text" required>
+        </div>
+
+        <div class="form-group">
+            <label for="prev_degree1_university">Previous Degree1 University</label>
+            <input id="prev_degree1_university" name="prev_degree1_university" type="text" required>
+        </div>
+
+        <div class="form-group">
+            <label for="prev_degree1_gpa">Previous Degree1 GPA</label>
+            <select name="prev_degree1_gpa" id="prev_degree1_gpa" required>
+                <option value="">-- Select GPA --</option>
+                {% for gpa in gpa_choices %}
+                    <option value="{{ gpa }}">{{ gpa }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+         <div class="form-group">
+            <label for="prev_degree2_name">Previous Degree2 Name</label>
+            <input id="prev_degree2_name" name="prev_degree2_name" type="text" >
+        </div>
+
+        <div class="form-group">
+            <label for="prev_degree2_university">Previous Degree2 University</label>
+            <input id="prev_degree2_university" name="prev_degree2_university" type="text" >
+        </div>
+         <div class="form-group">
+            <label for="prev_degree2_gpa">Previous Degree2 GPA</label>
+            <select name="prev_degree2_gpa" id="prev_degree2_gpa" >
+                <option value="">-- Select GPA --</option>
+                {% for gpa in gpa_choices %}
+                    <option value="{{ gpa }}">{{ gpa }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label for="blood_group">Blood Group</label>
+            <select name="blood_group" id="blood_group" required>
+                <option value="">-- Select --</option>
+                {% for code, label in blood_groups %}
+                    <option value="{{ code }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="birthday">Birthday</label>
+            <input type="date" name="birthday" id="birthday">
+        </div>
+
+        <div class="form-group">
+            <label for="program">Program</label>
+            <select id="program" name="program" required>
+                <option value="" selected disabled>-- Select Program --</option>
+                {% for prog in programs %}
+                    <option value="{{ prog.id }}">{{ prog.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="batch">Batch</label>
+            <input type="number" id="batch" name="batch" value="{{ current_year }}">
+        </div>
+
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="status" required>
+                <option value="" selected disabled>-- Select Status --</option>
+                {% for value, label in status %}
+                    <option value="{{ value }}" {% if value == 'active' %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group clearfix">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
