@@ -116,9 +116,8 @@ body {
   	gap: 20px;
 }
 
-.stud, .stud-add, .fac, .fac-add, .dept, .dept-add{
-	/* display: none; */
-}
+/* .stud, .stud-add, .fac, .fac-add, .dept, .dept-add{
+	display: none; } */
 
 .dashboard-head{
 	display: flex;
