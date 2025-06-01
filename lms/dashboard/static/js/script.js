@@ -29,12 +29,20 @@ function showAddStudentPage() {
     window.location.href = "/students/add";
 }
 
+function showUploadStudentPage() {
+    window.location.href = "/students/upload";
+}
+
 function showFacultyPage() {
     window.location.href = "/faculty";
 }
 
 function showAddFacultyPage() {
     window.location.href = "/faculty/add";
+}
+
+function showUploadFacultyPage() {
+    window.location.href = "/faculty/upload";
 }
 
 function showDepartmentsPage() {
@@ -45,12 +53,20 @@ function showAddDepartmentsPage() {
     window.location.href = "/departments/add";
 }
 
+function showUploadDepartmentsPage() {
+    window.location.href = "/departments/upload";
+}
+
 function showCampusPage() {
     window.location.href = "/campus";
 }
 
 function showAddCampusPage() {
     window.location.href = "/campus/add";
+}
+
+function showUploadCampusPage() {
+    window.location.href = "/campus/upload";
 }
 
 function showCampusCard(element) {
@@ -111,4 +127,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formattedDate = `${dd}-${mm}-${yyyy}`;
     document.getElementById('date').textContent = formattedDate;
+});
+
+// this is for the input file drag and drop functionality
+
+const uploadArea = document.getElementById('uploadArea');
+const fileInput = document.getElementById('fileInput');
+const fileList = document.getElementById('fileList');
+const validTypes = ['text/csv', 'application/vnd.ms-excel'];
+
+function handleFiles(files) {
+    fileList.innerHTML = '';
+    Array.from(files).forEach(file => {
+    if (!validTypes.includes(file.type)) {
+        alert(`File "${file.name}" is not a csv file.`);
+        return;
+    }
+    if (file.size > 50 * 1024 * 1024) {
+        alert(`File "${file.name}" exceeds 50MB.`);
+        return;
+    }
+
+    const item = document.createElement('div');
+    item.className = 'file-item';
+    item.innerHTML = `<span>${file.name}</span><span class="close-btn" onclick="this.parentElement.remove()">×</span>`;
+    fileList.appendChild(item);
+    });
+}
+
+uploadArea.addEventListener('dragover', e => {
+    e.preventDefault();
+    uploadArea.classList.add('dragover');
+});
+
+uploadArea.addEventListener('dragleave', () => {
+    uploadArea.classList.remove('dragover');
+});
+
+uploadArea.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
+});
+
+fileInput.addEventListener('change', () => {
+    handleFiles(fileInput.files);
 });

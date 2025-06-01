@@ -13,6 +13,18 @@ def faculty(request):
 
     return render(request, 'Faculty.html', {'faculties': faculties})
 
+def uploadfaculty(request):
+    return render(request, 'Upload-Faculty.html')
+
+def uploaddepartment(request):
+    return render(request, 'Upload-Department.html')
+
+def uploadcampus(request):
+    return render(request, 'Upload-Campus.html')
+
+def uploadstudent(request):
+    return render(request, 'Upload-Student.html')
+
 def departments(request):
     departments = Department.objects.all()
     return render(request, 'Departments.html', {'departments': departments})

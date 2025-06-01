@@ -55,67 +55,28 @@
                 </div>
             </div>
 
-            <div id="facultyPage" class="right-panel fac">
+            <div id="addFacultyPage" class="right-panel fac-add">
                 <div class="dashboard-head">
-                    <span class="over-heading">Faculty</span>
-                    <div class="date">
-                        <span id="date"></span>
-                    </div>
-                </div>
-                <div class="stud-header">
-                    <div class="search-bar">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" class="search" placeholder="Search Faculty...">
-                    </div>
-                    <div onclick="showAddFacultyPage()" class="create-icon">
-                        <span>Create</span>
-                        <i class="fa-solid fa-plus"></i>
-                    </div>
-                    <div onclick="showUploadFacultyPage()" class="create-icon">
-                        <span>Upload</span>
-                        <i class="fa-solid fa-upload"></i>
+                    <span class="over-heading">Upload Faculty csv</span>
+                    <div onclick="showFacultyPage()" class="date pointer">
+                        <span>Cancel</span>
+                        <i class="fas fa-times"></i>
                     </div>
                 </div>
                 
-                <div class="table-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Faculty ID</th>
-                                <th>Name</th>
-                                <th>Department</th>
-                                <th>Campus</th>
-                                <th>Email</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if faculties %}
-                                {% for faculty in faculties %}
-                                <tr>
-                                    <td>{{ faculty.faculty_id }} </td>
-                                    <td>{{ faculty.name }}</td>
-                                    <td>{{ faculty.department}}</td>
-                                    <td>{{ faculty.campus }}</td>
-                                    <td>{{ faculty.email }}</td>
-                                    
-                                    <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                                    <td class="edit" onclick="location.href='{% url 'edit_faculty' faculty.faculty_id %}'"><i class="fas fa-edit"></i></td>
-                                    <td class="delete" onclick="if(confirm('Are you sure you want to delete this faculty?')){window.location.href='{% url 'del_faculty' faculty.faculty_id %}'}"><i class="fa-solid fa-trash"></i></td>
-                                </tr>
-                                {% endfor %}
-                            {% else %}
-                            <tr>
-                                <td colspan="8" class="no-data">No Faculty Data Available</td>
-                            </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
+                <div class="upload-box">
+                    <span class="upload-header">Upload files</span>
+                    <span class="upload-subheader">Select and upload the files of your choice</span>
+                    <div class="upload-area" id="uploadArea">
+                        <div class="icon-holder"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                        <span>Choose a file or drag & drop it here</span>
+                        <small>Only csv files are allowed</small><br>
+                        <div class="browse-button" onclick="document.getElementById('fileInput').click()">Browse File</div>
+                        <input class="display-none" type="file" id="fileInput" hidden multiple />
+                    </div>
+                    <div class="file-list" id="fileList"></div>
                 </div>
             </div>
-
         </div>
 
     
