@@ -316,6 +316,8 @@ i{
 }
 
 .container {
+	place-self: center;
+	align-self: center;
 	margin-top: 20px;
 	background: white;
 	padding: 30px 40px;
