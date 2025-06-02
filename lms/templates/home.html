@@ -57,5 +57,22 @@
         <button>Edit Details</button>
     </div>
 
+
+    <form method="post" enctype="multipart/form-data" action="{% url 'bulk_upload' %}">
+    {% csrf_token %}
+    <label for="excel_file">Upload Excel File:</label>
+    <input type="file" name="excel_file" accept=".xlsx" required>
+    <button type="submit">Upload</button>
+</form>
+
+{% if messages %}
+    <ul>
+    {% for message in messages %}
+        <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+
 </body>
 </html>

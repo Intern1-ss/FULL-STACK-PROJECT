@@ -6,6 +6,9 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 
+from openpyxl import load_workbook
+from django.core.exceptions import ValidationError
+
 def studenthome(request):
     return render(request,'home.html')
 
@@ -121,5 +124,106 @@ def get_states(request):
 def get_districts_by_state(request, state_id):
     districts = District.objects.filter(state_id=state_id).values('id', 'name')
     return JsonResponse(list(districts), safe=False)
+
+
+
+
+
+
+
+
+
+def bulk_upload_students(request):
+    if request.method == 'POST' and request.FILES['excel_file']:
+        excel_file = request.FILES['excel_file']
+        wb = load_workbook(filename=excel_file)
+        sheet = wb.active
+
+        headers = [cell.value for cell in sheet[1]]
+        expected_headers = [
+            "regd_no", "name", "email", "state_name", "district_name","city", "prev_degree1_name",
+            "prev_degree1_university", "prev_degree1_gpa", "prev_degree2_name",
+            "prev_degree2_university", "prev_degree2_gpa", "blood_group", "birthday",
+            "program", "batch", "status"
+        ]
+
+        if headers != expected_headers:
+            messages.error(request, "Excel format is incorrect. Expected headers: " + ", ".join(expected_headers))
+            return redirect('studenthome')
+
+        success_count = 0
+        error_entries = []
+
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            data = dict(zip(headers, row))
+
+            try:
+                # Validate required fields
+                if not data['regd_no'] or not data['email'] or not data['name'] or not data['program']:
+                    raise ValueError("Missing required fields.")
+
+                # Check for duplicates
+                if Student.objects.filter(regd_no=data['regd_no']).exists():
+                    raise ValueError(f"Registration number {data['regd_no']} already exists.")
+                if Student.objects.filter(email=data['email']).exists():
+                    raise ValueError(f"Email {data['email']} already exists.")
+
+                # Validate blood group
+                if data['blood_group'] and data['blood_group'] not in dict(Student.BLOOD_GROUP_CHOICES):
+                    raise ValueError(f"Invalid blood group: {data['blood_group']}")
+
+                # Validate status
+                if data['status'] and data['status'] not in dict(Student.STATUS_CHOICES):
+                    raise ValueError(f"Invalid status: {data['status']}")
+
+                # Validate and fetch Program
+                try:
+                    program = Program.objects.get(name__iexact=data['program'])
+                except Program.DoesNotExist:
+                    raise ValueError(f"Program '{data['program']}' does not exist.")
+
+                # Parse birthday (expected DD-MM-YYYY)
+                birthday = None
+                if data['birthday']:
+                    try:
+                        birthday = datetime.strptime(data['birthday'], '%d-%m-%Y').date()
+                    except ValueError:
+                        raise ValueError("Birthday format should be DD-MM-YYYY")
+
+                # Create student
+                Student.objects.create(
+                    regd_no=data['regd_no'],
+                    name=data['name'],
+                    email=data['email'],
+                    state_name=data['state_name'] or '',
+                    district_name=data.get('district_name') or '',
+                    city=data.get('city') or '',
+                    prev_degree1_name=data.get('prev_degree1_name') or '',
+                    prev_degree1_university=data.get('prev_degree1_university') or '',
+                    prev_degree1_gpa=data.get('prev_degree1_gpa') or None,
+                    prev_degree2_name=data.get('prev_degree2_name') or '',
+                    prev_degree2_university=data.get('prev_degree2_university') or '',
+                    prev_degree2_gpa=data.get('prev_degree2_gpa') or None,
+                    blood_group=data.get('blood_group'),
+                    birthday=birthday,
+                    program=program,
+                    batch=data.get('batch') or datetime.now().year,
+                    status=data.get('status') or 'active',
+                    created_at=datetime.now(),
+                    updated_at=datetime.now()
+                )
+                success_count += 1
+
+            except Exception as e:
+                error_entries.append(f"{data.get('regd_no')} - {e}")
+
+        # Final message
+        if error_entries:
+            messages.warning(request, f"{success_count} students uploaded successfully. {len(error_entries)} failed.")
+            messages.error(request, "\n".join(error_entries))
+        else:
+            messages.success(request, f"All {success_count} students uploaded successfully.")
+
+        return redirect('studenthome')
 
 

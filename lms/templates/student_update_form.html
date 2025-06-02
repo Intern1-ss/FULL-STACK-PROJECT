@@ -12,10 +12,15 @@
     Registration Number: <input type="text" name="regd_no" value="{{ student.regd_no }}" readonly><br>
     Name: <input type="text" name="name" value="{{ student.name }}"><br>
     Email: <input type="email" name="email" value="{{ student.email }}"><br>
-    District: <input type="text" name="district" value="{{ student.district }}"><br>
-    Previous Degree Name: <input type="text" name="prev_degree_name" value="{{ student.prev_degree_name }}"><br>
-    Previous Degree University: <input type="text" name="prev_degree_university" value="{{ student.prev_degree_university }}"><br>
-    Previous Degree GPA: <input type="number" step="0.01" name="prev_degree_gpa" value="{{ student.prev_degree_gpa }}"><br>
+    State:<input type="text" name="state" value="{{ student.state_name }}"><br>
+    District: <input type="text" name="district" value="{{ student.district_name }}"><br>
+    City: <input type="text" name="city" value="{{ student.city }}"><br>
+    Previous Degree1 Name: <input type="text" name="prev_degree1_name" value="{{ student.prev_degree1_name }}"><br>
+    Previous Degree1 University: <input type="text" name="prev_degree1_university" value="{{ student.prev_degree1_university }}"><br>
+    Previous Degree1 GPA: <input type="number" step="0.01" name="prev_degree1_gpa" value="{{ student.prev_degree1_gpa }}"><br>
+    Previous Degree2 Name: <input type="text" name="prev_degree2_name" value="{{ student.prev_degree2_name }}"><br>
+    Previous Degree2 University: <input type="text" name="prev_degree2_university" value="{{ student.prev_degree2_university }}"><br>
+    Previous Degree2 GPA: <input type="number" step="0.01" name="prev_degree2_gpa" value="{{ student.prev_degree2_gpa }}"><br>
     Blood Group:
     <select name="blood_group">
         {% for code, label in blood_groups %}
