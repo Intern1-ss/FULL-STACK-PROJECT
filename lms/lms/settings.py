@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # DATABASE APP
     'DB',
+    'student',
     # CUSTOM APPS    
 ]
 
