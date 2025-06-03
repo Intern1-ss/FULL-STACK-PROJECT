@@ -63,7 +63,8 @@
                         <i class="fas fa-times"></i>
                     </div>
                 </div>
-                
+                <form id="uploadForm" class="upload-form" method="post" enctype="multipart/form-data" action="/bulkUp/upload/campus/">
+                    {% csrf_token %}
                 <div class="upload-box">
                     <span class="upload-header">Upload files</span>
                     <span class="upload-subheader">Select and upload the files of your choice</span>
@@ -72,10 +73,14 @@
                         <span>Choose a file or drag & drop it here</span>
                         <small>Only csv files are allowed</small><br>
                         <div class="browse-button" onclick="document.getElementById('fileInput').click()">Browse File</div>
-                        <input class="display-none" type="file" id="fileInput" hidden multiple />
+                        <input class="display-none" name="file" type="file" id="fileInput" hidden multiple />
                     </div>
                     <div class="file-list" id="fileList"></div>
                 </div>
+                <div class="upload-button-holder">
+                    <button type="submit" class="upload-button">Upload</button>
+                </div>
+                </form>
             </div>
         </div>
 

@@ -22,4 +22,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include('DB.urls')),
     path('', include('dashboard.urls')),
+    path('bulkUp/', include('bulkUp.urls')),
 ]

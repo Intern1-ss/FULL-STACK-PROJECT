@@ -146,13 +146,18 @@ document.addEventListener('DOMContentLoaded', () => {
 const uploadArea = document.getElementById('uploadArea');
 const fileInput = document.getElementById('fileInput');
 const fileList = document.getElementById('fileList');
-const validTypes = ['text/csv', 'application/vnd.ms-excel'];
+const validTypes = [
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.ms-excel',
+    'application/vnd.ms-excel.sheet.macroEnabled.12',
+    'application/vnd.ms-excel.sheet.binary.macroEnabled.12'
+];
 
 function handleFiles(files) {
     fileList.innerHTML = '';
     Array.from(files).forEach(file => {
     if (!validTypes.includes(file.type)) {
-        alert(`File "${file.name}" is not a csv file.`);
+        alert(`File "${file.name}" is not a supported Excel file.`);
         return;
     }
     if (file.size > 50 * 1024 * 1024) {

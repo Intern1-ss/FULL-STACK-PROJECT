@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'DB',
     # CUSTOM APPS
     'dashboard', 
+    'bulkUp',
 ]
 
 MIDDLEWARE = [

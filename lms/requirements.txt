@@ -2,3 +2,5 @@ python-dotenv
 django
 pymysql
 mysqlclient
+pandas
+openpyxl
