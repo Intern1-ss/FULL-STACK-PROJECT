@@ -40,11 +40,11 @@
                         </div>
                         <span class="icon-name">Departments</span>
                     </div>
-                    <div id="courses-item" class="courses menu-item">
+                    <div onclick="showProgramPage()" id="courses-item" class="courses menu-item">
                         <div class="icon">
                             <i class="fa-solid fa-book"></i>
                         </div>
-                        <span class="icon-name">Courses</span>
+                        <span class="icon-name">Program</span>
                     </div>
                     <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item">
                         <div class="icon">
@@ -84,7 +84,7 @@
                                 <th>Register No.</th>
                                 <th>Name</th>
                                 <th>Department</th>
-                                <th>Year</th>
+                                <th>Batch</th>
                                 <th>Email</th>
                                 <th></th>
                                 <th></th>
@@ -92,62 +92,25 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% if students %}
+                            {% for student in students %}
                             <tr>
-                                <td>1001</td>
-                                <td>John Doe</td>
-                                <td>Computer Science</td>
-                                <td>3rd Year</td>
-                                <td>johndoe@gmail.com</td>
+                                <td>{{ student.regd_no}}</td>
+                                <td>{{ student.name }}</td>
+                                <td>{{ student.program.department }}</td>
+                                <td>{{ student.batch }}</td>
+                                <td>{{ student.email }}</td>
                                 
                                 <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                                <td class="edit"><i class="fas fa-edit"></i></td>
-                                <td class="delete"><i class="fa-solid fa-trash"></i></td>
-                            </tr>
+                                <td class="edit" onclick="location.href='{% url 'edit_student' student.regd_no %}'"><i class="fas fa-edit"></i></td>
+                                <td class="delete" onclick="if(confirm('Are you sure you want to delete this Student?')){window.location.href='{% url 'del_student' student.regd_no %}'}"><i class="fa-solid fa-trash"></i></td>
+                                </tr>
+                            {% endfor %}
+                            {% else %}
                             <tr>
-                                <td>1002</td>
-                                <td>Jane Smith</td>
-                                <td>Electronics</td>
-                                <td>2nd Year</td>
-                                <td>janesmith@gmail.com</td>
-                                
-                                <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                                <td class="edit"><i class="fas fa-edit"></i></td>
-                                <td class="delete"><i class="fa-solid fa-trash"></i></td>
-
-                            </tr>
-                            <tr>
-                                <td>1003</td>
-                                <td>Emily Johnson</td>
-                                <td>Physics</td>
-                                <td>1st Year</td>
-                                <td>emilyjohnson@gmail.com</td>
-                                
-                                <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                                <td class="edit"><i class="fas fa-edit"></i></td>
-                                <td class="delete"><i class="fa-solid fa-trash"></i></td>
-                            </tr>
-                            <tr>
-                                <td>1004</td>
-                                <td>Michael Brown</td>
-                                <td>Mathematics</td>
-                                <td>4th Year</td>
-                                <td>michaelbrown@gmail.com</td>
-                                
-                                <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                                <td class="edit"><i class="fas fa-edit"></i></td>
-                                <td class="delete"><i class="fa-solid fa-trash"></i></td>
-                            </tr>
-                            <tr>
-                                <td>1005</td>
-                                <td>Sarah Wilson</td>
-                                <td>Chemistry</td>
-                                <td>3rd Year</td>
-                                <td>sarahwilson@gmail.com</td>
-                                
-                                <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                                <td class="edit"><i class="fas fa-edit"></i></td>
-                                <td class="delete"><i class="fa-solid fa-trash"></i></td>
-                            </tr>
+                                <td colspan="8" class="no-data">No Student Data Available</td>
+                                </tr>
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>

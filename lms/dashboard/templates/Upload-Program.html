@@ -34,13 +34,13 @@
                         </div>
                         <span class="icon-name">Faculty</span>
                     </div>
-                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item active">
+                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
                         <div class="icon">
                             <i class="fa-solid fa-users"></i>
                         </div>
                         <span class="icon-name">Departments</span>
                     </div>
-                    <div onclick="showProgramPage()" id="courses-item" class="courses menu-item">
+                    <div onclick="showProgramPage()" id="courses-item" class="courses menu-item activeW">
                         <div class="icon">
                             <i class="fa-solid fa-book"></i>
                         </div>
@@ -55,45 +55,28 @@
                 </div>
             </div>
 
-            <div id="addDepartmentsPage" class="right-panel dept-add">
+            <div id="addFacultyPage" class="right-panel fac-add">
                 <div class="dashboard-head">
-                    <span class="over-heading">Edit Department: {{ department.dept_id }} </span>
-                    <div onclick="showDepartmentsPage()" class="date pointer">
+                    <span class="over-heading">Upload Program csv</span>
+                    <div onclick="showProgramPage()" class="date pointer">
                         <span>Cancel</span>
                         <i class="fas fa-times"></i>
                     </div>
                 </div>
                 
-                <div class="container">
-                    <form class="form" method="post">
-                        {% csrf_token %}
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="name">Department Name</label>
-                                <input type="text" id="name" name="dept_name" value="{{ department.dept_name }}" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="deptID">Department ID</label>
-                                <input type="text" id="deptID" name="dept_id" disabled value="{{ department.dept_id }}" required>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            
-                            <div class="form-group">
-                            <label for="faculty-search">HOD:</label>
-                                <input list="faculties" id="faculty-search" name="hod" {% if department.hod  %}  value="{{ department.hod.faculty_id }}" {% endif %} placeholder="Search Faculty...">
-                                    <datalist id="faculties">
-                                        {% for faculty in faculties %}
-                                            <option value="{{ faculty.faculty_id }}">{{ faculty.name }}</option>
-                                        {% endfor %}
-                                    </datalist>
-                            </div>
-                        </div>
-                        <button class="create-button" type="submit">Update</button>
-                    </form>
+                <div class="upload-box">
+                    <span class="upload-header">Upload files</span>
+                    <span class="upload-subheader">Select and upload the files of your choice</span>
+                    <div class="upload-area" id="uploadArea">
+                        <div class="icon-holder"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                        <span>Choose a file or drag & drop it here</span>
+                        <small>Only csv files are allowed</small><br>
+                        <div class="browse-button" onclick="document.getElementById('fileInput').click()">Browse File</div>
+                        <input class="display-none" type="file" id="fileInput" hidden multiple />
+                    </div>
+                    <div class="file-list" id="fileList"></div>
                 </div>
             </div>
-
         </div>
 
     

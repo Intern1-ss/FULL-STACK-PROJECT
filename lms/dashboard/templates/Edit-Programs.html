@@ -34,13 +34,13 @@
                         </div>
                         <span class="icon-name">Faculty</span>
                     </div>
-                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item active">
+                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
                         <div class="icon">
                             <i class="fa-solid fa-users"></i>
                         </div>
                         <span class="icon-name">Departments</span>
                     </div>
-                    <div onclick="showProgramPage()" id="courses-item" class="courses menu-item">
+                    <div onclick="showProgramPage()" id="courses-item" class="courses menu-item active">
                         <div class="icon">
                             <i class="fa-solid fa-book"></i>
                         </div>
@@ -57,8 +57,8 @@
 
             <div id="addDepartmentsPage" class="right-panel dept-add">
                 <div class="dashboard-head">
-                    <span class="over-heading">Edit Department: {{ department.dept_id }} </span>
-                    <div onclick="showDepartmentsPage()" class="date pointer">
+                    <span class="over-heading">Edit Program: {{ program.name }}</span>
+                    <div onclick="showProgramPage()" class="date pointer">
                         <span>Cancel</span>
                         <i class="fas fa-times"></i>
                     </div>
@@ -69,24 +69,28 @@
                         {% csrf_token %}
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="name">Department Name</label>
-                                <input type="text" id="name" name="dept_name" value="{{ department.dept_name }}" required>
+                                <label for="name">Program Name</label>
+                                <input type="text" id="name" name="name" value="{{program.name}}" placeholder="Enter Program name" required>
                             </div>
                             <div class="form-group">
-                                <label for="deptID">Department ID</label>
-                                <input type="text" id="deptID" name="dept_id" disabled value="{{ department.dept_id }}" required>
+                                <label for="deptID">Program Code</label>
+                                <input type="text" id="deptID" name="code" value="{{program.code}}" placeholder="Enter Program Code" required>
                             </div>
                         </div>
                         <div class="form-row">
                             
                             <div class="form-group">
-                            <label for="faculty-search">HOD:</label>
-                                <input list="faculties" id="faculty-search" name="hod" {% if department.hod  %}  value="{{ department.hod.faculty_id }}" {% endif %} placeholder="Search Faculty...">
+                            <label for="faculty-search">Department</label>
+                                <input list="faculties" id="faculty-search" name="department" value="{{program.department.dept_id}}" placeholder="Search Department...">
                                     <datalist id="faculties">
-                                        {% for faculty in faculties %}
-                                            <option value="{{ faculty.faculty_id }}">{{ faculty.name }}</option>
+                                        {% for dept in departments %}
+                                            <option value="{{ dept.dept_id }}">{{ dept.dept_name }}</option>
                                         {% endfor %}
                                     </datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="deptID">Program Duration</label>
+                                <input type="number" id="deptID" name="duration_years" value="{{program.duration_years}}" placeholder="Enter Program Duration" required>
                             </div>
                         </div>
                         <button class="create-button" type="submit">Update</button>

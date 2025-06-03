@@ -75,6 +75,18 @@ function showCampusCard(element) {
         content.classList.toggle('display-none');
 }
 
+function showProgramPage() {
+    window.location.href = "/programs";
+}
+
+function showAddProgramsPage() {
+    window.location.href = "/programs/add";
+}
+
+function showUploadProgramsPage() {
+    window.location.href = "/programs/upload";
+}
+
 function menuCollapse(){
     console.log("Menu collapsed");
     let panel = document.querySelectorAll('.right-panel');

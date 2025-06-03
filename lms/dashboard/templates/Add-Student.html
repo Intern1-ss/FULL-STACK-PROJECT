@@ -40,11 +40,11 @@
                         </div>
                         <span class="icon-name">Departments</span>
                     </div>
-                    <div id="courses-item" class="courses menu-item">
+                    <div onclick="showProgramPage()" id="courses-item" class="courses menu-item">
                         <div class="icon">
                             <i class="fa-solid fa-book"></i>
                         </div>
-                        <span class="icon-name">Courses</span>
+                        <span class="icon-name">Program</span>
                     </div>
                     <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item">
                         <div class="icon">
@@ -65,25 +65,26 @@
                 </div>
                 
                 <div class="container">
-                    <form class="form">
+                    <form class="form" method="post">
+                        {% csrf_token %}
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="name">Full Name</label>
-                                <input type="text" id="name" placeholder="Enter name" required>
+                                <input type="text" id="name" name="name" placeholder="Enter name" required>
                             </div>
                             <div class="form-group">
                                 <label for="dob">Date of Birth</label>
-                                <input type="date" id="dob" required>
+                                <input type="date" id="dob" name="dob" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" id="email" placeholder="Enter email" required>
+                                <input type="email" id="email" name="email" placeholder="Enter email" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="mobile">Mobile Number</label>
-                                <input type="tel" id="mobile" placeholder="Enter mobile number" required>
+                                <input type="tel" id="mobile" name="mobile" placeholder="Enter mobile number" required>
                             </div>
                             <div class="form-group">
                                 <label for="gender">Gender</label>
@@ -95,7 +96,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="bloodGroup">Blood Group</label>
-                                <select class="field" name="bloodGroup" id="bloodGroup" >
+                                <select class="field" name="blood_group" id="bloodGroup" >
                                     <option value="A+">A+</option>
                                     <option value="A-">A−</option>
                                     <option value="B+">B+</option>
@@ -110,15 +111,20 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="regNum">Register Number</label>
-                                <input type="number" id="regNum" placeholder="Enter Register Number" required>
+                                <input type="number" id="regNum" name="regNum" placeholder="Enter Register Number" required>
                             </div>
                             <div class="form-group">
-                                <label for="progID">Program ID</label>
-                                <input type="text" id="progID" placeholder="Enter Program ID" required>
+                            <label for="faculty-search">Program</label>
+                                <input list="programs" id="faculty-search" name="program" placeholder="Search Program...">
+                                    <datalist id="programs">
+                                        {% for program in programs %}
+                                            <option value="{{ program.code }}">{{ program.name }}</option>
+                                        {% endfor %}
+                                    </datalist>
                             </div>
                             <div class="form-group">
                                 <label for="batch">Batch</label>
-                                <input type="number" id="batch" name="batch" min="1900" max="2100" placeholder="2025">
+                                <input type="number" id="batch" name="batch" min="1900" max="2100" value="2025" placeholder="2025">
 
                             </div>
                         </div>
@@ -344,7 +350,7 @@
                             </div>
                             <div class="form-group" id="state-group" style="display: none;">
                                 <label for="state">State</label>
-                                <input class="field" list="stateList" type="text" id="state" placeholder="Enter state" required>
+                                <input class="field" list="stateList" name="state_name" type="text" id="state" placeholder="Enter state" required>
                                 <datalist id="stateList">
                                     <option value="Andhra Pradesh">Andhra Pradesh</option>
                                     <option value="Arunachal Pradesh">Arunachal Pradesh</option>
@@ -378,35 +384,35 @@
                             </div>
                             <div class="form-group">
                                 <label for="district">District</label>
-                                <input type="text" id="district" placeholder="Enter district" required>
+                                <input type="text" id="district" name="district_name" placeholder="Enter district" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="prevDegName">Previous Degree Name</label>
-                                <input type="text" id="prevDegName" placeholder="Enter Previous Degree Name" required>
+                                <input type="text" id="prevDegName" name="prev_degree1_name" placeholder="Enter Previous Degree Name" >
                             </div>
                             <div class="form-group">
                                 <label for="prevDegUni">Previous University Name</label>
-                                <input type="text" id="prevDegUni" placeholder="Enter Previous University" required>
+                                <input type="text" id="prevDegUni" name="prev_degree1_university" placeholder="Enter Previous University">
                             </div>
                             <div class="form-group">
                                 <label for="prevGPA">Previous degree GPA</label>
-                                <input type="number" id="prevGPA" step="0.1" placeholder="Enter previous degree GPA" required>
+                                <input type="number" id="prevGPA" name="prev_degree1_gpa" step="0.1" placeholder="Enter previous degree GPA" >
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="prevDegName">Previous Degree Name</label>
-                                <input type="text" id="prevDegName" placeholder="Enter Previous Degree Name">
+                                <input type="text" id="prevDegName" name="prev_degree2_name" placeholder="Enter Previous Degree Name" >
                             </div>
                             <div class="form-group">
                                 <label for="prevDegUni">Previous University Name</label>
-                                <input type="text" id="prevDegUni" placeholder="Enter Previous University">
+                                <input type="text" id="prevDegUni" name="prev_degree2_university" placeholder="Enter Previous University" >
                             </div>
                             <div class="form-group">
                                 <label for="prevGPA">Previous degree GPA</label>
-                                <input type="number" id="prevGPA" step="0.1" placeholder="Enter previous degree GPA">
+                                <input type="number" id="prevGPA" name="prev_degree2_gpa" step="0.1" placeholder="Enter previous degree GPA" >
                             </div>
                         </div>
                         <button class="create-button" type="submit">Create</button>

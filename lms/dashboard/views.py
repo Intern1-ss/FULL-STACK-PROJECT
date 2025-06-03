@@ -1,17 +1,27 @@
 from django.shortcuts import render, redirect
-from DB.models import Department, Campus, Faculty
+from DB.models import Department, Campus, Faculty, Student, Program
 
 # Create your views here.
 def home(request):
-    return render(request, 'Overview.html')
+    context = {
+        'student_count': Student.objects.count(),
+        'faculty_count': Faculty.objects.count(),
+        'department_count': Department.objects.count(),
+        'campus_count': Campus.objects.count(),
+        'program_count': Program.objects.count(),
+    }
+    return render(request, 'Overview.html', context)
 
 def students(request):
-    return render(request, 'Student.html')
+    return render(request, 'Student.html', {'students': Student.objects.all()})
 
 def faculty(request):
     faculties = Faculty.objects.all()
 
     return render(request, 'Faculty.html', {'faculties': faculties})
+
+def programs(request):
+    return render(request, 'Programs.html', {'programs': Program.objects.all()})
 
 def uploadfaculty(request):
     return render(request, 'Upload-Faculty.html')
@@ -25,6 +35,9 @@ def uploadcampus(request):
 def uploadstudent(request):
     return render(request, 'Upload-Student.html')
 
+def uploadprogram(request):
+    return render(request, 'Upload-Program.html')
+
 def departments(request):
     departments = Department.objects.all()
     return render(request, 'Departments.html', {'departments': departments})
@@ -34,7 +47,43 @@ def campus(request):
     return render(request, 'Campus.html', {'campuses': campuses})
 
 def addstudent(request):
-    return render(request, 'Add-Student.html')
+    if request.method == 'POST':
+        student = Student()
+        student.regd_no = request.POST.get('regNum')
+        student.name = request.POST.get('name')
+        student.birthday = request.POST.get('dob')
+        student.email = request.POST.get('email')
+        student.batch = request.POST.get('batch')
+        student.blood_group = request.POST.get('blood_group')
+        student.city = request.POST.get('city')
+        student.mobile = request.POST.get('mobile')
+        student.country = request.POST.get('country')
+        student.district_name = request.POST.get('district_name')
+        student.state_name  = request.POST.get('state_name')
+        if request.POST.get('prev_degree1_gpa'):
+            try:
+                student.prev_degree1_gpa = float(request.POST.get('prev_degree1_gpa'))  
+            except ValueError: 
+                student.prev_degree1_gpa = None
+        if request.POST.get('prev_degree2_gpa'):
+            try:
+                student.prev_degree2_gpa = float(request.POST.get('prev_degree2_gpa'))  
+            except ValueError: 
+                student.prev_degree2_gpa = None
+        student.prev_degree1_name = request.POST.get('prev_degree1_name')
+        student.prev_degree1_university = request.POST.get('prev_degree1_university')
+        student.prev_degree2_name = request.POST.get('prev_degree2_name')
+        student.prev_degree2_university = request.POST.get('prev_degree2_university')
+        if not request.POST.get('program'):
+            student.program = None
+        else:
+            # Ensure that the program exists before assigning
+            student.program = Program.objects.get(code=request.POST.get('program'))
+        student.status = request.POST.get('status')
+        student.save()
+        return redirect('students')
+
+    return render(request, 'Add-Student.html', {'programs': Program.objects.all()})
 
 def addfaculty(request):
     if request.method == 'POST':
@@ -85,6 +134,59 @@ def addcampus(request):
         campus.save()
         return redirect('campus')
     return render(request, 'Add-Campus.html')
+
+def addprogram(request):
+    if request.method == 'POST':
+        program = Program()
+        program.name = request.POST.get('name')
+        program.code = request.POST.get('code')
+        program.duration_years = request.POST.get('duration_years')
+        # Ensure that the department exists before assigning
+        if not request.POST.get('department'):
+            program.department = None
+        else:
+            program.department = Department.objects.get(dept_id=request.POST.get('department'))
+        program.save()
+        return redirect('programs')
+    return render(request, 'Add-Programs.html', {'departments': Department.objects.all()})
+
+def edit_student(request, regd_no):
+    student = Student.objects.get(regd_no=regd_no)
+    if request.method == 'POST':
+        student.name = request.POST.get('name')
+        student.birthday = request.POST.get('dob')
+        student.email = request.POST.get('email')
+        student.batch = request.POST.get('batch')
+        student.mobile = request.POST.get('mobile')
+        student.blood_group = request.POST.get('blood_group')
+        student.city = request.POST.get('city')
+        student.country = request.POST.get('country')
+        student.district_name = request.POST.get('district_name')
+        student.state_name  = request.POST.get('state_name')
+        if request.POST.get('prev_degree1_gpa'):
+            try:
+                student.prev_degree1_gpa = float(request.POST.get('prev_degree1_gpa'))  
+            except ValueError: 
+                student.prev_degree1_gpa = None
+        if request.POST.get('prev_degree2_gpa'):
+            try:
+                student.prev_degree2_gpa = float(request.POST.get('prev_degree2_gpa'))  
+            except ValueError: 
+                student.prev_degree2_gpa = None
+        student.prev_degree1_name = request.POST.get('prev_degree1_name')
+        student.prev_degree1_university = request.POST.get('prev_degree1_university')
+        student.prev_degree2_name = request.POST.get('prev_degree2_name')
+        student.prev_degree2_university = request.POST.get('prev_degree2_university')
+        if not request.POST.get('program'):
+            student.program = None
+        else:
+            # Ensure that the program exists before assigning
+            student.program = Program.objects.get(code=request.POST.get('program'))
+        student.status = request.POST.get('status')
+        student.save()
+        return redirect('students')
+
+    return render(request, 'Edit-Student.html', {'student': student, 'programs': Program.objects.all()})
 
 def edit_faculty(request, faculty_id):
     faculty = Faculty.objects.get(faculty_id=faculty_id)
@@ -137,6 +239,30 @@ def edit_campus(request, campus_id):
         return redirect('campus')
     return render(request, 'Edit-Campus.html', {'campus': campus})
 
+def edit_program(request, program_id):
+    program = Program.objects.get(id=program_id)
+    if request.method == 'POST':
+        program.name = request.POST.get('name')
+        program.code = request.POST.get('code')
+        program.duration_years = request.POST.get('duration_years')
+        # Ensure that the department exists before assigning
+        if not request.POST.get('department'):
+            program.department = None
+        else:
+            program.department = Department.objects.get(dept_id=request.POST.get('department'))
+        program.save()
+        return redirect('programs')
+    
+    departments = Department.objects.all()
+    return render(request, 'Edit-Programs.html', {'program': program, 'departments': departments})
+
+def delete_student(request, regd_no):
+    student = Student.objects.get(regd_no=regd_no)
+    if not student:
+        return redirect('students')
+    student.delete()
+    return redirect('students')
+
 def delete_faculty(request, faculty_id):
     faculty = Faculty.objects.get(faculty_id=faculty_id)
     if not faculty:
@@ -157,3 +283,10 @@ def delete_campus(request, campus_id):
         return redirect('campus')
     campus.delete()
     return redirect('campus')
+
+def delete_program(request, program_id):
+    program = Program.objects.get(id=program_id)
+    if not program:
+        return redirect('programs')
+    program.delete()
+    return redirect('programs')
