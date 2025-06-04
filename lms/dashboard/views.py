@@ -184,7 +184,6 @@ def edit_student(request, regd_no):
             student.dp_key = uploaded.key
         else:
             print("No file uploaded or file is empty.")
-            student.dp_key = None
         student.birthday = request.POST.get('dob')
         student.email = request.POST.get('email')
         student.batch = request.POST.get('batch')
