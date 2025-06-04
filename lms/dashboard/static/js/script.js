@@ -17,6 +17,7 @@ let menuBackIcon = document.getElementById("backIcon");
 let menuOpen = true;
 
 
+
 function showOverviewPage() {
     window.location.href = "/";
 }
@@ -85,6 +86,16 @@ function showAddProgramsPage() {
 
 function showUploadProgramsPage() {
     window.location.href = "/programs/upload";
+}
+
+function closePopup() {
+    let popup = document.getElementById('popup');
+    popup.classList.add('display-none');
+}
+
+function openPopup() {
+    let popup = document.getElementById('popup');
+    popup.classList.remove('display-none');
 }
 
 function menuCollapse(){

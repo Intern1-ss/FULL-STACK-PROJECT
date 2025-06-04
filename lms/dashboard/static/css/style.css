@@ -339,11 +339,17 @@ i{
 	flex-wrap: wrap;
 }
 
+.form-header{
+	display: flex;	
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
 .form-row-header{
 	display: flex;
 	gap: 20px;
 	align-items: center;
-	margin-bottom: 10px;
 }
 
 .form-row-header img{
@@ -619,6 +625,29 @@ option:hover {
 	cursor: pointer;
 	font-weight: bold;
 	color: #888;
+}
+
+.pfp-img-title{
+	font-size: 16px;
+	color: #505050;
+	font-weight: 500;
+}
+
+.popup{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.3);
+	z-index: 9999;
+}
+
+.popup .container{
+	width: 80%;
 }
 
 /* file input css end */
