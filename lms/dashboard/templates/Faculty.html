@@ -101,7 +101,7 @@
                                     <td>{{ faculty.campus }}</td>
                                     <td>{{ faculty.email }}</td>
                                     
-                                    <td class="info"><i class="fa-solid fa-circle-info"></i></td>
+                                    <td class="info" onclick="openPopup()"><i class="fa-solid fa-circle-info"></i></td>
                                     <td class="edit" onclick="location.href='{% url 'edit_faculty' faculty.faculty_id %}'"><i class="fas fa-edit"></i></td>
                                     <td class="delete" onclick="if(confirm('Are you sure you want to delete this faculty?')){window.location.href='{% url 'del_faculty' faculty.faculty_id %}'}"><i class="fa-solid fa-trash"></i></td>
                                 </tr>
@@ -118,6 +118,74 @@
 
         </div>
 
+        <div class="popup display-none" id="popup">
+            <div class="container">
+                <form class="form">
+                    {% csrf_token %}
+                    <div class="form-header">   
+                        <div class="form-row-header">
+                            {% if faculty.dp_key %}
+                                <img src="/mediahandler/image/{{ faculty.dp_key }}/" id="pfp-pic" alt="">
+                            {% else %}
+                                <img src="{% static 'img/pfp.png' %}" id="pfp-pic" alt="">
+                            {% endif %}
+                            <span class="pfp-img-title">Profile Image</span>
+                        </div>
+                        <div class="icon-holder" onclick="closePopup()">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" name="name" value="{{ faculty.name }}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="dob">Date of Birth</label>
+                            <input type="date" name="dob" value="{{ faculty.dob|date:'Y-m-d' }}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" value="{{ faculty.email }}" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="mobile">Mobile Number</label>
+                            <input type="tel" name="mobile" value="{{ faculty.mobile }}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <input value="{{faculty.gender}}" name="gender" id="gender" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="campus">Campus</label>
+                            <input {% if faculty.campus.campus_name %} value="faculty.campus.campus_name" {% endif %} name="campus" id="campus" disabled>   
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="facID">Faculty ID</label>
+                            <input type="text" name="facID" disabled value="{{ faculty.faculty_id }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="deptID">Department</label>
+                            <input name="department" id="department_select" {% if faculty.department.dept_id %} value = faculty.department.dept_id {% endif %} disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <input class="field" name="status" id="status" value="{{ faculty.status }}" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="qualifiication">Qualification</label>
+                            <input type="text" name="qualification" value="{{ faculty.qualification }}" disabled>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     
     <script src="{% static 'js/script.js' %}"></script>
     </body>
