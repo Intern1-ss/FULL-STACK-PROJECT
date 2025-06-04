@@ -339,6 +339,39 @@ i{
 	flex-wrap: wrap;
 }
 
+.form-row-header{
+	display: flex;
+	gap: 20px;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.form-row-header img{
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;	
+}
+
+.form-row-header label{
+	padding: 7px 8px;
+	font-size: 16px;
+	font-weight: 500;
+	background-color: #505050;
+	color: white;
+	border-radius: 8px;
+	border: #505050 3px solid;
+	cursor: pointer;
+}
+
+.form-row-header label:hover{
+
+	background-color: #695BF4;
+	color: white;
+	border-radius: 8px;
+	border: #695BF4 3px solid;
+	cursor: pointer;
+}
+
 .form-group {
 	flex: 1;
 	display: flex;

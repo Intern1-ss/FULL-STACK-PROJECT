@@ -67,6 +67,11 @@
                 <div class="container">
                     <form class="form" method="post">
                         {% csrf_token %}
+                        <div class="form-row-header">
+                            <input type="file" accept="image/png, image/jpeg, image/jpg" id="input-file" class="display-none">
+                            <img src="{% static 'img/pfp.png' %}" id="pfp-pic" alt="">
+                            <label for="input-file">Browse Image</label>
+                        </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="name">Full Name</label>
