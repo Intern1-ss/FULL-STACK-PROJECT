@@ -201,12 +201,3 @@ fileInput.addEventListener('change', () => {
     handleFiles(fileInput.files);
 });
 
-
-// Profile picture upload functionality
-
-let profilePic = document.getElementById("pfp-pic");
-let inputFile = document.getElementById("input-file");
-
-inputFile.onchange = function (){
-    profilePic.src = URL.createObjectURL(inputFile.files[0]);
-}
