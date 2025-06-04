@@ -84,6 +84,7 @@ class Student(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     mobile = models.CharField(max_length=15)
+    gender = models.CharField(max_length=10, default="Male", blank=True, null=True)
     state_name = models.CharField(max_length=100, blank=True, null=True)
     district_name = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)

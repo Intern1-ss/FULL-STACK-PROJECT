@@ -98,6 +98,52 @@ function openPopup() {
     popup.classList.remove('display-none');
 }
 
+// Popup functionality for Student
+function closeStudentPopup() {
+    let popup = document.getElementById('popup');
+    popup.classList.add('display-none');
+}
+
+function openStudentPopup(id) {
+    let popup = document.getElementById('popup');
+    popup.classList.remove('display-none');
+    fetch(`/apis/students/${id}/`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('pop-pfp-pic').src = data.pic_key ? `/mediahandler/image/${data.pic_key}` : '//images/default-pfp.png';
+            data = data.data; // Assuming the API returns a list with one student object
+            document.getElementById('pop_name').value = data.name;
+            document.getElementById('pop_dob').value = data.birthday;
+            document.getElementById('pop_email').value = data.email;
+            document.getElementById('pop_mobile').value = data.mobile;
+            document.getElementById('pop_gender').value = data.gender;
+            document.getElementById('pop_bloodGroup').value = data.blood_group;
+            document.getElementById('pop_regNum').value = data.regd_no;
+            document.getElementById('pop_program').value = data.program;
+            document.getElementById('pop_batch').value = data.batch;
+            document.getElementById('pop_program').value = data.program;
+            document.getElementById("pop_status").value = data.status;
+            document.getElementById("pop_country").value = data.country;
+            document.getElementById("pop_state").value = data.state;
+            document.getElementById("pop_district").value = data.district;
+            document.getElementById("pop_prevDeg1Name").value = data.prev_degree1_name;
+            document.getElementById("pop_prevDeg1Uni").value = data.prev_degree1_university;
+            document.getElementById("pop_prevDeg2Name").value = data.prev_degree2_name;
+            document.getElementById("pop_prevDeg2Uni").value = data.prev_degree2_university;
+            document.getElementById("pop_prev1GPA").value = data.prev_degree1_gpa;
+            document.getElementById("pop_prev2GPA").value = data.prev_degree2_gpa;
+        })
+        .catch(error => {
+            console.error('Error fetching student data:', error);
+        });
+
+}
+
 function menuCollapse(){
     console.log("Menu collapsed");
     let panel = document.querySelectorAll('.right-panel');

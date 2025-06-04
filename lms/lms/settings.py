@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'dashboard', 
     'bulkUp',
     'mediahandler',
+    'API_Handler',
 ]
 
 MIDDLEWARE = [

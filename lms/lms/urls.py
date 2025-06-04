@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('dashboard.urls')),
     path('bulkUp/', include('bulkUp.urls')),
     path('mediahandler/', include('mediahandler.urls')),
+    path('apis/', include('API_Handler.urls')),
 ]
 
 # Force Django to serve media files even when DEBUG = False

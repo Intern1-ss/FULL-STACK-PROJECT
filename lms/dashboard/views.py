@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from DB.models import Department, Campus, Faculty, Student, Program
 from mediahandler import utils as mh
 import requests
@@ -320,3 +321,4 @@ def delete_program(request, program_id):
         return redirect('programs')
     program.delete()
     return redirect('programs')
+
