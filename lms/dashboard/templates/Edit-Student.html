@@ -97,10 +97,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="gender">Gender</label>
-                                <select class="field" name="cars" id="gender" >
-                                    <option value="Male" {% if faculty.gender == 'Male' %}selected{% endif %}>Male</option>
-                                    <option value="Female" {% if faculty.gender == 'Female' %}selected{% endif %}>Female</option>
-                                    <option value="Others" {% if faculty.gender == 'Others' %}selected{% endif %}>Others</option>
+                                <select class="field" name="gender" id="gender" >
+                                    <option value="Male" {% if student.gender == 'Male' %}selected{% endif %}>Male</option>
+                                    <option value="Female" {% if student.gender == 'Female' %}selected{% endif %}>Female</option>
+                                    <option value="Others" {% if student.gender == 'Others' %}selected{% endif %}>Others</option>
                                 </select>
                             </div>
                             <div class="form-group">

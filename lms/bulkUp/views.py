@@ -124,7 +124,7 @@ def download_student_template(request):
         'regd_no', 'name', 'email', 'mobile', 'state_name', 'district_name',
         'city', 'country', 'prev_degree1_name', 'prev_degree1_university', 'prev_degree1_gpa',
         'prev_degree2_name', 'prev_degree2_university', 'prev_degree2_gpa',
-        'blood_group', 'birthday', 'program_id', 'batch', 'status'
+        'blood_group', 'birthday', 'program_code', 'batch', 'status'
     ]
     return generate_excel_template(columns)
 
@@ -136,6 +136,7 @@ def upload_student_excel(request):
             messages.error(request, "Failed to read the Excel file.")
             return redirect('bulkUp_home')
         for _, row in df.iterrows():
+            a = Program.objects.get(code=row['program_code']).id  # Ensure program exists
             Student.objects.update_or_create(
                 regd_no=row['regd_no'],
                 defaults={
@@ -154,7 +155,7 @@ def upload_student_excel(request):
                     'prev_degree2_gpa': row['prev_degree2_gpa'],
                     'blood_group': row['blood_group'],
                     'birthday': row['birthday'],
-                    'program_id': row['program_id'],
+                    'program_id': a,
                     'batch': row['batch'],
                     'status': row['status'],
                 }

@@ -98,10 +98,74 @@ function openPopup() {
     popup.classList.remove('display-none');
 }
 
-// Popup functionality for Student
-function closeStudentPopup() {
+function openProgramPopup(code) {
     let popup = document.getElementById('popup');
-    popup.classList.add('display-none');
+    popup.classList.remove('display-none');
+    fetch(`/apis/programs/${code}/`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            data = data.data; // Assuming the API returns a list with one program object
+            document.getElementById('pop_name').value = data.name;
+            document.getElementById('pop_code').value = data.code;
+            document.getElementById('pop_dur').value = data.duration;
+            document.getElementById('pop_dept').value = data.department;
+        }).catch(error => {
+            console.error('Error fetching program data:', error);
+        });
+}
+
+function openDepartmentPopup(id) {
+    let popup = document.getElementById('popup');
+    popup.classList.remove('display-none');
+    fetch(`/apis/departments/${id}/`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            data= data.data; // Assuming the API returns a list with one department object
+            document.getElementById('pop_name').value = data.name;
+            document.getElementById('pop_deptid').value = data.dept_id;
+            document.getElementById('pop_hod').value = data.hod;
+        }).catch(error => {
+            console.error('Error fetching department data:', error);
+        });
+}
+
+function openFacultyPopup(id) {
+    let popup = document.getElementById('popup');
+    popup.classList.remove('display-none');
+    fetch(`/apis/faculty/${id}/`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('pop-pfp-pic').src = data.pic_key ? `/mediahandler/image/${data.pic_key}` : '/static/img/pfp.png';
+            data = data.data; // Assuming the API returns a list with one faculty object
+            document.getElementById('pop_name').value = data.name;
+            document.getElementById('pop_dob').value = data.birthday;
+            document.getElementById('pop_email').value = data.email;
+            document.getElementById('pop_mobile').value = data.mobile;
+            document.getElementById('pop_gender').value = data.gender;
+            document.getElementById('pop_campus').value = data.campus;
+            document.getElementById('pop_id').value = data.id;
+            document.getElementById('pop_dept').value = data.department;
+            document.getElementById('pop_status').value = data.status;
+            document.getElementById('pop_qual').value = data.qualification;
+        })
+        .catch(error => {
+            console.error('Error fetching faculty data:', error);
+        });
 }
 
 function openStudentPopup(id) {
@@ -115,7 +179,7 @@ function openStudentPopup(id) {
             return response.json();
         })
         .then(data => {
-            document.getElementById('pop-pfp-pic').src = data.pic_key ? `/mediahandler/image/${data.pic_key}` : '//images/default-pfp.png';
+            document.getElementById('pop-pfp-pic').src = data.pic_key ? `/mediahandler/image/${data.pic_key}` : '/static/img/pfp.png';
             data = data.data; // Assuming the API returns a list with one student object
             document.getElementById('pop_name').value = data.name;
             document.getElementById('pop_dob').value = data.birthday;

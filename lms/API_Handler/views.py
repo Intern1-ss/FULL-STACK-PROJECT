@@ -41,14 +41,20 @@ def view_faculty(request, faculty_id):
         return redirect('faculty')
     return JsonResponse({
         'status': 'success',
+        'pic_key': faculty.dp_key,
         'data': {
-        'faculty_id': faculty.faculty_id,
-        'name': faculty.name,
-        'email': faculty.email,
-        'mobile': faculty.mobile,
-        'department': str(faculty.department) if faculty.department else None,
-        'status': faculty.status
-    }})
+            'id': faculty.faculty_id,
+            'birthday': faculty.dob,
+            'name': faculty.name,
+            'gender': faculty.gender,
+            'email': faculty.email,
+            'campus': str(faculty.campus) if faculty.campus else None,
+            'qualification': faculty.qualification,
+            'mobile': faculty.mobile,
+            'department': str(faculty.department) if faculty.department else None,
+            'status': faculty.status
+        }
+    })
 
 def view_department(request, dept_id):
     department = Department.objects.get(dept_id=dept_id)
@@ -58,9 +64,8 @@ def view_department(request, dept_id):
         'status': 'success',
         'data': {
             'dept_id': department.dept_id,
-            'name': department.name,
-            'hod': str(department.hod) if department.hod else None,
-            'status': department.status
+            'name': department.dept_name,
+            'hod': str(department.hod.name) if department.hod else None,
     }})
 
 def view_campus(request, campus_id):
@@ -76,14 +81,14 @@ def view_campus(request, campus_id):
     }})
 
 def view_program(request, program_id):
-    program = Program.objects.get(program_id=program_id)
+    program = Program.objects.get(id=program_id)
     if not program:
         return redirect('programs')
     return JsonResponse({
         'status': 'success',
         'data': {
-            'program_id': program.program_id,
+            'code': program.code,
             'name': program.name,
             'department': str(program.department) if program.department else None,
-            'duration': program.duration
+            'duration': program.duration_years
     }})

@@ -99,7 +99,7 @@
                                 <td>{{ department.hod.name }}</td>
                                 <td>{{ department.hod.faculty_id }}</td>
                                 
-                                <td class="info" onclick="openPopup()"><i class="fa-solid fa-circle-info"></i></td>
+                                <td class="info" onclick="openDepartmentPopup({{department.dept_id}})"><i class="fa-solid fa-circle-info"></i></td>
                                 <td class="edit" onclick="location.href='{% url 'edit_department' department.dept_id %}'"><i class="fas fa-edit"></i></td>
                                 <td class="delete" onclick="if(confirm('Are you sure you want to delete this department?')){window.location.href='{% url 'del_department' department.dept_id %}'}"><i class="fa-solid fa-trash"></i></td>
                             </tr>
@@ -131,18 +131,18 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Department Name</label>
-                            <input type="text" id="name" name="dept_name" value="{{ department.dept_name }}" disabled>
+                            <input type="text" id="pop_name" name="dept_name" value="{{ department.dept_name }}" disabled>
                         </div>
                         <div class="form-group">
                             <label for="deptID">Department ID</label>
-                            <input type="text" id="deptID" name="dept_id" value="{{ department.dept_id }}" disabled>
+                            <input type="text" id="pop_deptid" name="dept_id" value="{{ department.dept_id }}" disabled>
                         </div>
                     </div>
                     <div class="form-row">
                         
                         <div class="form-group">
                         <label for="faculty-search">HOD:</label>
-                            <input list="faculties" id="faculty-search" name="hod" {% if department.hod  %}  value="{{ department.hod.faculty_id }}" {% endif %} disabled>
+                            <input list="faculties" id="pop_hod" name="hod" {% if department.hod  %}  value="{{ department.hod.faculty_id }}" {% endif %} disabled>
                         </div>
                     </div>
                 </form>

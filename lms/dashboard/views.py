@@ -66,6 +66,7 @@ def addstudent(request):
         student.birthday = request.POST.get('dob')
         student.email = request.POST.get('email')
         student.batch = request.POST.get('batch')
+        student.gender = request.POST.get('gender')
         student.blood_group = request.POST.get('blood_group')
         student.city = request.POST.get('city')
         student.mobile = request.POST.get('mobile')
@@ -187,6 +188,7 @@ def edit_student(request, regd_no):
             print("No file uploaded or file is empty.")
         student.birthday = request.POST.get('dob')
         student.email = request.POST.get('email')
+        student.gender = request.POST.get('gender')
         student.batch = request.POST.get('batch')
         student.mobile = request.POST.get('mobile')
         student.blood_group = request.POST.get('blood_group')
@@ -223,6 +225,16 @@ def edit_faculty(request, faculty_id):
     faculty = Faculty.objects.get(faculty_id=faculty_id)
     if request.method == 'POST':
         faculty.name = request.POST.get('name')
+        # Ensure the form uses enctype="multipart/form-data" and input name="dp_pic"
+        if request.FILES.get('dp_pic'):
+            # Upload to mediahandler API
+            if faculty.dp_key:
+                # If the student already has a profile picture, delete the old one
+                mh.delete_image( f"{faculty.faculty_id}-profile-pic")
+            uploaded = mh.handle_image_upload(request.FILES.get('dp_pic'), f"{faculty.faculty_id}-profile-pic")
+            faculty.dp_key = uploaded.key
+        else:
+            print("No file uploaded or file is empty.")
         faculty.dob = request.POST.get('dob')
         faculty.email = request.POST.get('email')
         faculty.mobile = request.POST.get('mobile')
