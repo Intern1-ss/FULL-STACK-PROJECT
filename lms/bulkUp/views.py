@@ -31,7 +31,7 @@ def upload_department_excel(request):
                 defaults={'dept_name': row['dept_name']}
             )
         messages.success(request, "Department data uploaded successfully.")
-        return redirect('bulkUp_home')
+        return redirect('departments')
 
 # =======================
 # CAMPUS TEMPLATE & UPLOAD
@@ -56,7 +56,7 @@ def upload_campus_excel(request):
                 }
             )
         messages.success(request, "Campus data uploaded successfully.")
-        return redirect('bulkUp_home')
+        return redirect('campus')
 
 # =======================
 # FACULTY TEMPLATE & UPLOAD
@@ -88,7 +88,7 @@ def upload_faculty_excel(request):
                 }
             )
         messages.success(request, "Faculty data uploaded successfully.")
-        return redirect('bulkUp_home')
+        return redirect('faculty')
 
 # =======================
 # PROGRAM TEMPLATE & UPLOAD
@@ -114,7 +114,7 @@ def upload_program_excel(request):
                 }
             )
         messages.success(request, "Program data uploaded successfully.")
-        return redirect('bulkUp_home')
+        return redirect('programs')
 
 # =======================
 # STUDENT TEMPLATE & UPLOAD
@@ -160,4 +160,4 @@ def upload_student_excel(request):
                 }
             )
         messages.success(request, "Student data uploaded successfully.")
-        return redirect('bulkUp_home')
+        return redirect('students')

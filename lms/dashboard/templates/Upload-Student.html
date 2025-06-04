@@ -63,7 +63,7 @@
                         <i class="fas fa-times"></i>
                     </div>
                 </div>
-                <div class="download-template">
+                <div class="download-template" onclick="window.location.href='/bulkUp/download/student/'">
                     <span>Download Template</span>
                     <i class="fa-solid fa-download"></i>
                 </div>
@@ -77,7 +77,7 @@
                             <span>Choose a file or drag & drop it here</span>
                             <small>Only csv files are allowed</small><br>
                             <div class="browse-button" onclick="document.getElementById('fileInput').click()">Browse File</div>
-                            <input class="display-none" type="file" id="fileInput" hidden multiple />
+                            <input class="display-none" name="file" type="file" id="fileInput" hidden multiple />
                         </div>
                         <div class="file-list" id="fileList"></div>
                         <div class="upload-button-holder display-none" id="uploadButton">
