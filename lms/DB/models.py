@@ -33,6 +33,7 @@ def validate_fixed_length(value):
 # Faculty Table
 class Faculty(models.Model):
     faculty_id = models.CharField(max_length=4, primary_key=True, validators=[validate_fixed_length])
+    dp_key = models.UUIDField(default=None, null=True, blank=True)
     dob = models.DateField(null=True, blank=True)
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
@@ -79,6 +80,7 @@ class Student(models.Model):
     ]
 
     regd_no = models.IntegerField(primary_key=True, unique=True)
+    dp_key = models.UUIDField(default=None, null=True, blank=True)
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     mobile = models.CharField(max_length=15)

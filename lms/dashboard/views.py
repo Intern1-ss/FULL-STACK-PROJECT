@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from DB.models import Department, Campus, Faculty, Student, Program
+from mediahandler import utils as mh
+import requests
 
 # Create your views here.
 def home(request):
@@ -50,6 +52,15 @@ def addstudent(request):
     if request.method == 'POST':
         student = Student()
         student.regd_no = request.POST.get('regNum')
+        print(request)
+        # Ensure the form uses enctype="multipart/form-data" and input name="dp_pic"
+        if request.FILES.get('dp_pic'):
+            # Upload to mediahandler API
+            uploaded = mh.handle_image_upload(request.FILES.get('dp_pic'), f"{student.regd_no}-profile-pic")
+            student.dp_key = uploaded.key
+        else:
+            print("No file uploaded or file is empty.")
+            student.dp_key = None
         student.name = request.POST.get('name')
         student.birthday = request.POST.get('dob')
         student.email = request.POST.get('email')
@@ -89,6 +100,14 @@ def addfaculty(request):
     if request.method == 'POST':
         faculty = Faculty()
         faculty.faculty_id = request.POST.get('faculty_id')
+        # Ensure the form uses enctype="multipart/form-data" and input name="dp_pic"
+        if request.FILES.get('dp_pic'):
+            # Upload to mediahandler API
+            uploaded = mh.handle_image_upload(request.FILES.get('dp_pic'), f"{faculty.faculty_id}-profile-pic")
+            faculty.dp_key = uploaded.key
+        else:
+            print("No file uploaded or file is empty.")
+            faculty.dp_key = None
         faculty.name = request.POST.get('name')
         faculty.dob = request.POST.get('dob')
         faculty.email = request.POST.get('email')
@@ -154,6 +173,18 @@ def edit_student(request, regd_no):
     student = Student.objects.get(regd_no=regd_no)
     if request.method == 'POST':
         student.name = request.POST.get('name')
+        print(request)
+        # Ensure the form uses enctype="multipart/form-data" and input name="dp_pic"
+        if request.FILES.get('dp_pic'):
+            # Upload to mediahandler API
+            if student.dp_key:
+                # If the student already has a profile picture, delete the old one
+                mh.delete_image( f"{student.regd_no}-profile-pic")
+            uploaded = mh.handle_image_upload(request.FILES.get('dp_pic'), f"{student.regd_no}-profile-pic")
+            student.dp_key = uploaded.key
+        else:
+            print("No file uploaded or file is empty.")
+            student.dp_key = None
         student.birthday = request.POST.get('dob')
         student.email = request.POST.get('email')
         student.batch = request.POST.get('batch')
