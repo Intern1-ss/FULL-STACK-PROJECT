@@ -449,6 +449,31 @@ option:hover {
 	border-radius: 5px;
 }
 
+.download-template{
+	width: 500px;
+	padding: 10px 30px;
+	box-sizing: border-box;
+	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	border-radius: 8px;
+	height: fit-content;
+	place-self: center;
+	background-color: #505050;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border: #505050 3px solid;
+	cursor: pointer;
+}
+
+.download-template:hover {
+	background-color: #695BF4;
+	color: white;
+	border: #695BF4 3px solid;
+}
+
 /* file input css */
 
 
@@ -513,6 +538,23 @@ option:hover {
 }
 
 .browse-button:hover {
+	background: #695BF4;
+	color: white;
+	border: #695BF4 3px solid;
+}
+
+.upload-button{
+	width: 100%;
+	font-size: 16px;
+	padding: 7px 15px;
+	border-radius: 8px;
+	background: #505050;
+	color: white;
+	cursor: pointer;
+	border: #505050 3px solid;
+}
+
+.upload-button:hover {
 	background: #695BF4;
 	color: white;
 	border: #695BF4 3px solid;

@@ -63,19 +63,28 @@
                         <i class="fas fa-times"></i>
                     </div>
                 </div>
-                
-                <div class="upload-box">
-                    <span class="upload-header">Upload files</span>
-                    <span class="upload-subheader">Select and upload the files of your choice</span>
-                    <div class="upload-area" id="uploadArea">
-                        <div class="icon-holder"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-                        <span>Choose a file or drag & drop it here</span>
-                        <small>Only csv files are allowed</small><br>
-                        <div class="browse-button" onclick="document.getElementById('fileInput').click()">Browse File</div>
-                        <input class="display-none" type="file" id="fileInput" hidden multiple />
-                    </div>
-                    <div class="file-list" id="fileList"></div>
+                <div class="download-template">
+                    <span>Download Template</span>
+                    <i class="fa-solid fa-download"></i>
                 </div>
+                <form id="uploadForm" class="upload-form" method="post" enctype="multipart/form-data" action="/bulkUp/upload/faculty/">
+                    {% csrf_token %}
+                    <div class="upload-box">
+                        <span class="upload-header">Upload files</span>
+                        <span class="upload-subheader">Select and upload the files of your choice</span>
+                        <div class="upload-area" id="uploadArea">
+                            <div class="icon-holder"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                            <span>Choose a file or drag & drop it here</span>
+                            <small>Only csv files are allowed</small><br>
+                            <div class="browse-button" onclick="document.getElementById('fileInput').click()">Browse File</div>
+                            <input class="display-none" type="file" id="fileInput" hidden multiple />
+                        </div>
+                        <div class="file-list" id="fileList"></div>
+                        <div class="upload-button-holder display-none" id="uploadButton">
+                            <button type="submit" class="upload-button">Upload</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
 

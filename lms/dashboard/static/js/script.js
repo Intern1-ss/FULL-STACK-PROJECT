@@ -167,9 +167,19 @@ function handleFiles(files) {
 
     const item = document.createElement('div');
     item.className = 'file-item';
-    item.innerHTML = `<span>${file.name}</span><span class="close-btn" onclick="this.parentElement.remove()">×</span>`;
+    item.innerHTML = `<span>${file.name}</span><span class="close-btn" onclick="removeFileItem(this)">×</span>`;
     fileList.appendChild(item);
-    });
+    }); //this is not working when an item is removed, and when a new item is added, the item is not being created.
+
+    let uploadButton = document.getElementById('uploadButton');
+    uploadButton.classList.remove('display-none');
+
+}
+
+function removeFileItem(element) {
+    element.parentElement.remove();
+    let uploadButton = document.getElementById('uploadButton');
+    uploadButton.classList.add('display-none');
 }
 
 uploadArea.addEventListener('dragover', e => {
