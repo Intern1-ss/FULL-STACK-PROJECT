@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Error Report PDF</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h2 { color: #b71c1c; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background: #f44336; color: #fff; }
+        tr.error-row { background: #fff1f1; }
+        .summary { margin-bottom: 20px; }
+        .correct { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h2>Error Report</h2>
+    <div class="summary">
+        <span class="correct">Valid Rows: {{ count }}</span><br>
+        <span class="error">Errors: {{ ecount }}</span>
+    </div>
+    <table>
+        <thead>
+            <tr><th>Problems</th></tr>
+        </thead>
+        <tbody>
+            {% if not errors or errors|length == 0 %}
+            <tr><td>No errors found.</td></tr>
+            {% endif %}
+            {% for error in errors %}
+            <tr class="error-row"><td>{{ error }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -23,4 +23,6 @@ urlpatterns = [
     # Student
     path('download/student/', views.download_student_template, name='download_student_template'),
     path('upload/student/', views.upload_student_excel, name='upload_student_excel'),
+
+    path('report/', views.generate_error_pdf, name='bulkUp_report'),
 ]

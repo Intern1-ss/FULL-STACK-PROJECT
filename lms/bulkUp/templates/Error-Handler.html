@@ -1,0 +1,206 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Excel Upload Result</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>    </head>
+
+  <style>
+    .upload-up-summary {
+      background-color: #fff;
+      padding: 16px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .up-summary-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .up-summary {
+      gap: 20px;
+    }
+
+    .up-summary span {
+      font-size: 16px;
+    }
+
+    .up-summary .correct {
+      color: green;
+    }
+
+    .up-summary .error {
+      color: red;
+    }
+    
+
+    table {
+      width: 80%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 8px;
+      overflow: auto;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    tr.error-row {
+      background-color: #fff1f1;
+    }
+
+    tr.error-row td:last-child {
+      color: rgb(255, 0, 0);
+      font-weight: normal;
+    }
+  </style>
+</head>
+<body>
+    <div class="whole-container">
+            <div class="menu-panel">
+                <div onclick="menuCollapse()" id="backIcon" class="back-icon">
+                    <i class="fa-solid fa-caret-right"></i>
+                </div>
+                <div class="logo-holder">
+                    <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
+                    <img class="logo-img display-none" src="{% static 'img/1.png' %}">
+                </div>
+                <div class="menu-icons">
+                    <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        <span class="icon-name">Overview</span>
+                    </div>
+                    <div onclick="showStudentPage()" id="students-item" class="students menu-item {% if role == 'student' %}active{% endif %}">
+                        <div class="icon">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <span class="icon-name">Students</span> 
+                    </div>
+                    <div onclick="showFacultyPage()" id="faculty-item" class="faculty menu-item {% if role == 'faculty' %}active{% endif %}">
+                        <div class="icon">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <span class="icon-name">Faculty</span>
+                    </div>
+                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item {% if role == 'department' %}active{% endif %}">
+                        <div class="icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <span class="icon-name">Departments</span>
+                    </div>
+                    <div onclick="showProgramPage()" id="courses-item" class="courses menu-item {% if role == 'program' %}active{% endif %}">
+                        <div class="icon">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+                        <span class="icon-name">Program</span>
+                    </div>
+                    <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item {% if role == 'campus' %}active{% endif %}">
+                        <div class="icon">
+                            <i class="fa-solid fa-school"></i>
+                        </div>
+                        <span class="icon-name">Campus</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel camp-add">
+                <div class="dashboard-head">
+                    <span class="over-heading">Upload Summary</span>
+                    <div class="date pointer" 
+                    {% if role == 'student' %}
+                    onclick="showStudentPage()"
+                    {% elif role == 'faculty' %}
+                    onclick="showFacultyPage()"
+                    {% elif role == 'department' %}
+                    onclick="showDepartmentsPage()"
+                    {% elif role == 'program' %}
+                    onclick="showProgramPage()"
+                    {% elif role == 'campus' %}
+                    onclick="showCampusPage()"
+                    {% endif %}
+                    >
+                        <span>Cancel</span>
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+
+  <div class="upload-up-summary">
+    <div class="up-summary-title">Upload summary</div>
+    <div class="up-summary">
+      <span class="correct">✅ Valid Rows: {{ count }}. {% if count %}They have been added to the database Successfully {% endif %}</span><br>
+      <span class="error">❌ Errors: {{ ecount }}.</span>
+    </div>
+  </div>
+  <div>
+
+  <button onclick="downloadErrorPDF({{errors}},{{count}}, {{ecount}}, '{{role}}')" style="margin-bottom: 16px; float: right;">🖨️ Downlaod Error Statement</button>
+  <table>
+    <thead>
+      <tr>
+        <th>Problems</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% if not errors or errors|length == 0 %}
+        <tr>
+            <td>No errors found.</td>
+        </tr>
+        {% endif %}
+        {% for error in errors %}
+        <tr class="error-row">
+            <td>{{ error }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  </div>
+
+</body>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+    function downloadErrorPDF(errors, count, ecount, role) {
+    fetch('/bulkUp/report/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            // 'X-CSRFToken': getCookie('csrftoken'), // Uncomment if CSRF protection is enabled
+        },
+        body: JSON.stringify({
+            errors: errors,
+            count: count,
+            ecount: ecount,
+            role: role
+        })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('PDF generation failed');
+        return response.blob();
+    })
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'error_report.pdf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+        alert('Failed to generate PDF: ' + error.message);
+    });
+}</script>
+
+</html>

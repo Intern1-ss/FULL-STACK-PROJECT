@@ -245,6 +245,20 @@ function menuCollapse(){
 //     }
 // });
 
+function printError(){
+    console.log("Print Error");
+    let panel = document.querySelectorAll('.right-panel');
+    let logoTitle = document.querySelector('.logo-title');
+    document.querySelectorAll('.icon-name').forEach(el => el.classList.add('display-none'));
+    logoTitle.classList.add('display-none');
+    document.querySelector('.logo-img').classList.remove('display-none');
+    document.querySelector('.menu-panel').classList.add('menu-panel-collapsed');
+    document.querySelectorAll('.menu-item').forEach(el => el.classList.add('menu-item-collapsed'));
+    menuBackIcon.style.left = '100px';
+    panel.forEach(el => { el.style.width = '90vw'; }); 
+    window.print();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const collapsed = localStorage.getItem('menuCollapsed') === 'true';
     if (collapsed) {
