@@ -8,6 +8,7 @@ from DB.models import Department, Campus, Faculty, Program, Student
 from .utils import generate_excel_template, read_excel_and_return_dataframe
 import json
 from xhtml2pdf import pisa
+from datetime import date
 
 # Create your views here.
 def home(request):
@@ -273,10 +274,12 @@ def generate_error_pdf(request):
         ecount = data.get('ecount', len(errors))
         role = data.get('role', 'student')
         html = render_to_string('Error-PDF.html', {
+            'date': date.today().strftime('%Y-%m-%d'),
             'errors': errors,
             'count': count,
             'ecount': ecount,
-            'role': role
+            'role': role,
+            'year': date.today().year,
         })
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="error_report.pdf"'

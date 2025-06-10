@@ -4,3 +4,4 @@ pymysql
 mysqlclient
 pandas
 openpyxl
+xhtml2pdf
