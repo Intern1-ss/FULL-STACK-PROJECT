@@ -9,44 +9,34 @@
 
   <style>
     .upload-up-summary {
-      background-color: #fff;
-      padding: 16px;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      flex-wrap: wrap;
       margin-bottom: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    .up-summary-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .up-summary {
+      margin-top: 20px;
       gap: 20px;
+      
     }
 
     .up-summary span {
       font-size: 16px;
     }
 
-    .up-summary .correct {
+    .correct {
       color: green;
     }
 
-    .up-summary .error {
+    .error {
       color: red;
     }
     
 
     table {
-      width: 80%;
       border-collapse: collapse;
       background: #fff;
       border-radius: 8px;
       overflow: auto;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-
     }
 
     th, td {
@@ -63,6 +53,39 @@
       color: rgb(255, 0, 0);
       font-weight: normal;
     }
+
+    .summary-item{
+      font-size: 16px;
+      font-weight: 500;
+      min-width: 200px;
+      width: fit-content;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      background-color: white;
+      border-radius: 8px;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+    
+    .download-error-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      gap: 20px;
+    }
+
+    .red{
+      background-color: red;
+    }
+
+    .green{
+      background-color: green;
+    }
+
   </style>
 </head>
 <body>
@@ -137,15 +160,30 @@
                 </div>
 
   <div class="upload-up-summary">
-    <div class="up-summary-title">Upload summary</div>
-    <div class="up-summary">
-      <span class="correct">✅ Valid Rows: {{ count }}. {% if count %}They have been added to the database Successfully {% endif %}</span><br>
-      <span class="error">❌ Errors: {{ ecount }}.</span>
+    <div class="summary-item">
+      <div class="card-header">
+        <div class="icon-holder green">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <span class="correct">{{ count }} Valid Row{% if count > 1 or count == 0 %}s{% endif %}</span> 
+      </div>
+    </div>
+
+    <div class="summary-item">
+      <div class="card-header">
+        <div class="icon-holder red">
+          <i class="fas fa-times"></i>
+        </div>
+        <span class="error">{{ ecount }} Error{% if ecount > 1 or ecount == 0 %}s{% endif %}</span>
+      </div>
     </div>
   </div>
-  <div>
+  <div class="download-error-button">
+    {% if count %} <span> {{ count }} rows have been added to the database Successfully </span>{% endif %}
+    <div class="date pointer" onclick="downloadErrorPDF({{errors}},{{count}}, {{ecount}}, '{{role}}')">Downlaod Error Statement</div>
+  </div>
 
-  <button onclick="downloadErrorPDF({{errors}},{{count}}, {{ecount}}, '{{role}}')" style="margin-bottom: 16px; float: right;">🖨️ Downlaod Error Statement</button>
+ <div class="table-content">
   <table>
     <thead>
       <tr>
@@ -165,7 +203,8 @@
         {% endfor %}
     </tbody>
   </table>
-  </div>
+ </div> 
+  
 
 </body>
     <script src="{% static 'js/script.js' %}"></script>
