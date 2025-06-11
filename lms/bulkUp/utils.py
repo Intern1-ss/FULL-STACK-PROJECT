@@ -150,7 +150,7 @@ def generate_excel_template_faculty(columns):
     gender_validation.add(f"{ws.cell(row=2, column=col).column_letter}2:{ws.cell(row=1000, column=col).column_letter}1000")
     
     #  Status Dropdown
-    status_values = ['Active','Inactive','OnLeave']
+    status_values = ['active','inactive','on leave']
     status_validation = DataValidation(
         type="list",
         formula1=f'"{",".join(status_values)}"',
