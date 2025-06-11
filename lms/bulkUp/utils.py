@@ -64,7 +64,13 @@ def generate_excel_template_student(columns):
     program_col = columns.index("program_code") + 1
     program_validation.add(f"{ws.cell(row=2, column=program_col).column_letter}2:{ws.cell(row=1000, column=program_col).column_letter}1000")
 
-  
+    # 4. Gender
+    gender_values = ["Male", "Female", "Other"]
+    gender_validation = DataValidation(type="list", formula1=f'"{",".join(gender_values)}"', allow_blank=True)
+    col = columns.index("gender") + 1
+    ws.add_data_validation(gender_validation)
+    gender_validation.add(f"{ws.cell(row=2, column=col).column_letter}2:{ws.cell(row=1000, column=col).column_letter}1000")
+    
     # 5. Optional: Set birthday column format
     if 'birthday' in columns:
         birthday_col = columns.index('birthday') + 1
@@ -76,7 +82,6 @@ def generate_excel_template_student(columns):
     response['Content-Disposition'] = 'attachment; filename=student_template.xlsx'
     wb.save(response)
     return response
-
 
 #for the fields like gpa 
 from decimal import Decimal, InvalidOperation
@@ -96,7 +101,6 @@ def safe_decimal(value):
 
  #for faculty
 from DB.models import Campus,Department
-
 
 def generate_excel_template_faculty(columns):
     wb = Workbook()
@@ -138,6 +142,24 @@ def generate_excel_template_faculty(columns):
         dob_col = columns.index('dob') + 1
         for row in range(2, 1001):
             ws.cell(row=row, column=dob_col).number_format = 'DD-MM-YYYY'
+    #  gender Dropdown
+    gender_values = ["Male", "Female", "Other"]
+    gender_validation = DataValidation(type="list", formula1=f'"{",".join(gender_values)}"', allow_blank=True)
+    col = columns.index("gender") + 1
+    ws.add_data_validation(gender_validation)
+    gender_validation.add(f"{ws.cell(row=2, column=col).column_letter}2:{ws.cell(row=1000, column=col).column_letter}1000")
+    
+    #  Status Dropdown
+    status_values = ['Active','Inactive','OnLeave']
+    status_validation = DataValidation(
+        type="list",
+        formula1=f'"{",".join(status_values)}"',
+        allow_blank=True
+    )
+    ws.add_data_validation(status_validation)
+    status_col = columns.index("status") + 1
+    status_validation.add(f"{ws.cell(row=2, column=status_col).column_letter}2:{ws.cell(row=1000, column=status_col).column_letter}1000")
+
 
     # Prepare Excel download response
     response = HttpResponse(
