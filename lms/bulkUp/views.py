@@ -9,6 +9,7 @@ from .utils import generate_excel_template_student, read_excel_and_return_datafr
 import json
 from xhtml2pdf import pisa
 from datetime import date
+import pandas as pd
 
 # Create your views here.
 def home(request):
@@ -302,7 +303,7 @@ def upload_program_excel(request):
 # =======================
 def download_student_template(request):
     columns = [
-        'regd_no', 'name', 'email', 'mobile', 'state_name', 'district_name',
+        'regd_no', 'name', 'email','gender', 'mobile', 'state_name', 'district_name',
         'city', 'country', 'prev_degree1_name', 'prev_degree1_university', 'prev_degree1_gpa',
         'prev_degree2_name', 'prev_degree2_university', 'prev_degree2_gpa',
         'blood_group', 'birthday', 'program_code', 'batch', 'status'
@@ -311,11 +312,16 @@ def download_student_template(request):
 
 
 
+
+
+def clean_optional(value):
+    return value if pd.notna(value) else None
+
 @csrf_exempt
 def upload_student_excel(request):
     if request.method == 'POST':
         expected_columns = [
-            'regd_no', 'name', 'email', 'mobile', 'state_name', 'district_name',
+            'regd_no', 'name', 'email','gender', 'mobile', 'state_name', 'district_name',
             'city', 'country', 'prev_degree1_name', 'prev_degree1_university', 'prev_degree1_gpa',
             'prev_degree2_name', 'prev_degree2_university', 'prev_degree2_gpa',
             'blood_group', 'birthday', 'program_code', 'batch', 'status'
@@ -352,16 +358,17 @@ def upload_student_excel(request):
                     defaults={
                         'name': row['name'],
                         'email': row['email'],
+                        'gender': row['gender'],
                         'mobile': row['mobile'],
                         'state_name': row['state_name'],
                         'district_name': row['district_name'],
                         'city': row['city'],
                         'country': row['country'],
-                        'prev_degree1_name': row['prev_degree1_name'],
-                        'prev_degree1_university': row['prev_degree1_university'],
+                        'prev_degree1_name': clean_optional(row['prev_degree1_name']),
+                        'prev_degree1_university': clean_optional(row['prev_degree1_university']),
                         'prev_degree1_gpa': safe_decimal(row['prev_degree1_gpa']),
-                        'prev_degree2_name': row['prev_degree2_name'],
-                        'prev_degree2_university': row['prev_degree2_university'],
+                        'prev_degree2_name': clean_optional(row['prev_degree2_name']),
+                        'prev_degree2_university': clean_optional(row['prev_degree2_university']),
                         'prev_degree2_gpa': safe_decimal(row['prev_degree2_gpa']),
                         'blood_group': row['blood_group'],
                         'birthday': row['birthday'],
@@ -384,6 +391,7 @@ def upload_student_excel(request):
         return render(request, 'Error-Handler.html', {
             'errors': errors, 'count': count, 'ecount': len(errors), 'role': 'student'
         })
+
 
 @csrf_exempt
 @require_POST
