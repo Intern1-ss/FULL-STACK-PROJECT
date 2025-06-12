@@ -418,4 +418,3 @@ def generate_error_pdf(request):
         return response
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
-
