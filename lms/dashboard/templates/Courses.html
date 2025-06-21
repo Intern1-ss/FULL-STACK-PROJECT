@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous">
+
+    </script>
+</head>
+<body>
+
+    <div class="whole-container">
+        <div class="menu-panel">
+            <div onclick="menuCollapse()" id="backIcon" class="back-icon">
+                <i class="fa-solid fa-caret-right"></i>
+            </div>
+            <div class="logo-holder">
+                <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
+                <img class="logo-img display-none" src="{% static 'img/1.png' %}">
+            </div>
+            <div class="menu-icons">
+                <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item">
+                    <div class="icon"><i class="fa-solid fa-chart-simple"></i></div>
+                    <span class="icon-name">Overview</span>
+                </div>
+                <div onclick="showStudentPage()" id="students-item" class="students menu-item">
+                    <div class="icon"><i class="fa-solid fa-user"></i></div>
+                    <span class="icon-name">Students</span> 
+                </div>
+                <div onclick="showFacultyPage()" id="faculty-item" class="faculty menu-item">
+                    <div class="icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <span class="icon-name">Faculty</span>
+                </div>
+                <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
+                    <div class="icon"><i class="fa-solid fa-users"></i></div>
+                    <span class="icon-name">Departments</span>
+                </div>
+                <div onclick="showProgramPage()" id="programe-item" class="programe menu-item">
+                    <div class="icon"><i class="fa-solid fa-book"></i></div>
+                    <span class="icon-name">Program</span>
+                </div>
+                <div onclick="window.location.href='{% url 'courses' %}'" id="courses-item" class="courses menu-item">
+                        <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                        <span class="icon-name">Courses</span>
+                </div>
+                <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item">
+                    <div class="icon"><i class="fa-solid fa-school"></i></div>
+                    <span class="icon-name">Campus</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="dashboard-head">
+                <span class="over-heading">Courses</span>
+            </div>
+        {% if messages %}
+  <div id="message-container">
+    {% for message in messages %}
+      <div class="message {{ message.tags }}">
+       <h2> {{ message }}</h2>
+        
+      </div>
+    {% endfor %}
+  </div>
+
+  <script>
+    // Auto-hide after 4 seconds
+    setTimeout(function() {
+      const msg = document.getElementById("message-container");
+      if (msg) {
+        msg.style.display = 'none';
+      }
+    }, 4000);
+  </script>
+{% endif %}
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Programe Name</th>
+                                <th>Department</th>
+                                <th>Batch</th>
+                                <th>Add Course</th>
+                                <th>View course</th>
+                                
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if programs %}
+                            {% for program in programs %}
+                            <tr>
+                                <td>{{ program.programme_short_name }}</td>
+                                <td>{{ program.department.dept_name }}</td>
+                                <td>{{ program.batch }}</td>
+                                <td> <button onclick="window.location.href='{% url 'add_course' program.programme_code program.batch %}'">Edit Courses</button></td>
+                                <td> <button onclick="window.location.href='{% url 'view_courses' program.programme_code program.batch %}'">View Courses</button></td>
+                                
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="8" class="no-data">No Program Data Available</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+            {% comment %} <div class="program-list">
+             {% for program in programs %}
+                <div class="program-bar">
+                    <div class="program-details">
+                        <div>
+                            <span><strong>{{ program.programme_short_name }}</strong>   Batch: {{ program.batch }}  Department: {{ program.department }}</span>
+                        </div>
+                    </div>
+                    {% comment %} <div>
+                        <button onclick="window.location.href='{% url 'add_course' program.programme_code program.batch %}'">Edit Courses</button>
+                    </div> 
+                    
+
+                </div>
+                 {% if program.papers.all %}
+                    <div class="course-list">
+                        <ul>
+                            {% for paper in program.papers.all %}
+                                <li>{{ paper.paper_title }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <p style="margin-left: 40px;">No courses added yet.</p>
+                {% endif %}
+            {% empty %}
+                <p>No programs found.</p>
+            {% endfor %}
+
+
+                 {% comment %} <h2>Select Program & Batch</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    <label>Program:</label>
+                    <select name="programme_code" required>
+                        {% for p in programs %}
+                            <option value="{{ p.programme_code }}">{{ p.programme_short_name }} ({{ p.batch }})</option>
+                        {% endfor %}
+                    </select>
+                    <br><br>
+                    <label>Batch (Year):</label>
+                    <input type="number" name="batch" required>
+                    <br><br>
+                    <button type="submit">Continue to Add Course</button>
+                </form> 
+
+        </div> {% endcomment %}
+
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

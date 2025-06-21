@@ -1,4 +1,4 @@
-let overview = document.getElementById("overview-item");
+
 let students = document.getElementById("students-item");
 let courses = document.getElementById("courses-item");
 let departments = document.getElementById("departments-item");
@@ -14,6 +14,7 @@ let facultyPage = document.getElementById("facultyPage");
 let addFacultyPage = document.getElementById("addFacultyPage");
 let campusPage = document.getElementById("campusPage");
 let menuBackIcon = document.getElementById("backIcon");
+let overview = document.getElementById("overview-item");
 let menuOpen = true;
 
 
@@ -86,6 +87,10 @@ function showAddProgramsPage() {
 
 function showUploadProgramsPage() {
     window.location.href = "/programs/upload";
+}
+
+function showCoursesPage() {
+    window.location.href ="/courses";
 }
 
 function closePopup() {

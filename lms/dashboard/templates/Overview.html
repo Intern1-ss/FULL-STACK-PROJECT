@@ -1,136 +1,150 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
-        <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>    </head>
-    <body>
-        <div class="whole-container">
-            <div class="menu-panel">
-                <div onclick="menuCollapse()" id="backIcon" class="back-icon">
-                    <i class="fa-solid fa-caret-right"></i>
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="whole-container">
+        <div class="menu-panel">
+            <div onclick="menuCollapse()" id="backIcon" class="back-icon">
+                <i class="fa-solid fa-caret-right"></i>
+            </div>
+            <div class="logo-holder">
+                <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
+                <img class="logo-img display-none" src="{% static 'img/1.png' %}">
+            </div>
+            <div class="menu-icons">
+                <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item active">
+                    <div class="icon">
+                        <i class="fa-solid fa-chart-simple"></i>
+                    </div>
+                    <span class="icon-name">Overview</span>
                 </div>
-                <div class="logo-holder">
-                    <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
-                    <img class="logo-img display-none" src="{% static 'img/1.png' %}">
+                <div onclick="showStudentPage()" id="students-item" class="students menu-item">
+                    <div class="icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <span class="icon-name">Students</span> 
                 </div>
-                <div class="menu-icons">
-                    <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item active">
-                        <div class="icon">
-                            <i class="fa-solid fa-chart-simple"></i>
-                        </div>
-                        <span class="icon-name">Overview</span>
+                <div onclick="showFacultyPage()" id="faculty-item" class="faculty menu-item">
+                    <div class="icon">
+                        <i class="fa-solid fa-chalkboard-user"></i>
                     </div>
-                    <div onclick="showStudentPage()" id="students-item" class="students menu-item">
-                        <div class="icon">
-                            <i class="fa-solid fa-user"></i>
-                        </div>
-                        <span class="icon-name">Students</span> 
+                    <span class="icon-name">Faculty</span>
+                </div>
+                <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
+                    <div class="icon">
+                        <i class="fa-solid fa-users"></i>
                     </div>
-                    <div onclick="showFacultyPage()" id="faculty-item" class="faculty menu-item">
-                        <div class="icon">
-                            <i class="fa-solid fa-chalkboard-user"></i>
-                        </div>
-                        <span class="icon-name">Faculty</span>
+                    <span class="icon-name">Departments</span>
+                </div>
+                <div onclick="showProgramPage()" id="programs-item" class="programs menu-item">
+                    <div class="icon">
+                        <i class="fa-solid fa-book"></i>
                     </div>
-                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
-                        <div class="icon">
-                            <i class="fa-solid fa-users"></i>
-                        </div>
-                        <span class="icon-name">Departments</span>
+                    <span class="icon-name">Program</span>
+                </div>
+                <div onclick="window.location.href='{% url 'courses' %}'" id="courses-item" class="courses menu-item">
+                    <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                    <span class="icon-name">Courses</span>
+                </div>
+                <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item">
+                    <div class="icon">
+                        <i class="fa-solid fa-school"></i>
                     </div>
-                    <div onclick="showProgramPage()" id="courses-item" class="courses menu-item">
-                        <div class="icon">
-                            <i class="fa-solid fa-book"></i>
-                        </div>
-                        <span class="icon-name">Program</span>
-                    </div>
-                    <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item">
-                        <div class="icon">
-                            <i class="fa-solid fa-school"></i>
-                        </div>
-                        <span class="icon-name">Campus</span>
-                    </div>
+                    <span class="icon-name">Campus</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="overviewPage" class="right-panel over"> 
+            <div class="dashboard-head">
+                <span class="over-heading">Overview</span>
+                <div class="date">
+                    <span id="date"></span>
                 </div>
             </div>
 
-            <div id="overviewPage" class="right-panel over"> 
-                <div class="dashboard-head">
-                    <span class="over-heading">Overview</span>
-                    <div class="date">
-                        <span id="date"></span>
+            <div class="dashboard">
+                <div class="dashboard-item">
+                    <div class="card-header">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <span>Students</span>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-num">{{ student_count }}</span>
+                        <span>Students</span>
                     </div>
                 </div>
+                <div class="dashboard-item">
+                    <div class="card-header">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <span>Faculty</span>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-num">{{ faculty_count }}</span>
+                        <span>Faculties</span>
+                    </div>
+                </div>
+                <div class="dashboard-item">
+                    <div class="card-header">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <span>Departments</span>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-num">{{ department_count }}</span>
+                        <span>Departments</span>
+                    </div>
+                </div>
+                <div class="dashboard-item">
+                    <div class="card-header">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+                        <span>Programs</span>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-num">{{ program_count }}</span>
+                        <span>Programs</span>
+                    </div>
+                </div>
+                <div class="dashboard-item">
+                    <div class="card-header">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <span>Courses</span>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-num">{{ courses_count }}</span>
+                        <span>Courses</span>
+                    </div>
+                </div>
+                <div class="dashboard-item">
+                    <div class="card-header">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-school"></i>
+                        </div>
+                        <span>Campus</span>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-num">{{ campus_count }}</span>
+                        <span>Campus</span>
+                    </div>
+                </div>
+            </div> 
+        </div>  
+    </div>
 
-                <div class="dashboard">
-                    <div class="dashboard-item">
-                        <div class="card-header">
-                            <div class="icon-holder">
-                                <i class="fa-solid fa-user"></i>
-                            </div>
-                            <span>Students</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-num">{{student_count}}</span>
-                            <span>Students</span>
-                        </div>
-                    </div>
-                    <div class="dashboard-item">
-                        <div class="card-header">
-                            <div class="icon-holder">
-                                <i class="fa-solid fa-chalkboard-user"></i>
-                            </div>
-                            <span>Faculty</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-num">{{faculty_count}}</span>
-                            <span>Faculties</span>
-                        </div>
-                    </div>
-                    <div class="dashboard-item">
-                        <div class="card-header">
-                            <div class="icon-holder">
-                                <i class="fa-solid fa-users"></i>
-                            </div>
-                            <span>Departments</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-num">{{department_count}}</span>
-                            <span>Departments</span>
-                        </div>
-                    </div>
-                    <div class="dashboard-item">
-                        <div class="card-header">
-                            <div class="icon-holder">
-                                <i class="fa-solid fa-book"></i>
-                            </div>
-                            <span>Programs</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-num">{{program_count}}</span>
-                            <span>Programs</span>
-                        </div>
-                    </div>
-                    <div class="dashboard-item">
-                        <div class="card-header">
-                            <div class="icon-holder">
-                                <i class="fa-solid fa-school"></i>
-                            </div>
-                            <span>Campus</span>
-                        </div>
-                        <div class="card-content">
-                            <span class="card-num">{{campus_count}}</span>
-                            <span>Campus</span>
-                        </div>
-                    </div>
-                </div> 
-                
-            </div>  
-
-        </div>
-
-    
     <script src="{% static 'js/script.js' %}"></script>
-    </body>
+</body>
 </html>

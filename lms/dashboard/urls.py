@@ -8,6 +8,13 @@ urlpatterns = [
     path('departments/', views.departments, name='departments'),
     path('campus/', views.campus, name='campus'),
     path('programs/', views.programs, name='programs'),
+    path('courses/', views.courses_page, name='courses'),
+    path('courses/view/<str:programme_code>/<int:batch>/', views.view_courses, name='view_courses'),
+
+    path('courses/edit/<int:program_id>/', views.edit_courses, name='edit_courses'),
+     
+    path('add-course/<str:programme_code>/<int:batch>/', views.add_course, name='add_course'),
+
     path('students/add/', views.addstudent, name='addstudent'),
     path('faculty/add/', views.addfaculty, name='addfaculty'),
     path('programs/add/', views.addprogram, name='addprogram'),

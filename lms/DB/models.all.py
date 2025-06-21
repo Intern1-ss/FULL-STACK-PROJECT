@@ -1,4 +1,5 @@
 from django.db import models
+from .models import Program  
 
 # Create your models here.
 
@@ -13,6 +14,8 @@ class Department(models.Model):
 
     def __str__(self):
         return self.dept_name
+
+
 
 #Campus Table
 class Campus(models.Model):
@@ -77,6 +80,7 @@ class Paper(models.Model):
     cie_weight = models.IntegerField()
     ese_weight = models.IntegerField()
     primary_department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='primary_papers')
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='papers')
     status = models.CharField(max_length=20, default='active')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

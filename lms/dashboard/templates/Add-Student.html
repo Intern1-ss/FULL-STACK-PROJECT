@@ -40,11 +40,15 @@
                         </div>
                         <span class="icon-name">Departments</span>
                     </div>
-                    <div onclick="showProgramPage()" id="courses-item" class="courses menu-item">
+                     <div onclick="showProgramPage()" id="programs-item" class="programs menu-item">
                         <div class="icon">
                             <i class="fa-solid fa-book"></i>
                         </div>
                         <span class="icon-name">Program</span>
+                    </div>
+                    <div onclick="window.location.href='{% url 'courses' %}'" id="courses-item" class="courses menu-item">
+                        <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                        <span class="icon-name">Courses</span>
                     </div>
                     <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item">
                         <div class="icon">
@@ -119,11 +123,11 @@
                                 <input type="number" id="regNum" name="regNum" placeholder="Enter Register Number" required>
                             </div>
                             <div class="form-group">
-                            <label for="faculty-search">Program</label>
-                                <input list="programs" id="faculty-search" name="program" placeholder="Search Program...">
+                            <label for="program-search">Program</label>
+                                <input list="programs" id="program-search" name="program" placeholder="Search Program...">
                                     <datalist id="programs">
                                         {% for program in programs %}
-                                            <option value="{{ program.code }}">{{ program.name }}</option>
+                                            <option value="{{ program.programme_code }}">{{ program.programme_short_name }}</option>
                                         {% endfor %}
                                     </datalist>
                             </div>

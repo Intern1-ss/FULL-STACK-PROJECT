@@ -40,11 +40,15 @@
                         </div>
                         <span class="icon-name">Departments</span>
                     </div>
-                    <div onclick="showProgramPage()" id="courses-item" class="courses menu-item">
+                     <div onclick="showProgramPage()" id="programs-item" class="programs menu-item">
                         <div class="icon">
                             <i class="fa-solid fa-book"></i>
                         </div>
                         <span class="icon-name">Program</span>
+                    </div>
+                    <div onclick="window.location.href='{% url 'courses' %}'" id="courses-item" class="courses menu-item">
+                        <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                        <span class="icon-name">Courses</span>
                     </div>
                     <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item">
                         <div class="icon">

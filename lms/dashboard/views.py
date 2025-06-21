@@ -1,7 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect , get_object_or_404
 from django.http import JsonResponse
-from DB.models import Department, Campus, Faculty, Student, Program
+from DB.models import Department, Campus, Faculty, Student, Program , Course   
 from mediahandler import utils as mh
+from django.contrib import messages
+
+
 import requests
 
 # Create your views here.
@@ -12,6 +15,7 @@ def home(request):
         'department_count': Department.objects.count(),
         'campus_count': Campus.objects.count(),
         'program_count': Program.objects.count(),
+        'courses_count':Course.objects.count(),
     }
     return render(request, 'Overview.html', context)
 
@@ -25,6 +29,154 @@ def faculty(request):
 
 def programs(request):
     return render(request, 'Programs.html', {'programs': Program.objects.all()})
+    
+#this is the old one for course
+# def courses_page(request):
+#     programs = Program.objects.all()
+#     return render(request, 'Courses.html', {'programs': programs})
+
+
+def courses_page(request):
+    programs = Program.objects.all()
+    if request.method == 'POST':
+        programme_code = request.POST.get('programme_code')
+        batch = request.POST.get('batch')
+        return redirect('add_course', programme_code=programme_code, batch=batch)
+    return render(request, 'Courses.html', {'programs': programs})
+
+def view_courses(request, programme_code, batch):
+    program = Program.objects.filter(programme_code=programme_code, batch=batch).first()
+    if not program:
+        return HttpResponse("Program not found", status=404)
+
+    courses = Course.objects.filter(programme_code=programme_code, batch=batch)
+    return render(request, 'view_courses.html', {
+        'program': program,
+        'courses': courses
+    })
+
+# def edit_courses(request, program_id):
+#     program = get_object_or_404(Program, id=program_id)
+
+#     if request.method == 'POST':
+#         # Clear existing papers for the program
+#         program.papers.all().delete()
+
+#         # Get data from form
+#         # paper_code = request.POST.getlist('paper_code')
+#         # paper_title = request.POST.getlist('paper_title')
+#         # credits = request.POST.getlist('credit')
+#         # cie_maxs = request.POST.getlist('cie_max')
+#         # ese_maxs = request.POST.getlist('ese_max')
+#         # cie_weights = request.POST.getlist('cie_weight')
+#         # ese_weights = request.POST.getlist('ese_weight')
+#         paper_codes = request.POST.getlist('paper_code')
+#         paper_titles = request.POST.getlist('paper_title')
+#         credits = request.POST.getlist('credit')
+#         cie_maxs = request.POST.getlist('cie_max')
+#         ese_maxs = request.POST.getlist('ese_max')
+#         cie_weights = request.POST.getlist('cie_weight')
+#         ese_weights = request.POST.getlist('ese_weight')
+
+
+#         for i in range(len(paper_codes)):
+#             if paper_codes[i] and paper_titles[i]:
+#                 Paper.objects.create(
+#                     paper_code=paper_codes[i],
+#                     paper_title=paper_titles[i],
+#                     credit=int(credits[i]),
+#                     cie_max=int(cie_maxs[i]),
+#                     ese_max=int(ese_maxs[i]),
+#                     cie_weight=int(cie_weights[i]),
+#                     ese_weight=int(ese_weights[i]),
+#                     primary_department=program.department,
+#                     program=program
+#                 )
+
+#         return redirect('courses')  # or your program list page
+
+#     return render(request, 'Edit-Courses.html', {'program': program})
+
+
+# def edit_courses(request, program_id):
+#     program = get_object_or_404(Program, id=program_id)
+
+#     if request.method == 'POST':
+#         # Clear existing papers for the program
+#         program.papers.all().delete()
+
+#         # Get form data
+#         paper_codes = request.POST.getlist('paper_code')
+#         paper_titles = request.POST.getlist('paper_title')
+#         credits = request.POST.getlist('credit')
+#         cie_maxs = request.POST.getlist('cie_max')
+#         ese_maxs = request.POST.getlist('ese_max')
+#         cie_weights = request.POST.getlist('cie_weight')
+#         ese_weights = request.POST.getlist('ese_weight')
+
+#         for i, code in enumerate(paper_codes):
+#             title = paper_titles[i]
+#             credit = credits[i]
+#             cie_max = cie_maxs[i]
+#             ese_max = ese_maxs[i]
+#             cie_weight = cie_weights[i]
+#             ese_weight = ese_weights[i]
+
+#             # Validate required fields
+#             if code.strip() and title.strip():
+#                 try:
+#                     Paper.objects.create(
+#                         paper_code=code.strip(),
+#                         paper_title=title.strip(),
+#                         credit=int(credit),
+#                         cie_max=int(cie_max),
+#                         ese_max=int(ese_max),
+#                         cie_weight=int(cie_weight),
+#                         ese_weight=int(ese_weight),
+#                         primary_department=program.department,
+#                         program=program
+#                     )
+#                 except Exception as e:
+#                     print(f"Error saving paper at index {i}: {e}")
+#                     continue  # Optionally log or skip invalid rows
+
+#         return redirect('courses')
+
+#     return render(request, 'Edit-Courses.html', {'program': program})
+
+
+
+def edit_courses(request, program_id):
+    program = get_object_or_404(Program, id=program_id)
+
+    if request.method == 'POST':
+        # Get data from form
+        paper_codes = request.POST.getlist('paper_code')
+        paper_titles = request.POST.getlist('paper_title')
+        credits = request.POST.getlist('credit')
+        cie_maxs = request.POST.getlist('cie_max')
+        ese_maxs = request.POST.getlist('ese_max')
+        cie_weights = request.POST.getlist('cie_weight')
+        ese_weights = request.POST.getlist('ese_weight')
+
+        for i, paper_code in enumerate(paper_codes):
+            # Only save non-empty entries
+            if paper_code and paper_titles[i]:
+                Paper.objects.create(
+                    paper_code=paper_code,
+                    paper_title=paper_titles[i],
+                    credit=int(credits[i]) if credits[i] else 0,
+                    cie_max=int(cie_maxs[i]) if cie_maxs[i] else 0,
+                    ese_max=int(ese_maxs[i]) if ese_maxs[i] else 0,
+                    cie_weight=int(cie_weights[i]) if cie_weights[i] else 0,
+                    ese_weight=int(ese_weights[i]) if ese_weights[i] else 0,
+                    primary_department=program.department,
+                    program=program
+                )
+
+        return redirect('courses')  # Redirect to the course list page
+
+    return render(request, 'Edit-Courses.html', {'program': program})
 
 def uploadfaculty(request):
     return render(request, 'Upload-Faculty.html')
@@ -91,7 +243,7 @@ def addstudent(request):
             student.program = None
         else:
             # Ensure that the program exists before assigning
-            student.program = Program.objects.get(code=request.POST.get('program'))
+            student.program = Program.objects.get(programme_code=request.POST.get('program'))
         student.status = request.POST.get('status')
         student.save()
         return redirect('students')
@@ -159,17 +311,25 @@ def addcampus(request):
 def addprogram(request):
     if request.method == 'POST':
         program = Program()
-        program.name = request.POST.get('name')
-        program.code = request.POST.get('code')
-        program.duration_years = request.POST.get('duration_years')
-        # Ensure that the department exists before assigning
-        if not request.POST.get('department'):
-            program.department = None
+        
+        # Required fields
+        program. programme_code = request.POST.get('code')  # programme_code
+        program.batch = request.POST.get('batch')
+        program.programme_short_name = request.POST.get('short_name')  # programme_short_name
+        program. programme_full_name = request.POST.get('full_name')    # programme_full_name
+
+        # Optional or validated fields
+        dept_id = request.POST.get('department')
+        if dept_id:
+            program.department = Department.objects.get(dept_id=dept_id)
         else:
-            program.department = Department.objects.get(dept_id=request.POST.get('department'))
+            program.department = None
+
         program.save()
         return redirect('programs')
+    
     return render(request, 'Add-Programs.html', {'departments': Department.objects.all()})
+
 
 def edit_student(request, regd_no):
     student = Student.objects.get(regd_no=regd_no)
@@ -334,3 +494,183 @@ def delete_program(request, program_id):
     program.delete()
     return redirect('programs')
 
+
+
+#for adding the details in course according to batch
+from DB.models import Course
+# def add_course(request, programme_code, batch):
+#     if request.method == 'POST':
+#         paper_code = request.POST.get('paper_code')
+
+#         if Course.objects.filter(programme_code=programme_code, batch=batch, paper_code=paper_code).exists():
+#             # messages.error(request, "This course already exists for the selected program and batch.")
+#             return redirect(request.path)
+
+#         Course.objects.create(
+#             programme_code=programme_code,
+#             batch=batch,
+#             # semester=request.POST.get('semester'),
+#             paper_code=paper_code,
+#             sequence=request.POST.get('sequence'),
+#             paper_title=request.POST.get('paper_title'),
+#             category=request.POST.get('category'),
+#             credits=request.POST.get('credits'),
+#             cie_max=request.POST.get('cie_max'),
+#             cie_max_atp=request.POST.get('cie_max_atp') or None,
+#             cie_max_psn=request.POST.get('cie_max_psn') or None,
+#             cie_max_brn=request.POST.get('cie_max_brn') or None,
+#             cie_max_ndg=request.POST.get('cie_max_ndg') or None,
+#             ese_max=request.POST.get('ese_max'),
+#             ese_max_atp=request.POST.get('ese_max_atp') or None,
+#             ese_max_psn=request.POST.get('ese_max_psn') or None,
+#             ese_max_brn=request.POST.get('ese_max_brn') or None,
+#             ese_max_ndg=request.POST.get('ese_max_ndg') or None,
+#             cie_wtg=request.POST.get('cie_wtg'),
+#             ese_wtg=request.POST.get('ese_wtg')
+#         )
+#         messages.success(request, f"Course {paper_code} added successfully.")
+#         return redirect('select_program')
+
+#     return render(request, 'Add_Course.html', {
+#         'programme_code': programme_code,
+#         'batch': batch
+#     })
+
+
+
+# def add_course(request, programme_code, batch):
+#     if request.method == 'POST':
+#         paper_codes = request.POST.getlist('paper_code')
+#         paper_titles = request.POST.getlist('paper_title')
+#         sequences = request.POST.getlist('sequence')
+#         categories = request.POST.getlist('category')
+#         credits = request.POST.getlist('credits')
+#         cie_max = request.POST.getlist('cie_max')
+#         cie_max_atp = request.POST.getlist('cie_max_atp')
+#         cie_max_psn = request.POST.getlist('cie_max_psn')
+#         cie_max_brn = request.POST.getlist('cie_max_brn')
+#         cie_max_ndg = request.POST.getlist('cie_max_ndg')
+#         ese_max = request.POST.getlist('ese_max')
+#         ese_max_atp = request.POST.getlist('ese_max_atp')
+#         ese_max_psn = request.POST.getlist('ese_max_psn')
+#         ese_max_brn = request.POST.getlist('ese_max_brn')
+#         ese_max_ndg = request.POST.getlist('ese_max_ndg')
+#         cie_wtg = request.POST.getlist('cie_wtg')
+#         ese_wtg = request.POST.getlist('ese_wtg')
+
+#         added_count = 0
+
+#         for i in range(len(paper_codes)):
+#             if not paper_codes[i]:
+#                 continue  # Skip empty rows
+
+#             if Course.objects.filter(programme_code=programme_code, batch=batch, paper_code=paper_codes[i]).exists():
+#                 continue  # Skip duplicates
+
+#             Course.objects.create(
+#                 programme_code=programme_code,
+#                 batch=batch,
+#                 paper_code=paper_codes[i],
+#                 paper_title=paper_titles[i],
+#                 sequence=sequences[i] or 0,
+#                 category=categories[i],
+#                 credits=credits[i] or 0,
+#                 cie_max=cie_max[i] or 0,
+#                 cie_max_atp=cie_max_atp[i] or None,
+#                 cie_max_psn=cie_max_psn[i] or None,
+#                 cie_max_brn=cie_max_brn[i] or None,
+#                 cie_max_ndg=cie_max_ndg[i] or None,
+#                 ese_max=ese_max[i] or 0,
+#                 ese_max_atp=ese_max_atp[i] or None,
+#                 ese_max_psn=ese_max_psn[i] or None,
+#                 ese_max_brn=ese_max_brn[i] or None,
+#                 ese_max_ndg=ese_max_ndg[i] or None,
+#                 cie_wtg=cie_wtg[i] or 0,
+#                 ese_wtg=ese_wtg[i] or 0,
+#             )
+#             added_count += 1
+
+#         if added_count > 0:
+#              messages.success(request, "")
+#         else:
+#             messages.warning(request, "No new courses were added. They may already exist or be empty.")
+
+#         return redirect('courses')
+
+#     return render(request, 'Add_Course.html', {
+#         'programme_code': programme_code,
+#         'batch': batch
+#     })
+
+
+
+def add_course(request, programme_code, batch):
+    # ✅ Get the full Program object to use in the template
+    try:
+        program = Program.objects.get(programme_code=programme_code, batch=batch)
+    except Program.DoesNotExist:
+        return HttpResponse("Program not found", status=404)
+
+    if request.method == 'POST':
+        paper_codes = request.POST.getlist('paper_code')
+        paper_titles = request.POST.getlist('paper_title')
+        sequences = request.POST.getlist('sequence')
+        categories = request.POST.getlist('category')
+        credits = request.POST.getlist('credits')
+        cie_max = request.POST.getlist('cie_max')
+        cie_max_atp = request.POST.getlist('cie_max_atp')
+        cie_max_psn = request.POST.getlist('cie_max_psn')
+        cie_max_brn = request.POST.getlist('cie_max_brn')
+        cie_max_ndg = request.POST.getlist('cie_max_ndg')
+        ese_max = request.POST.getlist('ese_max')
+        ese_max_atp = request.POST.getlist('ese_max_atp')
+        ese_max_psn = request.POST.getlist('ese_max_psn')
+        ese_max_brn = request.POST.getlist('ese_max_brn')
+        ese_max_ndg = request.POST.getlist('ese_max_ndg')
+        cie_wtg = request.POST.getlist('cie_wtg')
+        ese_wtg = request.POST.getlist('ese_wtg')
+
+        added_count = 0
+
+        for i in range(len(paper_codes)):
+            if not paper_codes[i]:
+                continue  # Skip empty rows
+
+            if Course.objects.filter(programme_code=programme_code, batch=batch, paper_code=paper_codes[i]).exists():
+                continue  # Skip duplicates
+
+            Course.objects.create(
+                programme_code=programme_code,
+                batch=batch,
+                paper_code=paper_codes[i],
+                paper_title=paper_titles[i],
+                sequence=sequences[i] or 0,
+                category=categories[i],
+                credits=credits[i] or 0,
+                cie_max=cie_max[i] or 0,
+                cie_max_atp=cie_max_atp[i] or None,
+                cie_max_psn=cie_max_psn[i] or None,
+                cie_max_brn=cie_max_brn[i] or None,
+                cie_max_ndg=cie_max_ndg[i] or None,
+                ese_max=ese_max[i] or 0,
+                ese_max_atp=ese_max_atp[i] or None,
+                ese_max_psn=ese_max_psn[i] or None,
+                ese_max_brn=ese_max_brn[i] or None,
+                ese_max_ndg=ese_max_ndg[i] or None,
+                cie_wtg=cie_wtg[i] or 0,
+                ese_wtg=ese_wtg[i] or 0,
+            )
+            added_count += 1
+
+        if added_count > 0:
+            messages.success(request, f"{added_count} course added successfully.")
+        else:
+            messages.warning(request, "No new courses were added, The course already exists.")
+
+        return redirect('courses')  # or any appropriate redirect
+
+    return render(request, 'Add_Course.html', {
+        'programme_code': programme_code,
+        'batch': batch,
+        'program': program,  # 👈 now available in the template
+        })
