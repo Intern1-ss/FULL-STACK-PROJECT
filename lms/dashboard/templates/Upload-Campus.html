@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>    </head>
+    <body>
+        <div class="whole-container">
+            <div class="menu-panel">
+                <div onclick="menuCollapse()" id="backIcon" class="back-icon">
+                    <i class="fa-solid fa-caret-right"></i>
+                </div>
+                <div class="logo-holder">
+                    <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
+                    <img class="logo-img display-none" src="{% static 'img/1.png' %}">
+                </div>
+                <div class="menu-icons">
+                    <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        <span class="icon-name">Overview</span>
+                    </div>
+                    <div onclick="showStudentPage()" id="students-item" class="students menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <span class="icon-name">Students</span> 
+                    </div>
+                    <div onclick="showFacultyPage()" id="faculty-item" class="faculty menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <span class="icon-name">Faculty</span>
+                    </div>
+                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <span class="icon-name">Departments</span>
+                    </div>
+                     <div onclick="showProgramPage()" id="programs-item" class="programs menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+                        <span class="icon-name">Program</span>
+                    </div>
+                    <div onclick="window.location.href='{% url 'courses' %}'" id="courses-item" class="courses menu-item">
+                        <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                        <span class="icon-name">Courses</span>
+                    </div>
+                    <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item active">
+                        <div class="icon">
+                            <i class="fa-solid fa-school"></i>
+                        </div>
+                        <span class="icon-name">Campus</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="addFacultyPage" class="right-panel fac-add">
+                <div class="dashboard-head">
+                    <span class="over-heading">Upload Campus csv</span>
+                    <div onclick="showCampusPage()" class="date pointer">
+                        <span>Cancel</span>
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <div class="download-template" onclick="window.location.href='/bulkUp/download/campus/'">
+                    <span>Download Template</span>
+                    <i class="fa-solid fa-download"></i>
+                </div>
+                <form id="uploadForm" class="upload-form" method="post" enctype="multipart/form-data" action="/bulkUp/upload/campus/">
+                    {% csrf_token %}
+                    <div class="upload-box">
+                        <span class="upload-header">Upload files</span>
+                        <span class="upload-subheader">Select and upload the files of your choice</span>
+                        <div class="upload-area" id="uploadArea">
+                            <div class="icon-holder"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                            <span>Choose a file or drag & drop it here</span>
+                            <small>Only csv files are allowed</small><br>
+                            <div class="browse-button" onclick="document.getElementById('fileInput').click()">Browse File</div>
+                            <input class="display-none" name="file" type="file" id="fileInput" hidden multiple />
+                        </div>
+                        <div class="file-list" id="fileList"></div>
+                        <div class="upload-button-holder display-none" id="uploadButton">
+                            <button type="submit" class="upload-button">Upload</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    
+    <script src="{% static 'js/script.js' %}"></script>
+    </body>
+</html>

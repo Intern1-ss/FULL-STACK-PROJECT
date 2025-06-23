@@ -29,6 +29,7 @@ SECRET_KEY = "django-insecure-qqi98idan64f=5!^frlw98$*a0%yd^5@cbu)+6nrop%z$yi-6r
 DEBUG = True
 
 ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,7 +43,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # DATABASE APP
     'DB',
-    # CUSTOM APPS    
+    # CUSTOM APPS
+    'dashboard', 
+    'bulkUp',
+    'mediahandler',
+    'API_Handler',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +142,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
