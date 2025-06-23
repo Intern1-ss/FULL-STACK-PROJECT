@@ -16,7 +16,7 @@
         {% csrf_token %}
         <label>Paper Code:</label><input type="text" name="paper_code" required><br>
         <label>Paper Title:</label><input type="text" name="paper_title" required><br>
-        {% comment %} <label>Semester:</label><input type="number" name="semester" required><br> 
+        <label>Semester (1 to 8):</label><input type="number" name="semester" min="1" max="8" required><br>
         <label>Sequence:</label><input type="number" name="sequence" required><br>
         <label>Category:</label>
         <select name="category" required>
@@ -122,6 +122,7 @@
                     {% comment %} <table id="course-table" border="1" cellpadding="6"> {% endcomment %}
                         <thead>
                             <tr>
+                                <th>Semester</th>
                                 <th>Paper Code</th>
                                 <th>Paper Title</th>
                                 <th>Sequence</th>
@@ -144,6 +145,13 @@
                         <tbody>
                         {% for i in "12345" %}
                             <tr>
+                                 <td>
+                                <select name="semester" required>
+                                    {% for sem in semesters %}
+                                        <option value="{{ sem }}">{{ sem }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
                                 <td><input type="text" name="paper_code"  /></td>
                                 <td><input type="text" name="paper_title"  /></td>
                                 <td><input type="number" name="sequence" ><br></td>
@@ -192,54 +200,59 @@
                     {% endfor %}
                 {% endif %} {% endcomment %}
 
-                <script>
-                function addRow() {
-                    const table = document.getElementById('course-table').getElementsByTagName('tbody')[0];
-                    const row = table.insertRow();
+               <script>
+    function addRow() {
+        const table = document.getElementById('course-table').getElementsByTagName('tbody')[0];
+        const row = table.insertRow();
 
-                    const fields = [
-                        { name: 'paper_code', type: 'text' },
-                        { name: 'paper_title', type: 'text' },
-                        { name: 'sequence', type: 'number' },
-                        { name: 'category', type: 'select', options: ['Theory', 'Practical', 'Core', 'Elective'] },
-                        { name: 'credits', type: 'number' },
-                        { name: 'cie_max', type: 'number' },
-                        { name: 'cie_max_atp', type: 'number' },
-                        { name: 'cie_max_psn', type: 'number' },
-                        { name: 'cie_max_brn', type: 'number' },
-                        { name: 'cie_max_ndg', type: 'number' },
-                        { name: 'ese_max', type: 'number' },
-                        { name: 'ese_max_atp', type: 'number' },
-                        { name: 'ese_max_psn', type: 'number' },
-                        { name: 'ese_max_brn', type: 'number' },
-                        { name: 'ese_max_ndg', type: 'number' },
-                        { name: 'cie_wtg', type: 'number' },
-                        { name: 'ese_wtg', type: 'number' },
-                    ];
+        const fields = [
+            {
+                name: 'semester',
+                type: 'select',
+                options: {{ semesters|safe }}
+            },
+            { name: 'paper_code', type: 'text' },
+            { name: 'paper_title', type: 'text' },
+            { name: 'sequence', type: 'number' },
+            { name: 'category', type: 'select', options: ['Theory', 'Practical', 'Core', 'Elective'] },
+            { name: 'credits', type: 'number' },
+            { name: 'cie_max', type: 'number' },
+            { name: 'cie_max_atp', type: 'number' },
+            { name: 'cie_max_psn', type: 'number' },
+            { name: 'cie_max_brn', type: 'number' },
+            { name: 'cie_max_ndg', type: 'number' },
+            { name: 'ese_max', type: 'number' },
+            { name: 'ese_max_atp', type: 'number' },
+            { name: 'ese_max_psn', type: 'number' },
+            { name: 'ese_max_brn', type: 'number' },
+            { name: 'ese_max_ndg', type: 'number' },
+            { name: 'cie_wtg', type: 'number' },
+            { name: 'ese_wtg', type: 'number' },
+        ];
 
-                    fields.forEach(field => {
-                        const cell = row.insertCell();
-                        if (field.type === 'select') {
-                            const select = document.createElement('select');
-                            select.name = field.name;
-                            field.options.forEach(opt => {
-                                const option = document.createElement('option');
-                                option.value = opt;
-                                option.textContent = opt;
-                                select.appendChild(option);
-                            });
-                            cell.appendChild(select);
-                        } else {
-                            const input = document.createElement('input');
-                            input.type = field.type;
-                            input.name = field.name;
-                            if (field.step) input.step = field.step;
-                            input.className = "form-control";
-                            cell.appendChild(input);
-                        }
-                    });
-                }
-                </script>
+        fields.forEach(field => {
+            const cell = row.insertCell();
+            if (field.type === 'select') {
+                const select = document.createElement('select');
+                select.name = field.name;
+                field.options.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt;
+                    option.textContent = opt;
+                    select.appendChild(option);
+                });
+                cell.appendChild(select);
+            } else {
+                const input = document.createElement('input');
+                input.type = field.type;
+                input.name = field.name;
+                input.className = "form-control";
+                cell.appendChild(input);
+            }
+        });
+    }
+</script>
+
 
                
 

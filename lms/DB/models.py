@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from datetime import datetime
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Department Table
 class Department(models.Model):
@@ -63,6 +63,10 @@ class Program(models.Model):
     department = models.ForeignKey('Department', on_delete=models.CASCADE, db_column='department_id')
     programme_short_name = models.CharField(max_length=100)
     programme_full_name = models.CharField(max_length=255)
+    total_semesters = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(12)],
+        default=8,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -123,6 +127,8 @@ class Student(models.Model):
 
 
 # Course Table
+
+
 class Course(models.Model):
     """Model representing a course (paper) under a program and batch."""
     CATEGORY_CHOICES = [
@@ -136,6 +142,10 @@ class Course(models.Model):
     batch = models.IntegerField()
     paper_code = models.CharField(max_length=20)
     paper_title = models.CharField(max_length=150)
+    semester = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(8)],
+        default=1 
+    )
     sequence = models.IntegerField()
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     credits = models.DecimalField(max_digits=3, decimal_places=1)
@@ -158,4 +168,4 @@ class Course(models.Model):
         unique_together = ('programme_code', 'batch', 'paper_code')
 
     def __str__(self):
-        return self.paper_code
+        return f"{self.paper_code} (Sem {self.semester})"

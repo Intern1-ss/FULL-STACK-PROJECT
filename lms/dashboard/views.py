@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from DB.models import Department, Campus, Faculty, Student, Program , Course   
 from mediahandler import utils as mh
 from django.contrib import messages
-
+from collections import defaultdict
 
 import requests
 
@@ -44,16 +44,37 @@ def courses_page(request):
         return redirect('add_course', programme_code=programme_code, batch=batch)
     return render(request, 'Courses.html', {'programs': programs})
 
+# def view_courses(request, programme_code, batch):
+#     program = Program.objects.filter(programme_code=programme_code, batch=batch).first()
+#     if not program:
+#         return HttpResponse("Program not found", status=404)
+
+#     # courses = Course.objects.filter(programme_code=programme_code, batch=batch)
+#     courses = Course.objects.filter(programme_code=programme_code, batch=batch).order_by('semester', 'sequence')
+#     return render(request, 'view_courses.html', {
+#         'program': program,
+#         'courses': courses
+#     })
+
+
 def view_courses(request, programme_code, batch):
     program = Program.objects.filter(programme_code=programme_code, batch=batch).first()
     if not program:
         return HttpResponse("Program not found", status=404)
 
-    courses = Course.objects.filter(programme_code=programme_code, batch=batch)
+    courses = Course.objects.filter(programme_code=programme_code, batch=batch).order_by('semester', 'sequence')
+
+    # Group courses by semester
+    semester_wise_courses = defaultdict(list)
+    for course in courses:
+        semester_wise_courses[course.semester].append(course)
+
     return render(request, 'view_courses.html', {
         'program': program,
-        'courses': courses
+        'semester_wise_courses': dict(semester_wise_courses)
     })
+
+
 
 # def edit_courses(request, program_id):
 #     program = get_object_or_404(Program, id=program_id)
@@ -317,6 +338,10 @@ def addprogram(request):
         program.batch = request.POST.get('batch')
         program.programme_short_name = request.POST.get('short_name')  # programme_short_name
         program. programme_full_name = request.POST.get('full_name')    # programme_full_name
+        # total_semesters 
+        total_sem = request.POST.get('total_semesters')
+        if total_sem and total_sem.isdigit():
+            program.total_semesters = int(total_sem)
 
         # Optional or validated fields
         dept_id = request.POST.get('department')
@@ -442,22 +467,52 @@ def edit_campus(request, campus_id):
         return redirect('campus')
     return render(request, 'Edit-Campus.html', {'campus': campus})
 
+# def edit_program(request, program_id):
+#     program = Program.objects.get(id=program_id)
+#     if request.method == 'POST':
+#         program.name = request.POST.get('name')
+#         program.code = request.POST.get('code')
+#         program.duration_years = request.POST.get('duration_years')
+#         # Ensure that the department exists before assigning
+#         if not request.POST.get('department'):
+#             program.department = None
+#         else:
+#             program.department = Department.objects.get(dept_id=request.POST.get('department'))
+#         program.save()
+#         return redirect('programs')
+    
+#     departments = Department.objects.all()
+#     return render(request, 'Edit-Programs.html', {'program': program, 'departments': departments})
+
 def edit_program(request, program_id):
     program = Program.objects.get(id=program_id)
+
     if request.method == 'POST':
-        program.name = request.POST.get('name')
-        program.code = request.POST.get('code')
-        program.duration_years = request.POST.get('duration_years')
-        # Ensure that the department exists before assigning
-        if not request.POST.get('department'):
-            program.department = None
+        program.programme_code = request.POST.get('code')
+        program.programme_short_name = request.POST.get('short_name')
+        program.programme_full_name = request.POST.get('full_name')
+        program.batch = request.POST.get('batch')
+        total_sem = request.POST.get('total_semesters')
+        if total_sem and total_sem.isdigit():
+            program.total_semesters = int(total_sem)
+        dept_id = request.POST.get('department')
+        if dept_id:
+            try:
+                program.department = Department.objects.get(dept_id=dept_id)
+            except Department.DoesNotExist:
+                program.department = None
         else:
-            program.department = Department.objects.get(dept_id=request.POST.get('department'))
+            program.department = None
+
         program.save()
         return redirect('programs')
-    
+
     departments = Department.objects.all()
-    return render(request, 'Edit-Programs.html', {'program': program, 'departments': departments})
+    return render(request, 'Edit-Programs.html', {
+        'program': program,
+        'departments': departments
+    })
+
 
 def delete_student(request, regd_no):
     student = Student.objects.get(regd_no=regd_no)
@@ -603,14 +658,16 @@ from DB.models import Course
 #     })
 
 
-
+from django.http import HttpResponse
 def add_course(request, programme_code, batch):
-    # ✅ Get the full Program object to use in the template
+    #  Get the full Program object to use in the template
     try:
         program = Program.objects.get(programme_code=programme_code, batch=batch)
     except Program.DoesNotExist:
         return HttpResponse("Program not found", status=404)
-
+    
+    # semesters = range(1, program.total_semesters + 1)
+    semesters = list(range(1, program.total_semesters + 1))
     if request.method == 'POST':
         paper_codes = request.POST.getlist('paper_code')
         paper_titles = request.POST.getlist('paper_title')
@@ -629,7 +686,8 @@ def add_course(request, programme_code, batch):
         ese_max_ndg = request.POST.getlist('ese_max_ndg')
         cie_wtg = request.POST.getlist('cie_wtg')
         ese_wtg = request.POST.getlist('ese_wtg')
-
+        semesters = request.POST.getlist('semester')
+        
         added_count = 0
 
         for i in range(len(paper_codes)):
@@ -639,11 +697,15 @@ def add_course(request, programme_code, batch):
             if Course.objects.filter(programme_code=programme_code, batch=batch, paper_code=paper_codes[i]).exists():
                 continue  # Skip duplicates
 
+            def safe_get(lst, idx, default=None):
+                 return lst[idx] if idx < len(lst) else default
             Course.objects.create(
                 programme_code=programme_code,
                 batch=batch,
                 paper_code=paper_codes[i],
                 paper_title=paper_titles[i],
+                # semester=int(semesters[i]) if semesters[i] else 1,
+                semester=int(safe_get(semesters, i, 1)) if safe_get(semesters, i) else 1,
                 sequence=sequences[i] or 0,
                 category=categories[i],
                 credits=credits[i] or 0,
@@ -672,5 +734,46 @@ def add_course(request, programme_code, batch):
     return render(request, 'Add_Course.html', {
         'programme_code': programme_code,
         'batch': batch,
-        'program': program,  # 👈 now available in the template
+        'program': program,  #  now available in the template
+        'semesters': semesters,
         })
+
+
+
+#for course pdf download
+from django.template.loader import get_template
+
+from xhtml2pdf import pisa
+
+
+def download_course_pdf(request, programme_code, batch):
+    program = Program.objects.filter(programme_code=programme_code, batch=batch).first()
+    if not program:
+        return HttpResponse("Program not found", status=404)
+
+    # Get all courses ordered by semester
+    courses = Course.objects.filter(programme_code=programme_code, batch=batch).order_by('semester', 'sequence')
+
+    # Organize courses semester-wise
+    semester_data = {}
+    for course in courses:
+        semester_data.setdefault(course.semester, []).append(course)
+
+    # Render to PDF
+    template_path = 'pdf_course_template.html'
+    context = {
+        'program': program,
+        'semester_data': semester_data,
+    }
+    response = HttpResponse(content_type='application/pdf')
+    filename = f"{program.programme_full_name.replace(' ', '_')}_Batch_{batch}_Syllabus.pdf"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    template = get_template(template_path)
+    html = template.render(context)
+    pisa_status = pisa.CreatePDF(html, dest=response)
+
+    if pisa_status.err:
+        return HttpResponse("Error generating PDF", status=500)
+
+    return response

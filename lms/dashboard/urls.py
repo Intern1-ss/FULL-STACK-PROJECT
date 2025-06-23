@@ -35,4 +35,8 @@ urlpatterns = [
     path('campus/delete/<str:campus_id>/', views.delete_campus, name='del_campus'),
     path('programs/edit/<int:program_id>/', views.edit_program, name='edit_program'),
     path('programs/delete/<int:program_id>/', views.delete_program, name='del_program'),
+
+
+    path('courses/pdf/<str:programme_code>/<int:batch>/', views.download_course_pdf, name='download_course_pdf'),
+
 ]
