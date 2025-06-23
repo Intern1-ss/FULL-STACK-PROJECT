@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>
+    <style>
+        .table-scroll {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.table-scroll table {
+    min-width: 1000px; /* Or whatever fits your content */
+    border-collapse: collapse;
+}
+
+.table-scroll th,
+.table-scroll td {
+    padding: 8px 12px;
+    text-align: left;
+    white-space: nowrap;
+}
+</style>
+</head>
+<body>
+    <div class="whole-container">
+        <div class="menu-panel">
+            <div onclick="menuCollapse()" id="backIcon" class="back-icon">
+                <i class="fa-solid fa-caret-right"></i>
+            </div>
+            <div class="logo-holder">
+                <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
+                <img class="logo-img display-none" src="{% static 'img/1.png' %}">
+            </div>
+            <div class="menu-icons">
+                <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item">
+                    <div class="icon"><i class="fa-solid fa-chart-simple"></i></div>
+                    <span class="icon-name">Overview</span>
+                </div>
+                <div onclick="showStudentPage()" id="students-item" class="students menu-item">
+                    <div class="icon"><i class="fa-solid fa-user"></i></div>
+                    <span class="icon-name">Students</span> 
+                </div>
+                <div onclick="showFacultyPage()" id="faculty-item" class="faculty menu-item">
+                    <div class="icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <span class="icon-name">Faculty</span>
+                </div>
+                <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
+                    <div class="icon"><i class="fa-solid fa-users"></i></div>
+                    <span class="icon-name">Departments</span>
+                </div>
+                <div onclick="showProgramPage()" id="programe-item" class="programe menu-item">
+                    <div class="icon"><i class="fa-solid fa-book"></i></div>
+                    <span class="icon-name">Program</span>
+                </div>
+                <div onclick="window.location.href='{% url 'courses' %}'" id="courses-item" class="courses menu-item">
+                        <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                        <span class="icon-name">Courses</span>
+                </div>
+                <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item">
+                    <div class="icon"><i class="fa-solid fa-school"></i></div>
+                    <span class="icon-name">Campus</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="dashboard-head">
+                <span class="over-heading">Courses</span>
+            </div>
+
+    <div class="container">
+        <h2>{{ program.programme_short_name }} - Batch {{ program.batch }}</h2>
+        <p><strong>Department:</strong> {{ program.department }}</p>
+
+        {% if courses %}
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Paper Code</th>
+                        <th>Paper Title</th>
+                        <th>Category</th>
+                        <th>Credits</th>
+                        <th>CIE Max</th>
+                        <th>cie_max_atp</th>
+                        <th>cie_max_psn</th>
+                        <th>cie_max_brn</th>
+                        <th>cie_max_ndg</th>
+                        <th>ESE Max</th>
+                        <th>ese_max_atp</th>
+                        <th>ese_max_psn</th>
+                        <th>ese_max_brn</th>
+                        <th>ese_max_ndg</th>
+                        <th>CIE Weightage</th>
+                        <th>ESE Weightage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in courses %}
+                        <tr>
+                            <td>{{ course.paper_code }}</td>
+                            <td>{{ course.paper_title }}</td>
+                            <td>{{ course.category }}</td>
+                            <td>{{ course.credits }}</td>
+                            <td>{{ course.cie_max }}</td>
+                             <td>{{ course.cie_max_atp }}</td>
+                             <td>{{ course.cie_max_psn }}</td>
+                             <td>{{ course.cie_max_brn }}</td>
+                             <td>{{ course.cie_max_ndg }}</td>
+                            <td>{{ course.ese_max }}</td>
+                            <td>{{ course.ese_max_atp }}</td>
+                             <td>{{ course.ese_max_psn }}</td>
+                             <td>{{ course.ese_max_brn }}</td>
+                             <td>{{ course.ese_max_ndg }}</td>
+                            <td>{{ course.cie_wtg }}</td>
+                            <td>{{ course.ese_wtg }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p>No courses found for this program and batch.</p>
+        {% endif %}
+
+        <div class="back-btn">
+            <button onclick="window.history.back()">Back</button>
+        </div>
+    </div>
+</body>
+</html>

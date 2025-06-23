@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>    </head>
+    <body>
+        <div class="whole-container">
+            <div class="menu-panel">
+                <div onclick="menuCollapse()" id="backIcon" class="back-icon">
+                    <i class="fa-solid fa-caret-right"></i>
+                </div>
+                <div class="logo-holder">
+                    <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
+                    <img class="logo-img display-none" src="{% static 'img/1.png' %}">
+                </div>
+                <div class="menu-icons">
+                    <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        <span class="icon-name">Overview</span>
+                    </div>
+                    <div onclick="showStudentPage()" id="students-item" class="students menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <span class="icon-name">Students</span> 
+                    </div>
+                    <div onclick="showFacultyPage()" id="faculty-item" class="faculty menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <span class="icon-name">Faculty</span>
+                    </div>
+                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <span class="icon-name">Departments</span>
+                    </div>
+                     <div onclick="showProgramPage()" id="programs-item" class="programs menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+                        <span class="icon-name">Program</span>
+                    </div>
+                    <div onclick="window.location.href='{% url 'courses' %}'" id="courses-item" class="courses menu-item">
+                        <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                        <span class="icon-name">Courses</span>
+                    </div>
+                    <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item active">
+                        <div class="icon">
+                            <i class="fa-solid fa-school"></i>
+                        </div>
+                        <span class="icon-name">Campus</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel camp-add">
+                <div class="dashboard-head">
+                    <span class="over-heading">Edit Campus: {{ campus.id }}</span>
+                    <div class="date pointer" onclick="showCampusPage()">
+                        <span>Cancel</span>
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                
+                <div class="container">
+                    <form class="form" method="POST">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Campus Name</label>
+                                <input type="text" id="name" name="name" value="{{ campus.campus_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="campID">Campus ID</label>
+                                <input type="text" id="campID" name="id" disabled value="{{ campus.id }}" disabled>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="campLoc">Campus Location</label>
+                                <input type="text" id="campLoc" name="loc" value="{{ campus.location }}" required>
+                            </div>
+                        </div>
+                        <button class="create-button" type="submit">Update</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    
+    <script src="{% static 'js/script.js' %}"></script>
+    </body>
+</html>

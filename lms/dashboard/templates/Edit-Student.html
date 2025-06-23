@@ -1,0 +1,460 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>    </head>
+    <body>
+        <div class="whole-container">
+            <div class="menu-panel">
+                <div onclick="menuCollapse()" id="backIcon" class="back-icon">
+                    <i class="fa-solid fa-caret-right"></i>
+                </div>
+                <div class="logo-holder">
+                    <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
+                    <img class="logo-img display-none" src="{% static 'img/1.png' %}">
+                </div>
+                <div class="menu-icons">
+                    <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        <span class="icon-name">Overview</span>
+                    </div>
+                    <div onclick="showStudentPage()" id="students-item" class="students menu-item active">
+                        <div class="icon">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <span class="icon-name">Students</span> 
+                    </div>
+                    <div onclick="showFacultyPage()" id="faculty-item" class="faculty menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <span class="icon-name">Faculty</span>
+                    </div>
+                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <span class="icon-name">Departments</span>
+                    </div>
+                    <div onclick="showProgramPage()" id="programs-item" class="programs menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+                        <span class="icon-name">Program</span>
+                    </div>
+                    <div onclick="window.location.href='{% url 'courses' %}'" id="courses-item" class="courses menu-item">
+                        <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                        <span class="icon-name">Courses</span>
+                    </div>
+                    <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-school"></i>
+                        </div>
+                        <span class="icon-name">Campus</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="addStudentPage" class="right-panel stud-add">
+                <div class="dashboard-head">
+                    <span class="over-heading">Edit Student: {{ student.regd_no }}</span>
+                    <div onclick="showStudentPage()" class="date pointer">
+                        <span>Cancel</span>
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                
+                <div class="container">
+                    <form class="form" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-row-header">
+                            <input type="file" accept="image/png, image/jpeg, image/jpg" name="dp_pic" id="input-file" class="display-none">
+                            {% if student.dp_key %}
+                                <img src="/mediahandler/image/{{ student.dp_key }}/" id="pfp-pic" alt="">
+                            {% else %}
+                                <img src="{% static 'img/pfp.png' %}" id="pfp-pic" alt="">
+                            {% endif %}
+                            <label for="input-file">Browse Image</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" name="name" value="{{student.name}}" placeholder="Enter name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dob">Date of Birth</label>
+                                <input type="date" id="dob" name="dob" value="{{ student.birthday|date:'Y-m-d' }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" value="{{student.email}}" placeholder="Enter email" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="mobile">Mobile Number</label>
+                                <input type="tel" id="mobile" name="mobile" value="{{student.mobile}}" placeholder="Enter mobile number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <select class="field" name="gender" id="gender" >
+                                    <option value="Male" {% if student.gender == 'Male' %}selected{% endif %}>Male</option>
+                                    <option value="Female" {% if student.gender == 'Female' %}selected{% endif %}>Female</option>
+                                    <option value="Others" {% if student.gender == 'Others' %}selected{% endif %}>Others</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="bloodGroup">Blood Group</label>
+                                <select class="field" name="blood_group" id="bloodGroup" >
+                                    <option value="A+" {% if student.blood_group == 'A+' %}selected{% endif %}>A+</option>
+                                    <option value="A-" {% if student.blood_group == 'A-' %}selected{% endif %}>A−</option>
+                                    <option value="B+" {% if student.blood_group == 'B+' %}selected{% endif %}>B+</option>
+                                    <option value="B-" {% if student.blood_group == 'B-' %}selected{% endif %}>B−</option>
+                                    <option value="AB+" {% if student.blood_group == 'AB+' %}selected{% endif %}>AB+</option>
+                                    <option value="AB-" {% if student.blood_group == 'AB-' %}selected{% endif %}>AB−</option>
+                                    <option value="O+" {% if student.blood_group == 'O+' %}selected{% endif %}>O+</option>
+                                    <option value="O-" {% if student.blood_group == 'O-' %}selected{% endif %}>O−</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="regNum">Register Number</label>
+                                <input type="number" id="regNum" name="regNum" value="{{student.regd_no}}" placeholder="Enter Register Number" required>
+                            </div>
+                            <div class="form-group">
+                            <label for="faculty-search">Program</label>
+                                <input list="programs" id="faculty-search" name="program" value="{{student.program}}" placeholder="Search Program...">
+                                    <datalist id="programs">
+                                        {% for program in programs %}
+                                            <option value="{{ program.code }}">{{ program.name }}</option>
+                                        {% endfor %}
+                                    </datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="batch">Batch</label>
+                                <input type="number" id="batch" name="batch" min="1900" max="2100" value="{{student.batch}}" placeholder="2025">
+
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select class="field" name="status" id="status" >
+                                    <option value="active" {% if faculty.status == 'active' %}selected{% endif %}>Active</option>
+                                    <option value="inactive" {% if faculty.status == 'inactive' %}selected{% endif %}>Inactive</option>
+                                    <option value="detention" {% if faculty.status == 'detention' %}selected{% endif %}>Detention</option>
+                                    <option value="graduated" {% if faculty.status == 'graduated' %}selected{% endif %}>Graduation</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country</label>
+                                <select class="field" id="country" name="country" required>
+                                    <option value="Afghanistan" {% if student.country == 'Afghanistan' %}selected{% endif %}>Afghanistan</option>
+                                    <option value="Albania" {% if student.country == 'Albania' %}selected{% endif %}>Albania</option>
+                                    <option value="Algeria" {% if student.country == 'Algeria' %}selected{% endif %}>Algeria</option>
+                                    <option value="American Samoa" {% if student.country == 'American Samoa' %}selected{% endif %}>American Samoa</option>
+                                    <option value="Andorra" {% if student.country == 'Andorra' %}selected{% endif %}>Andorra</option>
+                                    <option value="Angola" {% if student.country == 'Angola' %}selected{% endif %}>Angola</option>
+                                    <option value="Anguilla" {% if student.country == 'Anguilla' %}selected{% endif %}>Anguilla</option>
+                                    <option value="Antarctica" {% if student.country == 'Antarctica' %}selected{% endif %}>Antarctica</option>
+                                    <option value="Antigua and Barbuda" {% if student.country == 'Antigua and Barbuda' %}selected{% endif %}>Antigua and Barbuda</option>
+                                    <option value="Argentina" {% if student.country == 'Argentina' %}selected{% endif %}>Argentina</option>
+                                    <option value="Armenia" {% if student.country == 'Armenia' %}selected{% endif %}>Armenia</option>
+                                    <option value="Aruba" {% if student.country == 'Aruba' %}selected{% endif %}>Aruba</option>
+                                    <option value="Australia" {% if student.country == 'Australia' %}selected{% endif %}>Australia</option>
+                                    <option value="Austria" {% if student.country == 'Austria' %}selected{% endif %}>Austria</option>
+                                    <option value="Azerbaijan" {% if student.country == 'Azerbaijan' %}selected{% endif %}>Azerbaijan</option>
+                                    <option value="Bahamas" {% if student.country == 'Bahamas' %}selected{% endif %}>Bahamas</option>
+                                    <option value="Bahrain" {% if student.country == 'Bahrain' %}selected{% endif %}>Bahrain</option>
+                                    <option value="Bangladesh" {% if student.country == 'Bangladesh' %}selected{% endif %}>Bangladesh</option>
+                                    <option value="Barbados" {% if student.country == 'Barbados' %}selected{% endif %}>Barbados</option>
+                                    <option value="Belarus" {% if student.country == 'Belarus' %}selected{% endif %}>Belarus</option>
+                                    <option value="Belgium" {% if student.country == 'Belgium' %}selected{% endif %}>Belgium</option>
+                                    <option value="Belize" {% if student.country == 'Belize' %}selected{% endif %}>Belize</option>
+                                    <option value="Benin" {% if student.country == 'Benin' %}selected{% endif %}>Benin</option>
+                                    <option value="Bermuda" {% if student.country == 'Bermuda' %}selected{% endif %}>Bermuda</option>
+                                    <option value="Bhutan" {% if student.country == 'Bhutan' %}selected{% endif %}>Bhutan</option>
+                                    <option value="Bolivia" {% if student.country == 'Bolivia' %}selected{% endif %}>Bolivia</option>
+                                    <option value="Bosnia and Herzegovina" {% if student.country == 'Bosnia and Herzegovina' %}selected{% endif %}>Bosnia and Herzegovina</option>
+                                    <option value="Botswana" {% if student.country == 'Botswana' %}selected{% endif %}>Botswana</option>
+                                    <option value="Brazil" {% if student.country == 'Brazil' %}selected{% endif %}>Brazil</option>
+                                    <option value="British Indian Ocean Territory" {% if student.country == 'British Indian Ocean Territory' %}selected{% endif %}>British Indian Ocean Territory</option>
+                                    <option value="Brunei" {% if student.country == 'Brunei' %}selected{% endif %}>Brunei</option>
+                                    <option value="Bulgaria" {% if student.country == 'Bulgaria' %}selected{% endif %}>Bulgaria</option>
+                                    <option value="Burkina Faso" {% if student.country == 'Burkina Faso' %}selected{% endif %}>Burkina Faso</option>
+                                    <option value="Burundi" {% if student.country == 'Burundi' %}selected{% endif %}>Burundi</option>
+                                    <option value="Cambodia" {% if student.country == 'Cambodia' %}selected{% endif %}>Cambodia</option>
+                                    <option value="Cameroon" {% if student.country == 'Cameroon' %}selected{% endif %}>Cameroon</option>
+                                    <option value="Canada" {% if student.country == 'Canada' %}selected{% endif %}>Canada</option>
+                                    <option value="Cape Verde" {% if student.country == 'Cape Verde' %}selected{% endif %}>Cape Verde</option>
+                                    <option value="Cayman Islands" {% if student.country == 'Cayman Islands' %}selected{% endif %}>Cayman Islands</option>
+                                    <option value="Central African Republic" {% if student.country == 'Central African Republic' %}selected{% endif %}>Central African Republic</option>
+                                    <option value="Chad" {% if student.country == 'Chad' %}selected{% endif %}>Chad</option>
+                                    <option value="Chile" {% if student.country == 'Chile' %}selected{% endif %}>Chile</option>
+                                    <option value="China" {% if student.country == 'China' %}selected{% endif %}>China</option>
+                                    <option value="Colombia" {% if student.country == 'Colombia' %}selected{% endif %}>Colombia</option>
+                                    <option value="Comoros" {% if student.country == 'Comoros' %}selected{% endif %}>Comoros</option>
+                                    <option value="Congo - Brazzaville" {% if student.country == 'Congo - Brazzaville' %}selected{% endif %}>Congo - Brazzaville</option>
+                                    <option value="Congo - Kinshasa" {% if student.country == 'Congo - Kinshasa' %}selected{% endif %}>Congo - Kinshasa</option>
+                                    <option value="Costa Rica" {% if student.country == 'Costa Rica' %}selected{% endif %}>Costa Rica</option>
+                                    <option value="Côte d’Ivoire" {% if student.country == 'Côte d’Ivoire' %}selected{% endif %}>Côte d’Ivoire</option>
+                                    <option value="Croatia" {% if student.country == 'Croatia' %}selected{% endif %}>Croatia</option>
+                                    <option value="Cuba" {% if student.country == 'Cuba' %}selected{% endif %}>Cuba</option>
+                                    <option value="Cyprus" {% if student.country == 'Cyprus' %}selected{% endif %}>Cyprus</option>
+                                    <option value="Czech Republic" {% if student.country == 'Czech Republic' %}selected{% endif %}>Czech Republic</option>
+                                    <option value="Denmark" {% if student.country == 'Denmark' %}selected{% endif %}>Denmark</option>
+                                    <option value="Djibouti" {% if student.country == 'Djibouti' %}selected{% endif %}>Djibouti</option>
+                                    <option value="Dominica" {% if student.country == 'Dominica' %}selected{% endif %}>Dominica</option>
+                                    <option value="Dominican Republic" {% if student.country == 'Dominican Republic' %}selected{% endif %}>Dominican Republic</option>
+                                    <option value="Ecuador" {% if student.country == 'Ecuador' %}selected{% endif %}>Ecuador</option>
+                                    <option value="Egypt" {% if student.country == 'Egypt' %}selected{% endif %}>Egypt</option>
+                                    <option value="El Salvador" {% if student.country == 'El Salvador' %}selected{% endif %}>El Salvador</option>
+                                    <option value="Equatorial Guinea" {% if student.country == 'Equatorial Guinea' %}selected{% endif %}>Equatorial Guinea</option>
+                                    <option value="Eritrea" {% if student.country == 'Eritrea' %}selected{% endif %}>Eritrea</option>
+                                    <option value="Estonia" {% if student.country == 'Estonia' %}selected{% endif %}>Estonia</option>
+                                    <option value="Ethiopia" {% if student.country == 'Ethiopia' %}selected{% endif %}>Ethiopia</option>
+                                    <option value="Fiji" {% if student.country == 'Fiji' %}selected{% endif %}>Fiji</option>
+                                    <option value="Finland" {% if student.country == 'Finland' %}selected{% endif %}>Finland</option>
+                                    <option value="France" {% if student.country == 'France' %}selected{% endif %}>France</option>
+                                    <option value="Gabon" {% if student.country == 'Gabon' %}selected{% endif %}>Gabon</option>
+                                    <option value="Gambia" {% if student.country == 'Gambia' %}selected{% endif %}>Gambia</option>
+                                    <option value="Georgia" {% if student.country == 'Georgia' %}selected{% endif %}>Georgia</option>
+                                    <option value="Germany" {% if student.country == 'Germany' %}selected{% endif %}>Germany</option>
+                                    <option value="Ghana" {% if student.country == 'Ghana' %}selected{% endif %}>Ghana</option>
+                                    <option value="Greece" {% if student.country == 'Greece' %}selected{% endif %}>Greece</option>
+                                    <option value="Greenland" {% if student.country == 'Greenland' %}selected{% endif %}>Greenland</option>
+                                    <option value="Grenada" {% if student.country == 'Grenada' %}selected{% endif %}>Grenada</option>
+                                    <option value="Guam" {% if student.country == 'Guam' %}selected{% endif %}>Guam</option>
+                                    <option value="Guatemala" {% if student.country == 'Guatemala' %}selected{% endif %}>Guatemala</option>
+                                    <option value="Guinea" {% if student.country == 'Guinea' %}selected{% endif %}>Guinea</option>
+                                    <option value="Guinea-Bissau" {% if student.country == 'Guinea-Bissau' %}selected{% endif %}>Guinea-Bissau</option>
+                                    <option value="Guyana" {% if student.country == 'Guyana' %}selected{% endif %}>Guyana</option>
+                                    <option value="Haiti" {% if student.country == 'Haiti' %}selected{% endif %}>Haiti</option>
+                                    <option value="Honduras" {% if student.country == 'Honduras' %}selected{% endif %}>Honduras</option>
+                                    <option value="Hong Kong SAR China" {% if student.country == 'Hong Kong SAR China' %}selected{% endif %}>Hong Kong SAR China</option>
+                                    <option value="Hungary" {% if student.country == 'Hungary' %}selected{% endif %}>Hungary</option>
+                                    <option value="Iceland" {% if student.country == 'Iceland' %}selected{% endif %}>Iceland</option>
+                                    <option value="India" {% if student.country == 'India' %}selected{% endif %}>India</option>
+                                    <option value="Indonesia" {% if student.country == 'Indonesia' %}selected{% endif %}>Indonesia</option>
+                                    <option value="Iran" {% if student.country == 'Iran' %}selected{% endif %}>Iran</option>
+                                    <option value="Iraq" {% if student.country == 'Iraq' %}selected{% endif %}>Iraq</option>
+                                    <option value="Ireland" {% if student.country == 'Ireland' %}selected{% endif %}>Ireland</option>
+                                    <option value="Israel" {% if student.country == 'Israel' %}selected{% endif %}>Israel</option>
+                                    <option value="Italy" {% if student.country == 'Italy' %}selected{% endif %}>Italy</option>
+                                    <option value="Jamaica" {% if student.country == 'Jamaica' %}selected{% endif %}>Jamaica</option>
+                                    <option value="Japan" {% if student.country == 'Japan' %}selected{% endif %}>Japan</option>
+                                    <option value="Jordan" {% if student.country == 'Jordan' %}selected{% endif %}>Jordan</option>
+                                    <option value="Kazakhstan" {% if student.country == 'Kazakhstan' %}selected{% endif %}>Kazakhstan</option>
+                                    <option value="Kenya" {% if student.country == 'Kenya' %}selected{% endif %}>Kenya</option>
+                                    <option value="Kiribati" {% if student.country == 'Kiribati' %}selected{% endif %}>Kiribati</option>
+                                    <option value="Kuwait" {% if student.country == 'Kuwait' %}selected{% endif %}>Kuwait</option>
+                                    <option value="Kyrgyzstan" {% if student.country == 'Kyrgyzstan' %}selected{% endif %}>Kyrgyzstan</option>
+                                    <option value="Laos" {% if student.country == 'Laos' %}selected{% endif %}>Laos</option>
+                                    <option value="Latvia" {% if student.country == 'Latvia' %}selected{% endif %}>Latvia</option>
+                                    <option value="Lebanon" {% if student.country == 'Lebanon' %}selected{% endif %}>Lebanon</option>
+                                    <option value="Lesotho" {% if student.country == 'Lesotho' %}selected{% endif %}>Lesotho</option>
+                                    <option value="Liberia" {% if student.country == 'Liberia' %}selected{% endif %}>Liberia</option>
+                                    <option value="Libya" {% if student.country == 'Libya' %}selected{% endif %}>Libya</option>
+                                    <option value="Liechtenstein" {% if student.country == 'Liechtenstein' %}selected{% endif %}>Liechtenstein</option>
+                                    <option value="Lithuania" {% if student.country == 'Lithuania' %}selected{% endif %}>Lithuania</option>
+                                    <option value="Luxembourg" {% if student.country == 'Luxembourg' %}selected{% endif %}>Luxembourg</option>
+                                    <option value="Macau SAR China" {% if student.country == 'Macau SAR China' %}selected{% endif %}>Macau SAR China</option>
+                                    <option value="Macedonia" {% if student.country == 'Macedonia' %}selected{% endif %}>Macedonia</option>
+                                    <option value="Madagascar" {% if student.country == 'Madagascar' %}selected{% endif %}>Madagascar</option>
+                                    <option value="Malawi" {% if student.country == 'Malawi' %}selected{% endif %}>Malawi</option>
+                                    <option value="Malaysia" {% if student.country == 'Malaysia' %}selected{% endif %}>Malaysia</option>
+                                    <option value="Maldives" {% if student.country == 'Maldives' %}selected{% endif %}>Maldives</option>
+                                    <option value="Mali" {% if student.country == 'Mali' %}selected{% endif %}>Mali</option>
+                                    <option value="Malta" {% if student.country == 'Malta' %}selected{% endif %}>Malta</option>
+                                    <option value="Marshall Islands" {% if student.country == 'Marshall Islands' %}selected{% endif %}>Marshall Islands</option>
+                                    <option value="Mauritania" {% if student.country == 'Mauritania' %}selected{% endif %}>Mauritania</option>
+                                    <option value="Mauritius" {% if student.country == 'Mauritius' %}selected{% endif %}>Mauritius</option>
+                                    <option value="Mexico" {% if student.country == 'Mexico' %}selected{% endif %}>Mexico</option>
+                                    <option value="Micronesia" {% if student.country == 'Micronesia' %}selected{% endif %}>Micronesia</option>
+                                    <option value="Moldova" {% if student.country == 'Moldova' %}selected{% endif %}>Moldova</option>
+                                    <option value="Monaco" {% if student.country == 'Monaco' %}selected{% endif %}>Monaco</option>
+                                    <option value="Mongolia" {% if student.country == 'Mongolia' %}selected{% endif %}>Mongolia</option>
+                                    <option value="Montenegro" {% if student.country == 'Montenegro' %}selected{% endif %}>Montenegro</option>
+                                    <option value="Morocco" {% if student.country == 'Morocco' %}selected{% endif %}>Morocco</option>
+                                    <option value="Mozambique" {% if student.country == 'Mozambique' %}selected{% endif %}>Mozambique</option>
+                                    <option value="Myanmar (Burma)" {% if student.country == 'Myanmar (Burma)' %}selected{% endif %}>Myanmar (Burma)</option>
+                                    <option value="Namibia" {% if student.country == 'Namibia' %}selected{% endif %}>Namibia</option>
+                                    <option value="Nauru" {% if student.country == 'Nauru' %}selected{% endif %}>Nauru</option>
+                                    <option value="Nepal" {% if student.country == 'Nepal' %}selected{% endif %}>Nepal</option>
+                                    <option value="Netherlands" {% if student.country == 'Netherlands' %}selected{% endif %}>Netherlands</option>
+                                    <option value="New Zealand" {% if student.country == 'New Zealand' %}selected{% endif %}>New Zealand</option>
+                                    <option value="Nicaragua" {% if student.country == 'Nicaragua' %}selected{% endif %}>Nicaragua</option>
+                                    <option value="Niger" {% if student.country == 'Niger' %}selected{% endif %}>Niger</option>
+                                    <option value="Nigeria" {% if student.country == 'Nigeria' %}selected{% endif %}>Nigeria</option>
+                                    <option value="North Korea" {% if student.country == 'North Korea' %}selected{% endif %}>North Korea</option>
+                                    <option value="Norway" {% if student.country == 'Norway' %}selected{% endif %}>Norway</option>
+                                    <option value="Oman" {% if student.country == 'Oman' %}selected{% endif %}>Oman</option>
+                                    <option value="Pakistan" {% if student.country == 'Pakistan' %}selected{% endif %}>Pakistan</option>
+                                    <option value="Palau" {% if student.country == 'Palau' %}selected{% endif %}>Palau</option>
+                                    <option value="Panama" {% if student.country == 'Panama' %}selected{% endif %}>Panama</option>
+                                    <option value="Papua New Guinea" {% if student.country == 'Papua New Guinea' %}selected{% endif %}>Papua New Guinea</option>
+                                    <option value="Paraguay" {% if student.country == 'Paraguay' %}selected{% endif %}>Paraguay</option>
+                                    <option value="Peru" {% if student.country == 'Peru' %}selected{% endif %}>Peru</option>
+                                    <option value="Philippines" {% if student.country == 'Philippines' %}selected{% endif %}>Philippines</option>
+                                    <option value="Poland" {% if student.country == 'Poland' %}selected{% endif %}>Poland</option>
+                                    <option value="Portugal" {% if student.country == 'Portugal' %}selected{% endif %}>Portugal</option>
+                                    <option value="Qatar" {% if student.country == 'Qatar' %}selected{% endif %}>Qatar</option>
+                                    <option value="Romania" {% if student.country == 'Romania' %}selected{% endif %}>Romania</option>
+                                    <option value="Russia" {% if student.country == 'Russia' %}selected{% endif %}>Russia</option>
+                                    <option value="Rwanda" {% if student.country == 'Rwanda' %}selected{% endif %}>Rwanda</option>
+                                    <option value="Saint Kitts and Nevis" {% if student.country == 'Saint Kitts and Nevis' %}selected{% endif %}>Saint Kitts and Nevis</option>
+                                    <option value="Saint Lucia" {% if student.country == 'Saint Lucia' %}selected{% endif %}>Saint Lucia</option>
+                                    <option value="Saint Vincent and the Grenadines" {% if student.country == 'Saint Vincent and the Grenadines' %}selected{% endif %}>Saint Vincent and the Grenadines</option>
+                                    <option value="Samoa" {% if student.country == 'Samoa' %}selected{% endif %}>Samoa</option>
+                                    <option value="San Marino" {% if student.country == 'San Marino' %}selected{% endif %}>San Marino</option>
+                                    <option value="São Tomé and Príncipe" {% if student.country == 'São Tomé and Príncipe' %}selected{% endif %}>São Tomé and Príncipe</option>
+                                    <option value="Saudi Arabia" {% if student.country == 'Saudi Arabia' %}selected{% endif %}>Saudi Arabia</option>
+                                    <option value="Senegal" {% if student.country == 'Senegal' %}selected{% endif %}>Senegal</option>
+                                    <option value="Serbia" {% if student.country == 'Serbia' %}selected{% endif %}>Serbia</option>
+                                    <option value="Seychelles" {% if student.country == 'Seychelles' %}selected{% endif %}>Seychelles</option>
+                                    <option value="Sierra Leone" {% if student.country == 'Sierra Leone' %}selected{% endif %}>Sierra Leone</option>
+                                    <option value="Singapore" {% if student.country == 'Singapore' %}selected{% endif %}>Singapore</option>
+                                    <option value="Slovakia" {% if student.country == 'Slovakia' %}selected{% endif %}>Slovakia</option>
+                                    <option value="Slovenia" {% if student.country == 'Slovenia' %}selected{% endif %}>Slovenia</option>
+                                    <option value="Solomon Islands" {% if student.country == 'Solomon Islands' %}selected{% endif %}>Solomon Islands</option>
+                                    <option value="Somalia" {% if student.country == 'Somalia' %}selected{% endif %}>Somalia</option>
+                                    <option value="South Africa" {% if student.country == 'South Africa' %}selected{% endif %}>South Africa</option>
+                                    <option value="South Korea" {% if student.country == 'South Korea' %}selected{% endif %}>South Korea</option>
+                                    <option value="Spain" {% if student.country == 'Spain' %}selected{% endif %}>Spain</option>
+                                    <option value="Sri Lanka" {% if student.country == 'Sri Lanka' %}selected{% endif %}>Sri Lanka</option>
+                                    <option value="Sudan" {% if student.country == 'Sudan' %}selected{% endif %}>Sudan</option>
+                                    <option value="Suriname" {% if student.country == 'Suriname' %}selected{% endif %}>Suriname</option>
+                                    <option value="Swaziland" {% if student.country == 'Swaziland' %}selected{% endif %}>Swaziland</option>
+                                    <option value="Sweden" {% if student.country == 'Sweden' %}selected{% endif %}>Sweden</option>
+                                    <option value="Switzerland" {% if student.country == 'Switzerland' %}selected{% endif %}>Switzerland</option>
+                                    <option value="Syria" {% if student.country == 'Syria' %}selected{% endif %}>Syria</option>
+                                    <option value="Taiwan" {% if student.country == 'Taiwan' %}selected{% endif %}>Taiwan</option>
+                                    <option value="Tajikistan" {% if student.country == 'Tajikistan' %}selected{% endif %}>Tajikistan</option>
+                                    <option value="Tanzania" {% if student.country == 'Tanzania' %}selected{% endif %}>Tanzania</option>
+                                    <option value="Thailand" {% if student.country == 'Thailand' %}selected{% endif %}>Thailand</option>
+                                    <option value="Timor-Leste" {% if student.country == 'Timor-Leste' %}selected{% endif %}>Timor-Leste</option>
+                                    <option value="Togo" {% if student.country == 'Togo' %}selected{% endif %}>Togo</option>
+                                    <option value="Tonga" {% if student.country == 'Tonga' %}selected{% endif %}>Tonga</option>
+                                    <option value="Trinidad and Tobago" {% if student.country == 'Trinidad and Tobago' %}selected{% endif %}>Trinidad and Tobago</option>
+                                    <option value="Tunisia" {% if student.country == 'Tunisia' %}selected{% endif %}>Tunisia</option>
+                                    <option value="Turkey" {% if student.country == 'Turkey' %}selected{% endif %}>Turkey</option>
+                                    <option value="Turkmenistan" {% if student.country == 'Turkmenistan' %}selected{% endif %}>Turkmenistan</option>
+                                    <option value="Tuvalu" {% if student.country == 'Tuvalu' %}selected{% endif %}>Tuvalu</option>
+                                    <option value="Uganda" {% if student.country == 'Uganda' %}selected{% endif %}>Uganda</option>
+                                    <option value="Ukraine" {% if student.country == 'Ukraine' %}selected{% endif %}>Ukraine</option>
+                                    <option value="United Arab Emirates" {% if student.country == 'United Arab Emirates' %}selected{% endif %}>United Arab Emirates</option>
+                                    <option value="United Kingdom" {% if student.country == 'United Kingdom' %}selected{% endif %}>United Kingdom</option>
+                                    <option value="United States" {% if student.country == 'United States' %}selected{% endif %}>United States</option>
+                                    <option value="Uruguay" {% if student.country == 'Uruguay' %}selected{% endif %}>Uruguay</option>
+                                    <option value="Uzbekistan" {% if student.country == 'Uzbekistan' %}selected{% endif %}>Uzbekistan</option>
+                                    <option value="Vanuatu" {% if student.country == 'Vanuatu' %}selected{% endif %}>Vanuatu</option>
+                                    <option value="Vatican City" {% if student.country == 'Vatican City' %}selected{% endif %}>Vatican City</option>
+                                    <option value="Venezuela" {% if student.country == 'Venezuela' %}selected{% endif %}>Venezuela</option>
+                                    <option value="Vietnam" {% if student.country == 'Vietnam' %}selected{% endif %}>Vietnam</option>
+                                    <option value="Yemen" {% if student.country == 'Yemen' %}selected{% endif %}>Yemen</option>
+                                    <option value="Zambia" {% if student.country == 'Zambia' %}selected{% endif %}>Zambia</option>
+                                    <option value="Zimbabwe" {% if student.country == 'Zimbabwe' %}selected{% endif %}>Zimbabwe</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="state-group" style="display: none;">
+                                <label for="state">State</label>
+                                <input class="field" list="stateList" name="state_name" type="text" id="state" value="{{student.state_name}}" placeholder="Enter state" required>
+                                <datalist id="stateList">
+                                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                    <option value="Assam">Assam</option>
+                                    <option value="Bihar">Bihar</option>
+                                    <option value="Chhattisgarh">Chhattisgarh</option>
+                                    <option value="Goa">Goa</option>
+                                    <option value="Gujarat">Gujarat</option>
+                                    <option value="Haryana">Haryana</option>
+                                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                    <option value="Jharkhand">Jharkhand</option>
+                                    <option value="Karnataka">Karnataka</option>
+                                    <option value="Kerala">Kerala</option>
+                                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                    <option value="Maharashtra">Maharashtra</option>
+                                    <option value="Manipur">Manipur</option>
+                                    <option value="Meghalaya">Meghalaya</option>
+                                    <option value="Mizoram">Mizoram</option>
+                                    <option value="Nagaland">Nagaland</option>
+                                    <option value="Odisha">Odisha</option>
+                                    <option value="Punjab">Punjab</option>
+                                    <option value="Rajasthan">Rajasthan</option>
+                                    <option value="Sikkim">Sikkim</option>
+                                    <option value="Tamil Nadu">Tamil Nadu</option>
+                                    <option value="Telangana">Telangana</option>
+                                    <option value="Tripura">Tripura</option>
+                                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                    <option value="Uttarakhand">Uttarakhand</option>
+                                    <option value="West Bengal">West Bengal</option>
+                                    </datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="district">District</label>
+                                <input type="text" id="district" name="district_name" value="{{student.district_name}}" placeholder="Enter district" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="prevDegName">Previous Degree Name</label>
+                                <input type="text" id="prevDegName" name="prev_degree1_name" value="{{student.prev_degree1_name}}" placeholder="Enter Previous Degree Name" >
+                            </div>
+                            <div class="form-group">
+                                <label for="prevDegUni">Previous University Name</label>
+                                <input type="text" id="prevDegUni" name="prev_degree1_university" value="{{student.prev_degree1_university}}" placeholder="Enter Previous University">
+                            </div>
+                            <div class="form-group">
+                                <label for="prevGPA">Previous degree GPA</label>
+                                <input type="number" id="prevGPA" name="prev_degree1_gpa" step="0.1" value="{{student.prev_degree1_gpa}}" placeholder="Enter previous degree GPA" >
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="prevDegName">Previous Degree Name</label>
+                                <input type="text" id="prevDegName" name="prev_degree2_name" value="{{student.prev_degree2_name}}" placeholder="Enter Previous Degree Name" >
+                            </div>
+                            <div class="form-group">
+                                <label for="prevDegUni">Previous University Name</label>
+                                <input type="text" id="prevDegUni" name="prev_degree2_university" value="{{student.prev_degree2_university}}" plceholder="Enter Previous University" >
+                            </div>
+                            <div class="form-group">
+                                <label for="prevGPA">Previous degree GPA</label>
+                                <input type="number" id="prevGPA" name="prev_degree2_gpa" step="0.1" value="{{student.prev_degree2_gpa}}" placeholder="Enter previous degree GPA" >
+                            </div>
+                        </div>
+                        <button class="create-button" type="submit">Update</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        const countrySelect = document.getElementById('country');
+        const stateGroup = document.getElementById('state-group');
+        countrySelect.addEventListener('change', function() {
+            if (this.value === 'India') {
+                stateGroup.style.display = '';
+            } else {
+                stateGroup.style.display = 'none';
+            }
+        });
+        // On page load, trigger change to set initial state
+        countrySelect.dispatchEvent(new Event('change'));
+        let profilePic = document.getElementById("pfp-pic");
+        let inputFile = document.getElementById("input-file");
+
+        inputFile.onchange = function (){
+            profilePic.src = URL.createObjectURL(inputFile.files[0]);
+        }
+    </script>
+</body>
+</html>

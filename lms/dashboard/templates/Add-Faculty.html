@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>    </head>
+    <body>
+        <div class="whole-container">
+            <div class="menu-panel">
+                <div onclick="menuCollapse()" id="backIcon" class="back-icon">
+                    <i class="fa-solid fa-caret-right"></i>
+                </div>
+                <div class="logo-holder">
+                    <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
+                    <img class="logo-img display-none" src="{% static 'img/1.png' %}">
+                </div>
+                <div class="menu-icons">
+                    <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        <span class="icon-name">Overview</span>
+                    </div>
+                    <div onclick="showStudentPage()" id="students-item" class="students menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <span class="icon-name">Students</span> 
+                    </div>
+                    <div onclick="showFacultyPage()" id="faculty-item" class="faculty menu-item active">
+                        <div class="icon">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <span class="icon-name">Faculty</span>
+                    </div>
+                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <span class="icon-name">Departments</span>
+                    </div>
+                     <div onclick="showProgramPage()" id="programs-item" class="programs menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+                        <span class="icon-name">Program</span>
+                    </div>
+                    <div onclick="window.location.href='{% url 'courses' %}'" id="courses-item" class="courses menu-item">
+                        <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                        <span class="icon-name">Courses</span>
+                    </div>
+                    <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-school"></i>
+                        </div>
+                        <span class="icon-name">Campus</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="addFacultyPage" class="right-panel fac-add">
+                <div class="dashboard-head">
+                    <span class="over-heading">Add Faculty</span>
+                    <div onclick="showFacultyPage()" class="date pointer">
+                        <span>Cancel</span>
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                
+                <div class="container">
+                    <form class="form" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-row-header">
+                            <input type="file" accept="image/png, image/jpeg, image/jpg" name="dp_pic" id="input-file" class="display-none">
+                            <img src="{% static 'img/pfp.png' %}" id="pfp-pic" alt="">
+                            <label for="input-file">Browse Image</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" name="name" placeholder="Enter name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dob">Date of Birth</label>
+                                <input type="date" name="dob" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" name="email" placeholder="Enter email" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="mobile">Mobile Number</label>
+                                <input type="tel" name="mobile" placeholder="Enter mobile number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <select class="field" name="gender" id="gender" >
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="campus">Campus</label>
+                                <select class="field" name="campus" id="campus">
+                                    <option value="" selected>-----</option>
+                                    {% for camp in campuses %}
+                                        <option value="{{ camp.campus_name }}">
+                                            {{ camp.campus_name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="facID">Faculty ID</label>
+                                <input type="text" id="facID" name="faculty_id" placeholder="Enter Faculty ID" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="deptID">Department ID</label>
+                                <select class="field" name="department" id="department_select" placeholder="Select a Department">
+                                    <option value="" selected>-----</option>
+                                    {% for dept in departments %}
+                                        <option value="{{ dept.dept_id }}" {% if faculty.department.dept_id == dept.dept_id %}selected{% endif %}>
+                                            {{ dept.dept_name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select class="field" name="status" id="status" >
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="on leave">On Leave</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="qualifiication">Qualification</label>
+                                <input type="text" id="qualification" name="qualification" placeholder="Enter Highest Qualification" required>
+                            </div>
+                        </div>
+                        <button class="create-button" type="submit">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+   
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        let profilePic = document.getElementById("pfp-pic");
+        let inputFile = document.getElementById("input-file");
+
+        inputFile.onchange = function (){
+            profilePic.src = URL.createObjectURL(inputFile.files[0]);
+        }
+    </script>
+    </body>
+</html>

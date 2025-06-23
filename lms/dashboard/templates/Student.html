@@ -1,0 +1,237 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>    </head>
+    <body>
+        <div class="whole-container">
+            <div class="menu-panel">
+                <div onclick="menuCollapse()" id="backIcon" class="back-icon">
+                    <i class="fa-solid fa-caret-right"></i>
+                </div>
+                <div class="logo-holder">
+                    <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
+                    <img class="logo-img display-none" src="{% static 'img/1.png' %}">
+                </div>
+                <div class="menu-icons">
+                    <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        <span class="icon-name">Overview</span>
+                    </div>
+                    <div onclick="showStudentPage()" id="students-item" class="students menu-item active">
+                        <div class="icon">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <span class="icon-name">Students</span> 
+                    </div>
+                    <div onclick="showFacultyPage()" id="faculty-item" class="faculty menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <span class="icon-name">Faculty</span>
+                    </div>
+                    <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <span class="icon-name">Departments</span>
+                    </div>
+                     <div onclick="showProgramPage()" id="programs-item" class="programs menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+                        <span class="icon-name">Program</span>
+                    </div>
+                    <div onclick="window.location.href='{% url 'courses' %}'" id="courses-item" class="courses menu-item">
+                        <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                        <span class="icon-name">Courses</span>
+                    </div>
+                    <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item">
+                        <div class="icon">
+                            <i class="fa-solid fa-school"></i>
+                        </div>
+                        <span class="icon-name">Campus</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="studentPage" class="right-panel stud">
+                <div class="dashboard-head">
+                    <span class="over-heading">Students</span>
+                    <div class="date">
+                        <span id="date"></span>
+                    </div>
+                </div>
+                <div class="stud-header">
+                    <div class="search-bar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" class="search" placeholder="Search Students...">
+                    </div>
+                    <div onclick="showAddStudentPage()" class="create-icon">
+                        <span>Create</span>
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <div onclick="showUploadStudentPage()" class="create-icon">
+                        <span>Upload</span>
+                        <i class="fa-solid fa-upload"></i>
+                    </div>
+                </div>
+                
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Register No.</th>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>Batch</th>
+                                <th>Email</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if students %}
+                            {% for student in students %}
+                            <tr>
+                                <td>{{ student.regd_no}}</td>
+                                <td>{{ student.name }}</td>
+                                <td>{{ student.program.department }}</td>
+                                <td>{{ student.batch }}</td>
+                                <td>{{ student.email }}</td>
+                                
+                                <td class="info" onclick="openStudentPopup({{student.regd_no}})"><i class="fa-solid fa-circle-info"></i></td>
+                                <td class="edit" onclick="location.href='{% url 'edit_student' student.regd_no %}'"><i class="fas fa-edit"></i></td>
+                                <td class="delete" onclick="if(confirm('Are you sure you want to delete this Student?')){window.location.href='{% url 'del_student' student.regd_no %}'}"><i class="fa-solid fa-trash"></i></td>
+                                </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="8" class="no-data">No Student Data Available</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="popup display-none" id="popup">
+            <div class="container">
+                <form class="form">
+                    {% csrf_token %}
+                    <div class="form-header">   
+                        <div class="form-row-header">
+                            {% if student.dp_key %}
+                                <img src="/mediahandler/image/{{ student.dp_key }}/" id="pop-pfp-pic" alt="">
+                            {% else %}
+                                <img src="{% static 'img/pfp.png' %}" id="pop-pfp-pic" alt="">
+                            {% endif %}
+                            <span class="pfp-img-title">Profile Image</span>
+                        </div>
+                        <div class="icon-holder" onclick="closePopup()">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="pop_name" name="name" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="dob">Date of Birth</label>
+                            <input type="date" id="pop_dob" name="dob" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="pop_email" name="email" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="mobile">Mobile Number</label>
+                            <input type="tel" id="pop_mobile" name="mobile" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <input id="pop_gender" name="gender" disabled>  
+                        </div>
+                        <div class="form-group">
+                            <label for="bloodGroup">Blood Group</label>
+                            <input name="blood_group" id="pop_bloodGroup" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="regNum">Register Number</label>
+                            <input type="number" id="pop_regNum" name="regNum" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="faculty-search">Program</label>
+                            <input list="programs" id="pop_program" name="program" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="batch">Batch</label>
+                            <input type="number" id="pop_batch" name="batch" min="1900" max="2100" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <input id="pop_status" name="status" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <input id="pop_country" name="country" disabled>
+                        </div>
+                        <div class="form-group" id="state-group" style="display: none;">
+                            <label for="state">State</label>
+                            <input class="field" list="stateList" name="state_name" type="text" id="pop_state" value="{{student.state_name}}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="district">District</label>
+                            <input type="text" id="pop_district" name="district_name" value="{{student.district_name}}" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prevDegName">Previous Degree Name</label>
+                            <input type="text" id="pop_prevDeg1Name" name="prev_degree1_name" value="{{student.prev_degree1_name}}" disabled >
+                        </div>
+                        <div class="form-group">
+                            <label for="prevDegUni">Previous University Name</label>
+                            <input type="text" id="pop_prevDeg1Uni" name="prev_degree1_university" value="{{student.prev_degree1_university}}"disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="prevGPA">Previous degree GPA</label>
+                            <input type="number" id="pop_prev1GPA" name="prev_degree1_gpa" step="0.1" value="{{student.prev_degree1_gpa}}" disabled >
+                        </div>
+                    </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="prevDegName">Previous Degree Name</label>
+                                <input type="text" id="pop_prevDeg2Name" name="prev_degree2_name" value="{{student.prev_degree2_name}}" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="prevDegUni">Previous University Name</label>
+                                <input type="text" id="pop_prevDeg2Uni" name="prev_degree2_university" value="{{student.prev_degree2_university}}" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="prevGPA">Previous degree GPA</label>
+                                <input type="number" id="pop_prev2GPA" name="prev_degree2_gpa" step="0.1" value="{{student.prev_degree2_gpa}}" disabled>
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+
+    
+    <script src="{% static 'js/script.js' %}"></script>
+    </body>
+</html>

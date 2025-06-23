@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Error Report</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: "Helvetica", "Arial", sans-serif;
+            font-size: 12pt;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #b71c1c;
+            margin: 0;
+            font-size: 24pt;
+        }
+        .header p {
+            margin: 5px 0 0;
+            font-size: 10pt;
+            color: #555;
+        }
+        .summary {
+            margin: 20px 0;
+        }
+        .summary span {
+            display: inline-block;
+            margin-right: 30px;
+            font-weight: bold;
+        }
+        .correct {
+            color: #2e7d32;
+        }
+        .error {
+            color: #c62828;
+            right: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11pt;
+        }
+        th, td {
+            border: 1px solid #999;
+            padding: 8px;
+            vertical-align: top;
+            text-align: left;
+        }
+        th {
+            background-color: #d32f2f;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:nth-child(odd) {
+            background-color: #fff5f5;
+        }
+        .no-errors {
+            text-align: center;
+            padding: 20px;
+            font-weight: bold;
+            color: #388e3c;
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 9pt;
+            text-align: right;
+            color: #999;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Error Report</h1>
+        <p>Generated on {{ date }}</p>
+    </div>
+
+    <div class="summary">
+        <span class="correct">✔ Valid Rows: {{ count }}</span>
+        <span class="error">✖ Errors: {{ ecount }}</span>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Error Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if errors|length == 0 %}
+            <tr>
+                <td colspan="2" class="no-errors">No errors found. All records are valid.</td>
+            </tr>
+            {% else %}
+            {% for error in errors %}
+            <tr>
+                <td>{{ error }}</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        &copy; {{ year }} LMS @ Sri Sathya Sai Institute of Higher Learning.
+    </div>
+
+</body>
+</html>

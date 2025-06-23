@@ -17,8 +17,22 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+ team-sc
     path('', include('student.urls')),
+
+    path('', include('DB.urls')),
+    path('', include('dashboard.urls')),
+    path('bulkUp/', include('bulkUp.urls')),
+    path('mediahandler/', include('mediahandler.urls')),
+    path('apis/', include('API_Handler.urls')),
+ main
 ]
+
+# Force Django to serve media files even when DEBUG = False
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Serve static files in production
