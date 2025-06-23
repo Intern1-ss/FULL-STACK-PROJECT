@@ -43,11 +43,16 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # DATABASE APP
     'DB',
+team-sc
+    'student',
+    # CUSTOM APPS    
+
     # CUSTOM APPS
     'dashboard', 
     'bulkUp',
     'mediahandler',
     'API_Handler',
+ main
 ]
 
 MIDDLEWARE = [

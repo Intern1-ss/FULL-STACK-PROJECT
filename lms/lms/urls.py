@@ -22,11 +22,15 @@ from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+ team-sc
+    path('', include('student.urls')),
+
     path('', include('DB.urls')),
     path('', include('dashboard.urls')),
     path('bulkUp/', include('bulkUp.urls')),
     path('mediahandler/', include('mediahandler.urls')),
     path('apis/', include('API_Handler.urls')),
+ main
 ]
 
 # Force Django to serve media files even when DEBUG = False
