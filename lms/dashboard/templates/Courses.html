@@ -95,8 +95,8 @@
                                 <td>{{ program.programme_short_name }}</td>
                                 <td>{{ program.department.dept_name }}</td>
                                 <td>{{ program.batch }}</td>
-                                <td> <button onclick="window.location.href='{% url 'add_course' program.programme_code program.batch %}'">Add/Edit Courses</button></td>
-                                <td> <button onclick="window.location.href='{% url 'view_courses' program.programme_code program.batch %}'">View Courses</button></td>
+                                <td> <button class="create-button" onclick="window.location.href='{% url 'add_course' program.programme_code program.batch %}'">Add/Edit Courses</button></td>
+                                <td> <button class="create-button" onclick="window.location.href='{% url 'view_courses' program.programme_code program.batch %}'">View Courses</button></td>
                                 
                             </tr>
                             {% endfor %}

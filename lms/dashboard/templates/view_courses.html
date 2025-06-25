@@ -69,11 +69,14 @@
         <div class="right-panel">
             <div class="dashboard-head">
                 <span class="over-heading">Courses</span>
+                <div class="back-btn" style="margin-top: 20px; cursor: pointer;">
+                    <div class="date" onclick="window.history.back()">Back</div>
+                </div>
             </div>
 
     <div class="container">
-    <h2>{{ program.programme_short_name }} - Batch {{ program.batch }}</h2>
-    <p><strong>Department:</strong> {{ program.department }}</p>
+        <span style="font-size: 24px; font-weight: 500; color: #505050;"> {{ program.programme_full_name }}-Batch: {{ batch }}</span>
+        <p style="color: #505050; font-size: 18px;"><strong>Department:</strong> {{ program.department }}</p>
 
     {% if semester_wise_courses %}
         {% for semester, courses in semester_wise_courses.items %}
@@ -129,13 +132,9 @@
         <p>No courses found for this program and batch.</p>
     {% endif %}
 
-    <div class="back-btn">
-        <button onclick="window.history.back()">Back</button>
-    </div>
-
     <div style="text-align: right; margin-top: 20px;">
         <a href="{% url 'download_course_pdf' program.programme_code program.batch %}" target="_blank">
-            <button type="button">Download PDF</button>
+            <div class="download-template">Download PDF</div>
         </a>
     </div>
 </div>
