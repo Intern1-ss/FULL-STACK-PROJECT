@@ -358,7 +358,7 @@
             </form>
 
             <div class="back-btn">
-                <button onclick="window.history.back()">Back</button>
+                <button onclick="window.location.href='{% url "courses" %}'">Back</button>
             </div>
         </div>
     </div>
@@ -366,56 +366,69 @@
 
 <script>
     function addRow() {
-        const tableBody = document.getElementById('course-table').getElementsByTagName('tbody')[0];
-        const newRow = document.createElement('tr');
+    const tableBody = document.getElementById('course-table').getElementsByTagName('tbody')[0];
+    const newRow = document.createElement('tr');
 
-        const semesterOptions = `{{ semesters|join:"|" }}`.split("|");
-        const categoryOptions = `{{ category_choices|join:"|" }}`.split("|");
+    const semesterOptions = `{{ semesters|join:"|" }}`.split("|");
+    const categoryOptions = `{{ category_choices|join:"|" }}`.split("|");
 
-        const columns = [
-            { name: 'semester', type: 'select', options: semesterOptions },
-            { name: 'paper_code', type: 'text' },
-            { name: 'paper_title', type: 'text' },
-            { name: 'sequence', type: 'number' },
-            { name: 'category', type: 'select', options: categoryOptions },
-            { name: 'credits', type: 'number' },
-            { name: 'cie_max', type: 'number' },
-            { name: 'cie_max_atp', type: 'number' },
-            { name: 'cie_max_psn', type: 'number' },
-            { name: 'cie_max_brn', type: 'number' },
-            { name: 'cie_max_ndg', type: 'number' },
-            { name: 'ese_max', type: 'number' },
-            { name: 'ese_max_atp', type: 'number' },
-            { name: 'ese_max_psn', type: 'number' },
-            { name: 'ese_max_brn', type: 'number' },
-            { name: 'ese_max_ndg', type: 'number' },
-            { name: 'cie_wtg', type: 'number' },
-            { name: 'ese_wtg', type: 'number' },
-        ];
+    const columns = [
+        { name: 'semester', type: 'select', options: semesterOptions },
+        { name: 'paper_code', type: 'text' },
+        { name: 'paper_title', type: 'text' },
+        { name: 'sequence', type: 'number' },
+        { name: 'category', type: 'select', options: categoryOptions },
+        { name: 'credits', type: 'number' },
+        { name: 'cie_max', type: 'number' },
+        { name: 'cie_max_atp', type: 'number' },
+        { name: 'cie_max_psn', type: 'number' },
+        { name: 'cie_max_brn', type: 'number' },
+        { name: 'cie_max_ndg', type: 'number' },
+        { name: 'ese_max', type: 'number' },
+        { name: 'ese_max_atp', type: 'number' },
+        { name: 'ese_max_psn', type: 'number' },
+        { name: 'ese_max_brn', type: 'number' },
+        { name: 'ese_max_ndg', type: 'number' },
+        { name: 'cie_wtg', type: 'number' },
+        { name: 'ese_wtg', type: 'number' }
+    ];
 
-        columns.forEach(field => {
-            const cell = document.createElement('td');
-            if (field.type === 'select') {
-                const select = document.createElement('select');
-                select.name = field.name;
-                field.options.forEach(opt => {
-                    const option = document.createElement('option');
-                    option.value = opt;
-                    option.textContent = opt;
-                    select.appendChild(option);
-                });
-                cell.appendChild(select);
-            } else {
-                const input = document.createElement('input');
-                input.type = field.type;
-                input.name = field.name;
-                cell.appendChild(input);
-            }
-            newRow.appendChild(cell);
-        });
+    // First column: delete button
+    const deleteCell = document.createElement('td');
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.textContent = '🗑️';
+    deleteButton.style.cursor = 'pointer';
+    deleteButton.onclick = function () {
+        tableBody.removeChild(newRow);
+    };
+    deleteCell.appendChild(deleteButton);
+    newRow.appendChild(deleteCell);
 
-        tableBody.appendChild(newRow);
-    }
+    // Then rest of the columns
+    columns.forEach(field => {
+        const cell = document.createElement('td');
+        if (field.type === 'select') {
+            const select = document.createElement('select');
+            select.name = field.name;
+            field.options.forEach(opt => {
+                const option = document.createElement('option');
+                option.value = opt;
+                option.textContent = opt;
+                select.appendChild(option);
+            });
+            cell.appendChild(select);
+        } else {
+            const input = document.createElement('input');
+            input.type = field.type;
+            input.name = field.name;
+            cell.appendChild(input);
+        }
+        newRow.appendChild(cell);
+    });
+
+    tableBody.appendChild(newRow);
+}
 </script>
 
 <script src="{% static 'js/script.js' %}"></script>
