@@ -51,14 +51,11 @@
     <div class="right-panel">
         <div class="dashboard-head">
             <span class="over-heading">Add/Edit Courses</span>
-            <div class="back-btn" style="cursor: pointer;">
-                <div class="date" onclick="window.location.href='{% url "courses" %}'">Back</div>
-            </div>
         </div>
 
         <div>
-           <span style="font-size: 24px; font-weight: 500; color: #505050;"> {{ program.programme_full_name }}-Batch: {{ batch }}</span>
-            <p style="color: #505050; font-size: 18px;"><strong>Department:</strong> {{ program.department }}</p>
+            <h2>{{ program.programme_full_name }} - Batch: {{ batch }}</h2>
+            <p><strong>Department:</strong> {{ program.department }}</p>
 
             {% if messages %}
                 {% for message in messages %}
@@ -68,8 +65,8 @@
 
             <form method="POST">
                 {% csrf_token %}
-                <div class="table-content" style="overflow-x:auto; max-width:100%;">
-                    <table id="course-table" border="1" cellpadding="6" style="min-width:1200px; border: 1px solid #3e19e4;">
+                <div style="overflow-x:auto; max-width:100%;">
+                    <table id="course-table" border="1" cellpadding="6" style="min-width:1200px;">
                         <thead>
                         <tr>
                             <th>Delete course</th>
@@ -99,8 +96,8 @@
                             
                             <input type="hidden" name="existing_paper_code" value="{{ course.paper_code }}">
                             <td>
-                                <button type="submit" name="delete_row" value="{{ course.id }}"><i class="fa-solid fa-trash"></i></button>
-                            </td>
+                                     <button type="submit" name="delete_row" value="{{ course.id }}" style="color:red;">🗑️</button>
+                                </td>
                             <td>
                                 
                                 <select name="semester">
@@ -137,14 +134,15 @@
                         </tbody>
                     </table>
                 </div>
-                <div style="display: flex; justify-content: center; align-items: center; gap: 20px;">
-                    <div class="create-icon" style="margin-top: 20px;" onclick="addRow()">Add More Rows</div>
-                    <div class="create-icon" style="margin-top: 20px;">Save Courses</button>
-                </div>
-                
+
+                <button type="button" onclick="addRow()">Add More Rows</button>
+                <br><br>
+                <button type="submit" class="save-btn">Save Courses</button>
             </form>
 
-            
+            <div class="back-btn">
+                <button onclick="window.location.href='{% url "courses" %}'">Back</button>
+            </div>
         </div>
     </div>
 </div>
@@ -180,9 +178,9 @@
 
     // First column: delete button
     const deleteCell = document.createElement('td');
-    const deleteButton = document.createElement('div');
-    deleteButton.classList.add("delete-button");
-    deleteButton.innerHTML = '<i class="fa-solid fa-trash" style="color: #505050; display: flex; justify-content:center;"></i>';
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.textContent = '🗑️';
     deleteButton.style.cursor = 'pointer';
     deleteButton.onclick = function () {
         tableBody.removeChild(newRow);
@@ -201,7 +199,6 @@
                 option.value = opt;
                 option.textContent = opt;
                 select.appendChild(option);
-                select.style = "width: 100%; padding: 5px; cursor: pointer;";
             });
             cell.appendChild(select);
         } else {
