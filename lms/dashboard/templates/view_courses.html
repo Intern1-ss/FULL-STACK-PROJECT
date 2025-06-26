@@ -69,66 +69,75 @@
         <div class="right-panel">
             <div class="dashboard-head">
                 <span class="over-heading">Courses</span>
+                <div class="back-btn" style="margin-top: 20px; cursor: pointer;">
+                    <div class="date" onclick="window.history.back()">Back</div>
+                </div>
             </div>
 
     <div class="container">
-        <h2>{{ program.programme_short_name }} - Batch {{ program.batch }}</h2>
-        <p><strong>Department:</strong> {{ program.department }}</p>
+        <span style="font-size: 24px; font-weight: 500; color: #505050;"> {{ program.programme_full_name }}-Batch: {{ batch }}</span>
+        <p style="color: #505050; font-size: 18px;"><strong>Department:</strong> {{ program.department }}</p>
 
-        {% if courses %}
-        <div class="table-scroll">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Paper Code</th>
-                        <th>Paper Title</th>
-                        <th>Category</th>
-                        <th>Credits</th>
-                        <th>CIE Max</th>
-                        <th>cie_max_atp</th>
-                        <th>cie_max_psn</th>
-                        <th>cie_max_brn</th>
-                        <th>cie_max_ndg</th>
-                        <th>ESE Max</th>
-                        <th>ese_max_atp</th>
-                        <th>ese_max_psn</th>
-                        <th>ese_max_brn</th>
-                        <th>ese_max_ndg</th>
-                        <th>CIE Weightage</th>
-                        <th>ESE Weightage</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for course in courses %}
+    {% if semester_wise_courses %}
+        {% for semester, courses in semester_wise_courses.items %}
+            <h3 style="margin-top: 30px;">Semester {{ semester }}</h3>
+            <div class="table-scroll">
+                <table>
+                    <thead>
                         <tr>
-                            <td>{{ course.paper_code }}</td>
-                            <td>{{ course.paper_title }}</td>
-                            <td>{{ course.category }}</td>
-                            <td>{{ course.credits }}</td>
-                            <td>{{ course.cie_max }}</td>
-                             <td>{{ course.cie_max_atp }}</td>
-                             <td>{{ course.cie_max_psn }}</td>
-                             <td>{{ course.cie_max_brn }}</td>
-                             <td>{{ course.cie_max_ndg }}</td>
-                            <td>{{ course.ese_max }}</td>
-                            <td>{{ course.ese_max_atp }}</td>
-                             <td>{{ course.ese_max_psn }}</td>
-                             <td>{{ course.ese_max_brn }}</td>
-                             <td>{{ course.ese_max_ndg }}</td>
-                            <td>{{ course.cie_wtg }}</td>
-                            <td>{{ course.ese_wtg }}</td>
+                            <th>Paper Code</th>
+                            <th>Paper Title</th>
+                            <th>Category</th>
+                            <th>Credits</th>
+                            <th>CIE Max</th>
+                            <th>cie_max_atp</th>
+                            <th>cie_max_psn</th>
+                            <th>cie_max_brn</th>
+                            <th>cie_max_ndg</th>
+                            <th>ESE Max</th>
+                            <th>ese_max_atp</th>
+                            <th>ese_max_psn</th>
+                            <th>ese_max_brn</th>
+                            <th>ese_max_ndg</th>
+                            <th>CIE Weightage</th>
+                            <th>ESE Weightage</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-            <p>No courses found for this program and batch.</p>
-        {% endif %}
+                    </thead>
+                    <tbody>
+                        {% for course in courses %}
+                            <tr>
+                                <td>{{ course.paper_code }}</td>
+                                <td>{{ course.paper_title }}</td>
+                                <td>{{ course.category }}</td>
+                                <td>{{ course.credits }}</td>
+                                <td>{{ course.cie_max }}</td>
+                                <td>{{ course.cie_max_atp }}</td>
+                                <td>{{ course.cie_max_psn }}</td>
+                                <td>{{ course.cie_max_brn }}</td>
+                                <td>{{ course.cie_max_ndg }}</td>
+                                <td>{{ course.ese_max }}</td>
+                                <td>{{ course.ese_max_atp }}</td>
+                                <td>{{ course.ese_max_psn }}</td>
+                                <td>{{ course.ese_max_brn }}</td>
+                                <td>{{ course.ese_max_ndg }}</td>
+                                <td>{{ course.cie_wtg }}</td>
+                                <td>{{ course.ese_wtg }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No courses found for this program and batch.</p>
+    {% endif %}
 
-        <div class="back-btn">
-            <button onclick="window.history.back()">Back</button>
-        </div>
+    <div style="text-align: right; margin-top: 20px;">
+        <a href="{% url 'download_course_pdf' program.programme_code program.batch %}" target="_blank">
+            <div class="download-template">Download PDF</div>
+        </a>
     </div>
+</div>
+
 </body>
 </html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 12px;
+        }
+        h2, h3 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 11px;
+        }
+        th, td {
+            border: 1px solid #444;
+            padding: 6px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .semester-title {
+            background-color: #ddd;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>{{ program.programme_full_name }}</h2>
+    <h3>Batch {{ program.batch }} | Department: {{ program.department.dept_name }}</h3>
+
+    {% for semester, courses in semester_data.items %}
+        <p class="semester-title">Semester {{ semester }}</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Paper Code</th>
+                    <th>Title of the Paper</th>
+                    <th>Credits</th>
+                    <th>Category</th>
+                    <th>CIE Max</th>
+                    <th>ESE Max</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                    <tr>
+                        <td>{{ course.paper_code }}</td>
+                        <td>{{ course.paper_title }}</td>
+                        <td>{{ course.credits }}</td>
+                        <td>{{ course.category }}</td>
+                        <td>{{ course.cie_max }}</td>
+                        <td>{{ course.ese_max }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+</body>
+</html>

@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from DB.models import Department, Campus, Faculty, Student, Program , Course   
 from mediahandler import utils as mh
 from django.contrib import messages
-
+from collections import defaultdict
 
 import requests
 
@@ -44,16 +44,37 @@ def courses_page(request):
         return redirect('add_course', programme_code=programme_code, batch=batch)
     return render(request, 'Courses.html', {'programs': programs})
 
+# def view_courses(request, programme_code, batch):
+#     program = Program.objects.filter(programme_code=programme_code, batch=batch).first()
+#     if not program:
+#         return HttpResponse("Program not found", status=404)
+
+#     # courses = Course.objects.filter(programme_code=programme_code, batch=batch)
+#     courses = Course.objects.filter(programme_code=programme_code, batch=batch).order_by('semester', 'sequence')
+#     return render(request, 'view_courses.html', {
+#         'program': program,
+#         'courses': courses
+#     })
+
+
 def view_courses(request, programme_code, batch):
     program = Program.objects.filter(programme_code=programme_code, batch=batch).first()
     if not program:
         return HttpResponse("Program not found", status=404)
 
-    courses = Course.objects.filter(programme_code=programme_code, batch=batch)
+    courses = Course.objects.filter(programme_code=programme_code, batch=batch).order_by('semester', 'sequence')
+
+    # Group courses by semester
+    semester_wise_courses = defaultdict(list)
+    for course in courses:
+        semester_wise_courses[course.semester].append(course)
+
     return render(request, 'view_courses.html', {
         'program': program,
-        'courses': courses
+        'semester_wise_courses': dict(semester_wise_courses)
     })
+
+
 
 # def edit_courses(request, program_id):
 #     program = get_object_or_404(Program, id=program_id)
@@ -317,6 +338,10 @@ def addprogram(request):
         program.batch = request.POST.get('batch')
         program.programme_short_name = request.POST.get('short_name')  # programme_short_name
         program. programme_full_name = request.POST.get('full_name')    # programme_full_name
+        # total_semesters 
+        total_sem = request.POST.get('total_semesters')
+        if total_sem and total_sem.isdigit():
+            program.total_semesters = int(total_sem)
 
         # Optional or validated fields
         dept_id = request.POST.get('department')
@@ -442,22 +467,52 @@ def edit_campus(request, campus_id):
         return redirect('campus')
     return render(request, 'Edit-Campus.html', {'campus': campus})
 
+# def edit_program(request, program_id):
+#     program = Program.objects.get(id=program_id)
+#     if request.method == 'POST':
+#         program.name = request.POST.get('name')
+#         program.code = request.POST.get('code')
+#         program.duration_years = request.POST.get('duration_years')
+#         # Ensure that the department exists before assigning
+#         if not request.POST.get('department'):
+#             program.department = None
+#         else:
+#             program.department = Department.objects.get(dept_id=request.POST.get('department'))
+#         program.save()
+#         return redirect('programs')
+    
+#     departments = Department.objects.all()
+#     return render(request, 'Edit-Programs.html', {'program': program, 'departments': departments})
+
 def edit_program(request, program_id):
     program = Program.objects.get(id=program_id)
+
     if request.method == 'POST':
-        program.name = request.POST.get('name')
-        program.code = request.POST.get('code')
-        program.duration_years = request.POST.get('duration_years')
-        # Ensure that the department exists before assigning
-        if not request.POST.get('department'):
-            program.department = None
+        program.programme_code = request.POST.get('code')
+        program.programme_short_name = request.POST.get('short_name')
+        program.programme_full_name = request.POST.get('full_name')
+        program.batch = request.POST.get('batch')
+        total_sem = request.POST.get('total_semesters')
+        if total_sem and total_sem.isdigit():
+            program.total_semesters = int(total_sem)
+        dept_id = request.POST.get('department')
+        if dept_id:
+            try:
+                program.department = Department.objects.get(dept_id=dept_id)
+            except Department.DoesNotExist:
+                program.department = None
         else:
-            program.department = Department.objects.get(dept_id=request.POST.get('department'))
+            program.department = None
+
         program.save()
         return redirect('programs')
-    
+
     departments = Department.objects.all()
-    return render(request, 'Edit-Programs.html', {'program': program, 'departments': departments})
+    return render(request, 'Edit-Programs.html', {
+        'program': program,
+        'departments': departments
+    })
+
 
 def delete_student(request, regd_no):
     student = Student.objects.get(regd_no=regd_no)
@@ -603,74 +658,142 @@ from DB.models import Course
 #     })
 
 
-
+from django.http import HttpResponse
 def add_course(request, programme_code, batch):
-    # ✅ Get the full Program object to use in the template
-    try:
-        program = Program.objects.get(programme_code=programme_code, batch=batch)
-    except Program.DoesNotExist:
-        return HttpResponse("Program not found", status=404)
+    program = get_object_or_404(Program, programme_code=programme_code, batch=batch)
+    semesters = list(range(1, 9))
+    category_choices = [choice[0] for choice in Course.CATEGORY_CHOICES]
 
     if request.method == 'POST':
-        paper_codes = request.POST.getlist('paper_code')
-        paper_titles = request.POST.getlist('paper_title')
-        sequences = request.POST.getlist('sequence')
-        categories = request.POST.getlist('category')
-        credits = request.POST.getlist('credits')
-        cie_max = request.POST.getlist('cie_max')
-        cie_max_atp = request.POST.getlist('cie_max_atp')
-        cie_max_psn = request.POST.getlist('cie_max_psn')
-        cie_max_brn = request.POST.getlist('cie_max_brn')
-        cie_max_ndg = request.POST.getlist('cie_max_ndg')
-        ese_max = request.POST.getlist('ese_max')
-        ese_max_atp = request.POST.getlist('ese_max_atp')
-        ese_max_psn = request.POST.getlist('ese_max_psn')
-        ese_max_brn = request.POST.getlist('ese_max_brn')
-        ese_max_ndg = request.POST.getlist('ese_max_ndg')
-        cie_wtg = request.POST.getlist('cie_wtg')
-        ese_wtg = request.POST.getlist('ese_wtg')
-
-        added_count = 0
-
-        for i in range(len(paper_codes)):
-            if not paper_codes[i]:
-                continue  # Skip empty rows
-
-            if Course.objects.filter(programme_code=programme_code, batch=batch, paper_code=paper_codes[i]).exists():
-                continue  # Skip duplicates
-
-            Course.objects.create(
-                programme_code=programme_code,
-                batch=batch,
-                paper_code=paper_codes[i],
-                paper_title=paper_titles[i],
-                sequence=sequences[i] or 0,
-                category=categories[i],
-                credits=credits[i] or 0,
-                cie_max=cie_max[i] or 0,
-                cie_max_atp=cie_max_atp[i] or None,
-                cie_max_psn=cie_max_psn[i] or None,
-                cie_max_brn=cie_max_brn[i] or None,
-                cie_max_ndg=cie_max_ndg[i] or None,
-                ese_max=ese_max[i] or 0,
-                ese_max_atp=ese_max_atp[i] or None,
-                ese_max_psn=ese_max_psn[i] or None,
-                ese_max_brn=ese_max_brn[i] or None,
-                ese_max_ndg=ese_max_ndg[i] or None,
-                cie_wtg=cie_wtg[i] or 0,
-                ese_wtg=ese_wtg[i] or 0,
-            )
-            added_count += 1
-
-        if added_count > 0:
-            messages.success(request, f"{added_count} course added successfully.")
+        # Handle delete action
+        if 'delete_row' in request.POST:
+            course_id = request.POST['delete_row']
+            try:
+                Course.objects.get(id=course_id).delete()
+                messages.success(request, "Course deleted successfully.")
+            except Course.DoesNotExist:
+                messages.error(request, "Course not found to delete.")
         else:
-            messages.warning(request, "No new courses were added, The course already exists.")
+            # Get all POST field lists
+            semester_list = request.POST.getlist('semester')
+            paper_code_list = request.POST.getlist('paper_code')
+            existing_paper_code_list = request.POST.getlist('existing_paper_code')
+            paper_title_list = request.POST.getlist('paper_title')
+            sequence_list = request.POST.getlist('sequence')
+            category_list = request.POST.getlist('category')
+            credits_list = request.POST.getlist('credits')
+            cie_max_list = request.POST.getlist('cie_max')
+            cie_max_atp_list = request.POST.getlist('cie_max_atp')
+            cie_max_psn_list = request.POST.getlist('cie_max_psn')
+            cie_max_brn_list = request.POST.getlist('cie_max_brn')
+            cie_max_ndg_list = request.POST.getlist('cie_max_ndg')
+            ese_max_list = request.POST.getlist('ese_max')
+            ese_max_atp_list = request.POST.getlist('ese_max_atp')
+            ese_max_psn_list = request.POST.getlist('ese_max_psn')
+            ese_max_brn_list = request.POST.getlist('ese_max_brn')
+            ese_max_ndg_list = request.POST.getlist('ese_max_ndg')
+            cie_wtg_list = request.POST.getlist('cie_wtg')
+            ese_wtg_list = request.POST.getlist('ese_wtg')
 
-        return redirect('courses')  # or any appropriate redirect
+            for i in range(len(paper_code_list)):
+                paper_code = paper_code_list[i].strip()
+                existing_code = existing_paper_code_list[i].strip() if i < len(existing_paper_code_list) else ""
 
+                # Skip incomplete new rows
+                if not paper_code or not paper_title_list[i].strip():
+                    continue
+
+                course_data = {
+                    'programme_code': programme_code,
+                    'batch': batch,
+                    'paper_code': paper_code,
+                    'paper_title': paper_title_list[i].strip(),
+                    'semester': semester_list[i],
+                    'sequence': sequence_list[i] or 0,
+                    'category': category_list[i],
+                    'credits': credits_list[i] or 0,
+                    'cie_max': cie_max_list[i] or 0,
+                    'cie_max_atp': cie_max_atp_list[i] or 0,
+                    'cie_max_psn': cie_max_psn_list[i] or 0,
+                    'cie_max_brn': cie_max_brn_list[i] or 0,
+                    'cie_max_ndg': cie_max_ndg_list[i] or 0,
+                    'ese_max': ese_max_list[i] or 0,
+                    'ese_max_atp': ese_max_atp_list[i] or 0,
+                    'ese_max_psn': ese_max_psn_list[i] or 0,
+                    'ese_max_brn': ese_max_brn_list[i] or 0,
+                    'ese_max_ndg': ese_max_ndg_list[i] or 0,
+                    'cie_wtg': cie_wtg_list[i] or 0,
+                    'ese_wtg': ese_wtg_list[i] or 0,
+                }
+
+                if existing_code:
+                    # Update only if values changed
+                    try:
+                        course = Course.objects.get(programme_code=programme_code, batch=batch, paper_code=existing_code)
+                        changed = False
+                        for field, val in course_data.items():
+                            current_val = getattr(course, field)
+                            new_val = type(current_val)(val)
+                            if current_val != new_val:
+                                setattr(course, field, new_val)
+                                changed = True
+                        if changed:
+                            course.save()
+                    except Course.DoesNotExist:
+                        continue
+                else:
+                    # New course (if all required fields filled)
+                    if all(course_data.values()):
+                        Course.objects.create(**course_data)
+
+            messages.success(request, "Courses updated successfully.")
+
+    courses = Course.objects.filter(programme_code=programme_code, batch=batch).order_by('semester', 'sequence')
     return render(request, 'Add_Course.html', {
-        'programme_code': programme_code,
+        'program': program,
         'batch': batch,
-        'program': program,  # 👈 now available in the template
-        })
+        'courses': courses,
+        'semesters': semesters,
+        'category_choices': category_choices,
+    })
+
+
+
+
+#for course pdf download
+from django.template.loader import get_template
+
+from xhtml2pdf import pisa
+
+
+def download_course_pdf(request, programme_code, batch):
+    program = Program.objects.filter(programme_code=programme_code, batch=batch).first()
+    if not program:
+        return HttpResponse("Program not found", status=404)
+
+    # Get all courses ordered by semester
+    courses = Course.objects.filter(programme_code=programme_code, batch=batch).order_by('semester', 'sequence')
+
+    # Organize courses semester-wise
+    semester_data = {}
+    for course in courses:
+        semester_data.setdefault(course.semester, []).append(course)
+
+    # Render to PDF
+    template_path = 'pdf_course_template.html'
+    context = {
+        'program': program,
+        'semester_data': semester_data,
+    }
+    response = HttpResponse(content_type='application/pdf')
+    filename = f"{program.programme_full_name.replace(' ', '_')}_Batch_{batch}_Syllabus.pdf"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    template = get_template(template_path)
+    html = template.render(context)
+    pisa_status = pisa.CreatePDF(html, dest=response)
+
+    if pisa_status.err:
+        return HttpResponse("Error generating PDF", status=500)
+
+    return response

@@ -300,14 +300,18 @@ table {
 
 	td{
 		padding: 12px 24px;
+		color: #817F7D;
 	}  
 
 	.edit, .delete, .info{
 		padding: 10px 20px;
 	}
 
+
+
 	tr:nth-child(even) {
 		background-color: #F1F5FB;
+		
 	} 
 }
 
@@ -652,9 +656,6 @@ option:hover {
 }
 
 /* file input css end */
-.display-none {
-	display: none;
-}
 
 .program-list {
     display: flex;
@@ -688,4 +689,12 @@ option:hover {
 .course-list ul {
     margin: 0;
     padding-left: 20px;
+}
+
+a{
+	all: unset;
+}
+
+.display-none {
+	display: none;
 }

@@ -1,53 +1,3 @@
-{% comment %} <!DOCTYPE html>
-<html>
-<head>
-    <title>Add Course</title>
-</head>
-<body>
-    <h2>Add Course to {{ programme_code }} ({{ batch }})</h2>
-
-    {% if messages %}
-        {% for message in messages %}
-            <p style="color:red;">{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-
-    <form method="POST">
-        {% csrf_token %}
-        <label>Paper Code:</label><input type="text" name="paper_code" required><br>
-        <label>Paper Title:</label><input type="text" name="paper_title" required><br>
-        {% comment %} <label>Semester:</label><input type="number" name="semester" required><br> 
-        <label>Sequence:</label><input type="number" name="sequence" required><br>
-        <label>Category:</label>
-        <select name="category" required>
-            <option value="Theory">Theory</option>
-            <option value="Practical">Practical</option>
-            <option value="Core">Core</option>
-            <option value="Elective">Elective</option>
-        </select><br>
-        <label>Credits:</label><input type="number" step="0.1" name="credits" required><br>
-        <label>CIE Max:</label><input type="number" name="cie_max" required><br>
-        <label>CIE Max ATP:</label><input type="number" name="cie_max_atp"><br>
-        <label>CIE Max PSN:</label><input type="number" name="cie_max_psn"><br>
-        <label>CIE Max BRN:</label><input type="number" name="cie_max_brn"><br>
-        <label>CIE Max NDG:</label><input type="number" name="cie_max_ndg"><br>
-        <label>ESE Max:</label><input type="number" name="ese_max" required><br>
-        <label>ESE Max ATP:</label><input type="number" name="ese_max_atp"><br>
-        <label>ESE Max PSN:</label><input type="number" name="ese_max_psn"><br>
-        <label>ESE Max BRN:</label><input type="number" name="ese_max_brn"><br>
-        <label>ESE Max NDG:</label><input type="number" name="ese_max_ndg"><br>
-        <label>CIE Weightage (0.00 - 1.00):</label><input type="number" step="0.01" name="cie_wtg" required><br>
-        <label>ESE Weightage (0.00 - 1.00):</label><input type="number" step="0.01" name="ese_wtg" required><br>
-        <br>
-        <button type="submit">Add Course</button>
-    </form>
-</body>
-</html> {% endcomment %}
-
-
-
-
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -57,265 +7,213 @@
     <script src="https://kit.fontawesome.com/ecaf831147.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="whole-container">
-        <div class="menu-panel">
-            <div onclick="menuCollapse()" id="backIcon" class="back-icon">
-                <i class="fa-solid fa-caret-right"></i>
+<div class="whole-container">
+    <div class="menu-panel">
+        <div onclick="menuCollapse()" id="backIcon" class="back-icon">
+            <i class="fa-solid fa-caret-right"></i>
+        </div>
+        <div class="logo-holder">
+            <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
+            <img class="logo-img display-none" src="{% static 'img/1.png' %}">
+        </div>
+        <div class="menu-icons">
+            <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item">
+                <div class="icon"><i class="fa-solid fa-chart-simple"></i></div>
+                <span class="icon-name">Overview</span>
             </div>
-            <div class="logo-holder">
-                <span class="logo-title">Sri Sathya Sai Institute of Higher Learning</span>
-                <img class="logo-img display-none" src="{% static 'img/1.png' %}">
+            <div onclick="showStudentPage()" id="students-item" class="students menu-item">
+                <div class="icon"><i class="fa-solid fa-user"></i></div>
+                <span class="icon-name">Students</span> 
             </div>
-            <div class="menu-icons">
-                <div onclick="showOverviewPage()" id="overview-item" class="overview menu-item">
-                    <div class="icon"><i class="fa-solid fa-chart-simple"></i></div>
-                    <span class="icon-name">Overview</span>
-                </div>
-                <div onclick="showStudentPage()" id="students-item" class="students menu-item">
-                    <div class="icon"><i class="fa-solid fa-user"></i></div>
-                    <span class="icon-name">Students</span> 
-                </div>
-                <div onclick="showFacultyPage()" id="faculty-item" class="faculty menu-item">
-                    <div class="icon"><i class="fa-solid fa-chalkboard-user"></i></div>
-                    <span class="icon-name">Faculty</span>
-                </div>
-                <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
-                    <div class="icon"><i class="fa-solid fa-users"></i></div>
-                    <span class="icon-name">Departments</span>
-                </div>
-                <div onclick="showProgramPage()" id="programe-item" class="programe menu-item">
-                    <div class="icon"><i class="fa-solid fa-book"></i></div>
-                    <span class="icon-name">Program</span>
-                </div>
-                <div onclick="window.location.href='{% url 'courses' %}'" id="courses-item" class="courses menu-item">
-                        <div class="icon"><i class="fa-solid fa-book-open"></i></div>
-                        <span class="icon-name">Courses</span>
-                </div>
-                <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item">
-                    <div class="icon"><i class="fa-solid fa-school"></i></div>
-                    <span class="icon-name">Campus</span>
-                </div>
+            <div onclick="showFacultyPage()" id="faculty-item" class="faculty menu-item">
+                <div class="icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                <span class="icon-name">Faculty</span>
+            </div>
+            <div onclick="showDepartmentsPage()" id="departments-item" class="departments menu-item">
+                <div class="icon"><i class="fa-solid fa-users"></i></div>
+                <span class="icon-name">Departments</span>
+            </div>
+            <div onclick="showProgramPage()" id="programe-item" class="programe menu-item">
+                <div class="icon"><i class="fa-solid fa-book"></i></div>
+                <span class="icon-name">Program</span>
+            </div>
+            <div onclick="window.location.href='{% url 'courses' %}'" id="courses-item" class="courses menu-item">
+                <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                <span class="icon-name">Courses</span>
+            </div>
+            <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item">
+                <div class="icon"><i class="fa-solid fa-school"></i></div>
+                <span class="icon-name">Campus</span>
             </div>
         </div>
+    </div>
 
-        <div class="right-panel">
-            <div class="dashboard-head">
-                <span class="over-heading">Add Courses</span>
-            </div>
+    <div class="right-panel">
+        <div class="dashboard-head">
+            <span class="over-heading">Add/Edit Courses</span>
+        </div>
 
-           <div>
-
-           <h2> {{ program.programme_full_name }}-Batch: {{ batch }}</h2>
-            
+        <div>
+            <h2>{{ program.programme_full_name }} - Batch: {{ batch }}</h2>
             <p><strong>Department:</strong> {{ program.department }}</p>
 
-                {% if messages %}
-                    {% for message in messages %}
-                        <p style="color:red;">{{ message }}</p>
-                    {% endfor %}
-                {% endif %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p style="color:red;">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
 
-                <form method="POST">
-                    {% csrf_token %}
-                    <div style="overflow-x: auto; max-width: 100%;">
-                     <table id="course-table" border="1" cellpadding="6" style="min-width: 1200px;">
-                    {% comment %} <table id="course-table" border="1" cellpadding="6"> {% endcomment %}
+            <form method="POST">
+                {% csrf_token %}
+                <div style="overflow-x:auto; max-width:100%;">
+                    <table id="course-table" border="1" cellpadding="6" style="min-width:1200px;">
                         <thead>
-                            <tr>
-                                <th>Paper Code</th>
-                                <th>Paper Title</th>
-                                <th>Sequence</th>
-                                <th>Category</th>
-                                <th>Credits</th>
-                                <th>CIE Max</th>
-                                <th>CIE ATP</th>
-                                <th>CIE PSN</th>
-                                <th>CIE BRN</th>
-                                <th>CIE NDG</th>
-                                <th>ESE Max</th>
-                                <th>ESE ATP</th>
-                                <th>ESE PSN</th>
-                                <th>ESE BRN</th>
-                                <th>ESE NDG</th>
-                                <th>CIE Weight</th>
-                                <th>ESE Weight</th>
-                            </tr>
+                        <tr>
+                            <th>Delete course</th>
+                            <th>Semester</th>
+                            <th>Paper Code</th>
+                            <th>Paper Title</th>
+                            <th>Sequence</th>
+                            <th>Category</th>
+                            <th>Credits</th>
+                            <th>CIE Max</th>
+                            <th>CIE ATP</th>
+                            <th>CIE PSN</th>
+                            <th>CIE BRN</th>
+                            <th>CIE NDG</th>
+                            <th>ESE Max</th>
+                            <th>ESE ATP</th>
+                            <th>ESE PSN</th>
+                            <th>ESE BRN</th>
+                            <th>ESE NDG</th>
+                            <th>CIE Weight</th>
+                            <th>ESE Weight</th>
+                        </tr>
                         </thead>
                         <tbody>
-                        {% for i in "12345" %}
-                            <tr>
-                                <td><input type="text" name="paper_code"  /></td>
-                                <td><input type="text" name="paper_title"  /></td>
-                                <td><input type="number" name="sequence" ><br></td>
-                                <td>
-                                    <select name="category" required>
-                                         <option value="Theory">Theory</option>
-                                        <option value="Practical">Practical</option>
-                                        <option value="Core">Core</option>
-                                        <option value="Elective">Elective</option>
-                                       
-                                    </select>
+                        {% for course in courses %}
+                        <tr>
+                            
+                            <input type="hidden" name="existing_paper_code" value="{{ course.paper_code }}">
+                            <td>
+                                     <button type="submit" name="delete_row" value="{{ course.id }}" style="color:red;">🗑️</button>
                                 </td>
-                                <td><input type="number" step="0.1" name="credits" /></td>
-                                <td><input type="number" name="cie_max" /></td>
-                                <td><input type="number" name="cie_max_atp" /></td>
-                                <td><input type="number" name="cie_max_psn" /></td>
-                                <td><input type="number" name="cie_max_brn" /></td>
-                                <td><input type="number" name="cie_max_ndg" /></td>
-                                <td><input type="number" name="ese_max" /></td>
-                                <td><input type="number" name="ese_max_atp" /></td>
-                                <td><input type="number" name="ese_max_psn" /></td>
-                                <td><input type="number" name="ese_max_brn" /></td>
-                                <td><input type="number" name="ese_max_ndg" /></td>
-                                <td><input type="number"  name="cie_wtg" /></td>
-                                <td><input type="number"  name="ese_wtg" /></td>
-                            </tr>
+                            <td>
+                                
+                                <select name="semester">
+                                    {% for sem in semesters %}
+                                        <option value="{{ sem }}" {% if course.semester == sem %}selected{% endif %}>{{ sem }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td><input type="text" name="paper_code" value="{{ course.paper_code }}" /></td>
+                            <td><input type="text" name="paper_title" value="{{ course.paper_title }}" /></td>
+                            <td><input type="number" name="sequence" value="{{ course.sequence }}" /></td>
+                            <td>
+                                <select name="category">
+                                    {% for cat in category_choices %}
+                                        <option value="{{ cat }}" {% if course.category == cat %}selected{% endif %}>{{ cat }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td><input type="number" step="0.1" name="credits" value="{{ course.credits }}" /></td>
+                            <td><input type="number" name="cie_max" value="{{ course.cie_max }}" /></td>
+                            <td><input type="number" name="cie_max_atp" value="{{ course.cie_max_atp }}" /></td>
+                            <td><input type="number" name="cie_max_psn" value="{{ course.cie_max_psn }}" /></td>
+                            <td><input type="number" name="cie_max_brn" value="{{ course.cie_max_brn }}" /></td>
+                            <td><input type="number" name="cie_max_ndg" value="{{ course.cie_max_ndg }}" /></td>
+                            <td><input type="number" name="ese_max" value="{{ course.ese_max }}" /></td>
+                            <td><input type="number" name="ese_max_atp" value="{{ course.ese_max_atp }}" /></td>
+                            <td><input type="number" name="ese_max_psn" value="{{ course.ese_max_psn }}" /></td>
+                            <td><input type="number" name="ese_max_brn" value="{{ course.ese_max_brn }}" /></td>
+                            <td><input type="number" name="ese_max_ndg" value="{{ course.ese_max_ndg }}" /></td>
+                            <td><input type="number" name="cie_wtg" value="{{ course.cie_wtg }}" /></td>
+                            <td><input type="number" name="ese_wtg" value="{{ course.ese_wtg }}" /></td>
+                        </tr>
                         {% endfor %}
                         </tbody>
                     </table>
-                    </div>
-                    <button type="button" onclick="addRow()">Add More Rows</button>
-                    <br><br>
-                    <button type="submit" class="save-btn"> Save Courses</button>
-                </form>
-
-                <div class="back-btn">
-                    <button onclick="window.history.back()">Back</button>
                 </div>
 
-                {% comment %} {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    {% endfor %}
-                {% endif %} {% endcomment %}
+                <button type="button" onclick="addRow()">Add More Rows</button>
+                <br><br>
+                <button type="submit" class="save-btn">Save Courses</button>
+            </form>
 
-                <script>
-                function addRow() {
-                    const table = document.getElementById('course-table').getElementsByTagName('tbody')[0];
-                    const row = table.insertRow();
-
-                    const fields = [
-                        { name: 'paper_code', type: 'text' },
-                        { name: 'paper_title', type: 'text' },
-                        { name: 'sequence', type: 'number' },
-                        { name: 'category', type: 'select', options: ['Theory', 'Practical', 'Core', 'Elective'] },
-                        { name: 'credits', type: 'number' },
-                        { name: 'cie_max', type: 'number' },
-                        { name: 'cie_max_atp', type: 'number' },
-                        { name: 'cie_max_psn', type: 'number' },
-                        { name: 'cie_max_brn', type: 'number' },
-                        { name: 'cie_max_ndg', type: 'number' },
-                        { name: 'ese_max', type: 'number' },
-                        { name: 'ese_max_atp', type: 'number' },
-                        { name: 'ese_max_psn', type: 'number' },
-                        { name: 'ese_max_brn', type: 'number' },
-                        { name: 'ese_max_ndg', type: 'number' },
-                        { name: 'cie_wtg', type: 'number' },
-                        { name: 'ese_wtg', type: 'number' },
-                    ];
-
-                    fields.forEach(field => {
-                        const cell = row.insertCell();
-                        if (field.type === 'select') {
-                            const select = document.createElement('select');
-                            select.name = field.name;
-                            field.options.forEach(opt => {
-                                const option = document.createElement('option');
-                                option.value = opt;
-                                option.textContent = opt;
-                                select.appendChild(option);
-                            });
-                            cell.appendChild(select);
-                        } else {
-                            const input = document.createElement('input');
-                            input.type = field.type;
-                            input.name = field.name;
-                            if (field.step) input.step = field.step;
-                            input.className = "form-control";
-                            cell.appendChild(input);
-                        }
-                    });
-                }
-                </script>
-
-               
-
-               {% comment %} <h2>Add Course to {{ programme_code }} ({{ batch }})</h2>
-
-                    {% if messages %}
-                        {% for message in messages %}
-                            <p style="color:red;">{{ message }}</p>
-                        {% endfor %}
-                    {% endif %}
-
-                    <form method="POST">
-                        {% csrf_token %}
-                        <label>Paper Code:</label><input type="text" name="paper_code" required><br>
-                        <label>Paper Title:</label><input type="text" name="paper_title" required><br>
-                        {% comment %} <label>Semester:</label><input type="number" name="semester" required><br> 
-                        <label>Sequence:</label><input type="number" name="sequence" required><br>
-                        <label>Category:</label>
-                        <select name="category" required>
-                            <option value="Theory">Theory</option>
-                            <option value="Practical">Practical</option>
-                            <option value="Core">Core</option>
-                            <option value="Elective">Elective</option>
-                        </select><br>
-                        <label>Credits:</label><input type="number" step="0.1" name="credits" required ><br>
-                        <label>CIE Max:</label><input type="number" name="cie_max" required><br>
-                        <label>CIE Max ATP:</label><input type="number" name="cie_max_atp"><br>
-                        <label>CIE Max PSN:</label><input type="number" name="cie_max_psn"><br>
-                        <label>CIE Max BRN:</label><input type="number" name="cie_max_brn"><br>
-                        <label>CIE Max NDG:</label><input type="number" name="cie_max_ndg"><br>
-                        <label>ESE Max:</label><input type="number" name="ese_max" required><br>
-                        <label>ESE Max ATP:</label><input type="number" name="ese_max_atp"><br>
-                        <label>ESE Max PSN:</label><input type="number" name="ese_max_psn"><br>
-                        <label>ESE Max BRN:</label><input type="number" name="ese_max_brn"><br>
-                        <label>ESE Max NDG:</label><input type="number" name="ese_max_ndg"><br>
-                        <label>CIE Weightage (0.00 - 1.00):</label><input type="number" step="0.01" name="cie_wtg" required><br>
-                        <label>ESE Weightage (0.00 - 1.00):</label><input type="number" step="0.01" name="ese_wtg" required><br>
-                        <br>
-                        <button type="submit">Add Course</button>
-                        
-                    </form>
-                    <div class="back-btn">
-                    <button onclick="window.history.back()">Back</button>
-                    </div>
-
-                    {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                           {{ message }}
-                           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    {% endfor %}
-                    {% endif %} {% endcomment %}
-
-                 {% comment %} <h2>Select Program & Batch</h2>
-                <form method="POST">
-                    {% csrf_token %}
-                    <label>Program:</label>
-                    <select name="programme_code" required>
-                        {% for p in programs %}
-                            <option value="{{ p.programme_code }}">{{ p.programme_short_name }} ({{ p.batch }})</option>
-                        {% endfor %}
-                    </select>
-                    <br><br>
-                    <label>Batch (Year):</label>
-                    <input type="number" name="batch" required>
-                    <br><br>
-                    <button type="submit">Continue to Add Course</button>
-                </form> {% endcomment %}
-
+            <div class="back-btn">
+                <button onclick="window.location.href='{% url "courses" %}'">Back</button>
             </div>
-
         </div>
-        
     </div>
+</div>
 
-    <script src="{% static 'js/script.js' %}"></script>
+<script>
+    function addRow() {
+    const tableBody = document.getElementById('course-table').getElementsByTagName('tbody')[0];
+    const newRow = document.createElement('tr');
+
+    const semesterOptions = `{{ semesters|join:"|" }}`.split("|");
+    const categoryOptions = `{{ category_choices|join:"|" }}`.split("|");
+
+    const columns = [
+        { name: 'semester', type: 'select', options: semesterOptions },
+        { name: 'paper_code', type: 'text' },
+        { name: 'paper_title', type: 'text' },
+        { name: 'sequence', type: 'number' },
+        { name: 'category', type: 'select', options: categoryOptions },
+        { name: 'credits', type: 'number' },
+        { name: 'cie_max', type: 'number' },
+        { name: 'cie_max_atp', type: 'number' },
+        { name: 'cie_max_psn', type: 'number' },
+        { name: 'cie_max_brn', type: 'number' },
+        { name: 'cie_max_ndg', type: 'number' },
+        { name: 'ese_max', type: 'number' },
+        { name: 'ese_max_atp', type: 'number' },
+        { name: 'ese_max_psn', type: 'number' },
+        { name: 'ese_max_brn', type: 'number' },
+        { name: 'ese_max_ndg', type: 'number' },
+        { name: 'cie_wtg', type: 'number' },
+        { name: 'ese_wtg', type: 'number' }
+    ];
+
+    // First column: delete button
+    const deleteCell = document.createElement('td');
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.textContent = '🗑️';
+    deleteButton.style.cursor = 'pointer';
+    deleteButton.onclick = function () {
+        tableBody.removeChild(newRow);
+    };
+    deleteCell.appendChild(deleteButton);
+    newRow.appendChild(deleteCell);
+
+    // Then rest of the columns
+    columns.forEach(field => {
+        const cell = document.createElement('td');
+        if (field.type === 'select') {
+            const select = document.createElement('select');
+            select.name = field.name;
+            field.options.forEach(opt => {
+                const option = document.createElement('option');
+                option.value = opt;
+                option.textContent = opt;
+                select.appendChild(option);
+            });
+            cell.appendChild(select);
+        } else {
+            const input = document.createElement('input');
+            input.type = field.type;
+            input.name = field.name;
+            cell.appendChild(input);
+        }
+        newRow.appendChild(cell);
+    });
+
+    tableBody.appendChild(newRow);
+}
+</script>
+
+<script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>
