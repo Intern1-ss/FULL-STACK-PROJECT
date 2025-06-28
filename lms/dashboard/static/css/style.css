@@ -420,6 +420,10 @@ option:hover {
 	color: white;
 }
 
+button {
+	all: unset;
+}
+
 .create-button {	
 	margin-top: 10px;
 	padding: 7px 15px;

@@ -51,11 +51,14 @@
     <div class="right-panel">
         <div class="dashboard-head">
             <span class="over-heading">Add/Edit Courses</span>
+            <div class="back-btn">
+                <div class="date pointer" onclick="window.location.href='{% url "courses" %}'">Back</div>
+            </div>
         </div>
 
         <div>
-            <h2>{{ program.programme_full_name }} - Batch: {{ batch }}</h2>
-            <p><strong>Department:</strong> {{ program.department }}</p>
+            <span style="font-size: 24px; font-weight: 600; color: #505050;">{{ program.programme_full_name }} - Batch: {{ batch }}</span>
+            <p style="font-size: 18px; font-weight: 500; color: #505050;"><strong>Department:</strong> {{ program.department }}</p>
 
             {% if messages %}
                 {% for message in messages %}
@@ -66,7 +69,7 @@
             <form method="POST">
                 {% csrf_token %}
                 <div style="overflow-x:auto; max-width:100%;">
-                    <table id="course-table" border="1" cellpadding="6" style="min-width:1200px;">
+                    <table id="course-table" border="1" cellpadding="6" style="min-width:1200px; border: #3f34b4 1px solid; margin-top: 20px;">
                         <thead>
                         <tr>
                             <th>Delete course</th>
@@ -134,15 +137,15 @@
                         </tbody>
                     </table>
                 </div>
+                <div style="display: flex; justify-content: center; margin-top: 20px; gap: 20px;">
+                    <div class="create-icon" onclick="addRow()">Add More Rows</div>
+                    <div class="create-icon">Save Courses</div>
+                </div>
+                
 
-                <button type="button" onclick="addRow()">Add More Rows</button>
-                <br><br>
-                <button type="submit" class="save-btn">Save Courses</button>
             </form>
 
-            <div class="back-btn">
-                <button onclick="window.location.href='{% url "courses" %}'">Back</button>
-            </div>
+            
         </div>
     </div>
 </div>
@@ -178,10 +181,11 @@
 
     // First column: delete button
     const deleteCell = document.createElement('td');
-    const deleteButton = document.createElement('button');
+    const deleteButton = document.createElement('div');
     deleteButton.type = 'button';
-    deleteButton.textContent = '🗑️';
+    deleteButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
     deleteButton.style.cursor = 'pointer';
+    deleteButton.style= 'display: flex: align-items: center; justify-content: center;';
     deleteButton.onclick = function () {
         tableBody.removeChild(newRow);
     };
