@@ -129,6 +129,10 @@
                         </div>
                         <span class="icon-name">Program</span>
                     </div>
+                    <div onclick="window.location.href='{% url 'courses' %}'" id="courses-item" class="courses menu-item">
+                        <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                        <span class="icon-name">Courses</span>
+                    </div>
                     <div onclick="showCampusPage()" id="campus-item" class="Campus menu-item {% if role == 'campus' %}active{% endif %}">
                         <div class="icon">
                             <i class="fa-solid fa-school"></i>

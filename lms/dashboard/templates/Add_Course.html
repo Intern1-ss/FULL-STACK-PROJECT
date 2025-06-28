@@ -99,8 +99,8 @@
                             
                             <input type="hidden" name="existing_paper_code" value="{{ course.paper_code }}">
                             <td>
-                                     <button type="submit" name="delete_row" value="{{ course.id }}" style="color:red;">🗑️</button>
-                                </td>
+                                <button type="submit" name="delete_row" value="{{ course.id }}" style="color:red;" onclick="return confirm('Are you sure you want to delete this course? [{{course.paper_code}}] ')">🗑️</button>
+                            </td>
                             <td>
                                 
                                 <select name="semester">
