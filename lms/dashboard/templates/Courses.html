@@ -54,6 +54,19 @@
         <div class="right-panel">
             <div class="dashboard-head">
                 <span class="over-heading">Courses</span>
+                <div class="date">
+                    <span id="date"></span>
+                </div>
+            </div>
+            <div class="stud-header">
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" class="search" placeholder="Search Courses...">
+                </div>
+                <div onclick="showUploadStudentPage()" class="create-icon">
+                    <span>Upload</span>
+                    <i class="fa-solid fa-upload"></i>
+                </div>
             </div>
         {% if messages %}
   <div id="message-container">
