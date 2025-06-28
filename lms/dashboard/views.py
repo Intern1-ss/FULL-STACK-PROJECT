@@ -214,6 +214,9 @@ def uploadstudent(request):
 def uploadprogram(request):
     return render(request, 'Upload-Program.html')
 
+def uploadcourse(request):
+    return render(request, 'Upload-Courses.html')
+
 def departments(request):
     departments = Department.objects.all()
     return render(request, 'Departments.html', {'departments': departments})

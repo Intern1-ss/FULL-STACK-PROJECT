@@ -67,11 +67,11 @@
                         <i class="fas fa-times"></i>
                     </div>
                 </div>
-                <div class="download-template" onclick="window.location.href='/bulkUp/download/student/'">
+                <div class="download-template" onclick="window.location.href='/bulkUp/download/course/'">
                     <span>Download Template</span>
                     <i class="fa-solid fa-download"></i>
                 </div>
-                <form id="uploadForm" class="upload-form" method="post" enctype="multipart/form-data" action="/bulkUp/upload/student/">
+                <form id="uploadForm" class="upload-form" method="post" enctype="multipart/form-data" action="/bulkUp/upload/course/">
                     {% csrf_token %}
                     <div class="upload-box">
                         <span class="upload-header">Upload files</span>

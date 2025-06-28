@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
-from DB.models import Department, Campus, Faculty, Program, Student
-from .utils import generate_excel_template_student, read_excel_and_return_dataframe,safe_decimal,generate_excel_template,generate_excel_template_faculty,generate_excel_template_department,generate_excel_template_program
+from DB.models import Department, Campus, Faculty, Program, Student, Course
+from .utils import generate_excel_template_student, read_excel_and_return_dataframe,safe_decimal,generate_excel_template,generate_excel_template_faculty,generate_excel_template_department,generate_excel_template_program, generate_excel_template_course
 import json
 from xhtml2pdf import pisa
 from datetime import date
@@ -327,6 +327,8 @@ def upload_student_excel(request):
             'blood_group', 'birthday', 'program_code', 'batch', 'status'
         ]
 
+        print("Received file:", request.FILES.get('file'))
+
         df = read_excel_and_return_dataframe(request.FILES['file'])
         if df is None:
             messages.error(request, "Failed to read the Excel file.")
@@ -346,7 +348,7 @@ def upload_student_excel(request):
             try:
                 # Validate program_code exists
                 try:
-                    program = Program.objects.get(code=row['program_code'])
+                    program = Program.objects.get(programme_code=row['program_code'])
                 except Program.DoesNotExist:
                     raise ValueError(f"Program code '{row['program_code']}' not found.")
 
@@ -391,6 +393,109 @@ def upload_student_excel(request):
         return render(request, 'Error-Handler.html', {
             'errors': errors, 'count': count, 'ecount': len(errors), 'role': 'student'
         })
+    
+
+
+
+#=======================
+# COURSE TEMPLATE & UPLOAD
+#=======================
+def download_course_template(request):
+    columns = [
+        'programme_code', 'batch', 'paper_code', 'paper_title', 'semester',
+        'sequence', 'category', 'credits', 'cie_max', 'cie_max_atp',
+        'cie_max_psn', 'cie_max_brn', 'cie_max_ndg', 'ese_max',
+        'ese_max_atp', 'ese_max_psn', 'ese_max_brn', 'ese_max_ndg',
+        'cie_wtg', 'ese_wtg'
+    ]
+    return generate_excel_template_course(columns)
+
+@csrf_exempt
+def upload_course_excel(request):
+    if request.method == 'POST':
+        expected_columns = [
+            'programme_code', 'batch', 'paper_code', 'paper_title', 'semester',
+            'sequence', 'category', 'credits', 'cie_max', 'cie_max_atp',
+            'cie_max_psn', 'cie_max_brn', 'cie_max_ndg', 'ese_max',
+            'ese_max_atp', 'ese_max_psn', 'ese_max_brn', 'ese_max_ndg',
+            'cie_wtg', 'ese_wtg'
+        ]
+
+        df = read_excel_and_return_dataframe(request.FILES['file'])
+        if df is None:
+            messages.error(request, "Failed to read the Excel file.")
+            return redirect('bulkUp_home')
+
+        if list(df.columns) != expected_columns:
+            messages.error(request, "Uploaded file does not match the Course template columns.")
+            return render(request, 'Error-Handler.html', {
+                'errors': ["Template mismatch: expected columns are " + str(expected_columns)],
+                'count': 0, 'ecount': 1, 'role': 'course'
+            })
+
+        count = 0
+        errors = []
+
+        for idx, row in df.iterrows():
+            try:
+                # Validate required fields
+                required_fields = ['programme_code', 'batch', 'paper_code', 'paper_title', 'semester', 'sequence', 'category', 'credits', 'cie_max', 'ese_max', 'cie_wtg', 'ese_wtg']
+                for field in required_fields:
+                    if pd.isna(row[field]) or row[field] == '':
+                        raise ValueError(f"Field '{field}' is required and cannot be empty.")
+                # Validate Programme Exists 
+                try:
+                    programme = Program.objects.get(programme_code=row['programme_code'], batch=int(row['batch']))
+                except Program.DoesNotExist:
+                    raise ValueError(f"Programme with code '{row['programme_code']}' and '{row['batch']}' does not exist.")
+                # Validate programme_code and batch
+                programme_code = str(row['programme_code']).strip()
+                batch = int(row['batch'])
+
+                # Check if course already exists
+                if Course.objects.filter(programme_code=programme_code, batch=batch, paper_code=row['paper_code']).exists():
+                    raise ValueError(f"Course with code '{row['paper_code']}' for programme '{programme_code}' and batch '{batch}' already exists.")
+
+                # Create or update Course
+                Course.objects.update_or_create(
+                    programme_code=programme_code,
+                    batch=batch,
+                    paper_code=row['paper_code'],
+                    defaults={
+                        'paper_title': row['paper_title'],
+                        'semester': int(row['semester']),
+                        'sequence': int(row['sequence']),
+                        'category': row['category'],
+                        'credits': safe_decimal(row['credits']),
+                        'cie_max': int(row['cie_max']),
+                        'cie_max_atp': int(row.get('cie_max_atp', 0)),
+                        'cie_max_psn': int(row.get('cie_max_psn', 0)),
+                        'cie_max_brn': int(row.get('cie_max_brn', 0)),
+                        'cie_max_ndg': int(row.get('cie_max_ndg', 0)),
+                        'ese_max': int(row['ese_max']),
+                        'ese_max_atp': int(row.get('ese_max_atp', 0)),
+                        'ese_max_psn': int(row.get('ese_max_psn', 0)),
+                        'ese_max_brn': int(row.get('ese_max_brn', 0)),
+                        'ese_max_ndg': int(row.get('ese_max_ndg', 0)),
+                        'cie_wtg': safe_decimal(row['cie_wtg']),
+                        'ese_wtg': safe_decimal(row['ese_wtg']),
+                    }
+                )
+                count += 1
+            except Exception as e:
+                errors.append(f"Row {idx + 2}: {str(e)}")
+        if errors:
+            messages.error(request, "Some rows could not be uploaded:\n" + "\n".join(errors))
+            return render(request, 'Error-Handler.html', {
+                'errors': errors,
+                'count': count,
+                'ecount': len(errors),
+                'role': 'course'
+            })
+
+
+# =======================
+# ERROR PDF GENERATION
 
 
 @csrf_exempt

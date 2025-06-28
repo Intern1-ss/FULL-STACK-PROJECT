@@ -14,8 +14,9 @@ def generate_excel_template(columns):
 import pandas as pd
 def read_excel_and_return_dataframe(file):
     try:
-        return pd.read_excel(file)
+        return pd.read_excel(file,)
     except Exception as e:
+        print(f"Error reading Excel file: {e}")
         return None
     
 
@@ -54,7 +55,7 @@ def generate_excel_template_student(columns):
     status_validation.add(f"{ws.cell(row=2, column=status_col).column_letter}2:{ws.cell(row=1000, column=status_col).column_letter}1000")
 
     # 3. Program Code Dropdown (from DB)
-    programs = Program.objects.values_list('code', flat=True)
+    programs = Program.objects.values_list('programme_code', flat=True)
     program_validation = DataValidation(
         type="list",
         formula1=f'"{",".join(programs)}"',
@@ -223,5 +224,76 @@ def generate_excel_template_program(columns):
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename=program_template.xlsx'
+    wb.save(response)
+    return response
+
+
+"""class Course(models.Model):
+    ""Model representing a course (paper) under a program and batch.""
+    CATEGORY_CHOICES = [
+        ('Theory', 'Theory'),
+        ('Practical', 'Practical'),
+        ('Core', 'Core'),
+        ('Elective', 'Elective'),
+    ]
+
+    programme_code = models.CharField(max_length=20)
+    batch = models.IntegerField()
+    paper_code = models.CharField(max_length=20)
+    paper_title = models.CharField(max_length=150)
+    semester = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(8)],
+        default=1 
+    )
+    sequence = models.IntegerField()
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    credits = models.DecimalField(max_digits=3, decimal_places=1)
+    cie_max = models.IntegerField()
+    cie_max_atp = models.IntegerField(null=True, blank=True)
+    cie_max_psn = models.IntegerField(null=True, blank=True)
+    cie_max_brn = models.IntegerField(null=True, blank=True)
+    cie_max_ndg = models.IntegerField(null=True, blank=True)
+    ese_max = models.IntegerField()
+    ese_max_atp = models.IntegerField(null=True, blank=True)
+    ese_max_psn = models.IntegerField(null=True, blank=True)
+    ese_max_brn = models.IntegerField(null=True, blank=True)
+    ese_max_ndg = models.IntegerField(null=True, blank=True)
+    cie_wtg = models.DecimalField(max_digits=5, decimal_places=2)
+    ese_wtg = models.DecimalField(max_digits=5, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('programme_code', 'batch', 'paper_code')
+
+    def __str__(self):
+        return f"{self.paper_code} (Sem {self.semester})"""
+
+def generate_excel_template_course(columns):
+    wb = Workbook()
+    ws = wb.active
+    ws.append(columns)
+
+    # Program code dropdown
+    program_codes = [program.programme_code for program in Program.objects.all()]
+    if program_codes:
+        formula = f'"{",".join(program_codes)}"'
+        validation = DataValidation(type="list", formula1=formula, allow_blank=False)
+        ws.add_data_validation(validation)
+        col_letter = ws.cell(row=1, column=columns.index("programme_code") + 1).column_letter
+        validation.add(f"{col_letter}2:{col_letter}1000")
+
+    # Batch Dropdown
+    batch_values = [program.batch for program in Program.objects.all()]  # Example range from 2000 to 2030
+    if batch_values:
+        formula = f'"{",".join(map(str, batch_values))}"'
+        batch_validation = DataValidation(type="list", formula1=formula, allow_blank=False)
+        ws.add_data_validation(batch_validation)
+        batch_col = columns.index("batch") + 1
+        batch_validation.add(f"{ws.cell(row=2, column=batch_col).column_letter}2:{ws.cell(row=1000, column=batch_col).column_letter}1000")
+
+    # Prepare Excel response
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=course_template.xlsx'
     wb.save(response)
     return response

@@ -23,6 +23,7 @@ urlpatterns = [
     path('campus/upload/', views.uploadcampus, name='uploadcampus'),
     path('students/upload/', views.uploadstudent, name='uploadstudent'),
     path('programs/upload/', views.uploadprogram, name='uploadprogram'),
+    path('courses/upload/', views.uploadcourse, name='uploadcourse'),
     path('departments/add/', views.adddepartment, name='adddepartment'),
     path('campus/add/', views.addcampus, name='addcampus'),
     path('students/edit/<str:regd_no>/', views.edit_student, name='edit_student'),

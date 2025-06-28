@@ -87,7 +87,7 @@ def view_program(request, program_id):
     return JsonResponse({
         'status': 'success',
         'data': {
-            'code': program.code,
+            'code': program.programme_code,
             'name': program.name,
             'department': str(program.department) if program.department else None,
             'duration': program.duration_years

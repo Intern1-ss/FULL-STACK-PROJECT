@@ -59,6 +59,10 @@ function showUploadDepartmentsPage() {
     window.location.href = "/departments/upload";
 }
 
+function showUploadCoursesPage() {
+    window.location.href = "/courses/upload";
+}
+
 function showCampusPage() {
     window.location.href = "/campus";
 }
